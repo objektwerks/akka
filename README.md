@@ -1,2 +1,2 @@
-# akka
-Akka prototypes.
+Akka Prototypes
+---------------
