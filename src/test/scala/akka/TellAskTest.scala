@@ -30,7 +30,7 @@ class Master extends Actor with ActorLogging {
     case Message(TellWorker, from, message) => worker ! Message(Tell, s"$from -> Master", message)
     case Message(Ask, from, message) => sender ! s"Master received and responded to $message from $from."
     case Message(AskWorker, from, message) =>
-      // This used to work with earlier versions. Now it throws an AskTimeoutException
+      // Test passes, but occasionally throws an AskTimeoutException.
       worker ? Message(AskWorker, s"$from -> Master", message) pipeTo sender
     case Message(AbortWorker, from, message) => worker ! Message(AbortWorker, s"$from -> Master", message)
     case _ => log.info("Master received an invalid message.")
@@ -91,7 +91,7 @@ class TellAskTest extends FunSuite with BeforeAndAfterAll {
     }
   }
 
-  // Test passes, but throws an AskTimeoutException.
+  // Test passes, but occasionally throws an AskTimeoutException.
   test("system ? master ? worker") {
     val future = master ? Message(AskWorker, "System", "ask ? message")
     future onComplete  {
