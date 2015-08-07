@@ -18,7 +18,6 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   private val ping: ActorRef = system.actorOf(Props[Ping], name = "ping")
 
   override protected def afterAll(): Unit = {
-    super.afterAll
     system.shutdown
     system.awaitTermination(3 seconds)
   }

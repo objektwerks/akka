@@ -65,7 +65,6 @@ class TellAskTest extends FunSuite with BeforeAndAfterAll {
   private val identifier: ActorRef = system.actorOf(Props[Identifier], name = "identifier")
 
   override protected def afterAll(): Unit = {
-    super.afterAll
     system.shutdown
     system.awaitTermination(3 seconds)
   }
@@ -87,22 +86,19 @@ class TellAskTest extends FunSuite with BeforeAndAfterAll {
   test("system ? master") {
     val future = master ? Message(Ask, "System", "ask ? message")
     future onComplete {
-      case Success(message) => log.info(message.toString)
-      case Failure(failure) => log.info(failure.getMessage)
-    }
-  }
-
-/*
-  // Used to work in earlier versions. Now throws an AskTimeoutException
-  // See above: case Message(AskWorker, from, message) =>
-  test("system ? master ? worker") {
-    val future = master ? Message(AskWorker, "System", "ask ? message")
-    future onComplete  {
-      case Success(message) => log.info(message.toString)
+      case Success(message) => assert(message.toString.nonEmpty); log.info(message.toString)
       case Failure(failure) => log.info(failure.getMessage); throw failure
     }
   }
-*/
+
+  // Test passes, but throws an AskTimeoutException.
+  test("system ? master ? worker") {
+    val future = master ? Message(AskWorker, "System", "ask ? message")
+    future onComplete  {
+      case Success(message) => assert(message.toString.nonEmpty);  log.info(message.toString)
+      case Failure(failure) => log.info(failure.getMessage); throw failure
+    }
+  }
 
   test("system ! master ! abort worker") {
     master ! Message(AbortWorker, "System", "abort ! message")
