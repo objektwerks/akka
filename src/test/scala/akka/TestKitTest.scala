@@ -1,15 +1,15 @@
 package akka
 
-import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import akka.actor._
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 import scala.concurrent.duration._
 
-class Ping extends Actor {
+class Ping extends Actor with ActorLogging {
   def receive = {
-    case ping: String => println(ping); sender ! ping
-    case _ => println("Ping received an invalid message.")
+    case ping: String => log.info(ping); sender ! ping
+    case _ => log.info("Ping received an invalid message.")
   }
 }
 

@@ -8,15 +8,15 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 import scala.concurrent.duration._
 
-class Service extends Actor {
+class Service extends Actor with ActorLogging {
   def receive = {
-    case message: String => println(s"Service: $message")
+    case message: String => log.info(s"Service: $message")
   }
 }
 
-class Listener extends Actor {
+class Listener extends Actor with ActorLogging {
   def receive = {
-    case deadLetter: DeadLetter => println(s"Deadletter: ${deadLetter.message}")
+    case deadLetter: DeadLetter => log.info(s"Deadletter: ${deadLetter.message}")
   }
 }
 

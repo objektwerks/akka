@@ -6,6 +6,7 @@ import akka.actor.SupervisorStrategy.{Restart, Stop}
 import akka.actor._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.ExecutionContext.Implicits.{global => ec}
 import scala.concurrent.duration._
@@ -22,8 +23,8 @@ class CleanWindowsException(cause: String) extends Exception(cause)
 class CleanBathroomException(cause: String) extends Exception(cause)
 class StandInCornerException(cause: String) extends Exception(cause)
 
-class Nanny extends Actor {
-  println(s"Nanny created: $self")
+class Nanny extends Actor with ActorLogging {
+  log.info(s"Nanny created: $self")
   private implicit val timeout = new Timeout(3, TimeUnit.SECONDS)
   private val child: ActorRef = context.actorOf(Props[Child], name = "child")
 
@@ -41,50 +42,30 @@ class Nanny extends Actor {
     case CleanWindows => child ! CleanWindows
     case CleanBathroom => child ! CleanBathroom
     case StandInCorner => child ! StandInCorner
-    case _ => println("Nanny received an invalid message.")
+    case _ => log.info("Nanny received an invalid message.")
   }
 }
 
-class Child extends Actor {
-  println(s"Child created: $self")
+class Child extends Actor with ActorLogging {
+  log.info(s"Child created: $self")
 
   def receive = {
-    case Play => println("Child happily wishes to play!")
+    case Play => log.info("Child happily wishes to play!")
     case CleanRoom => throw new CleanRoomException("Child refuses to clean room!")
     case CleanWindows => throw new CleanWindowsException("Child refuses to clean windows!")
     case CleanBathroom => throw new CleanBathroomException("Child refuses to clean bathroom!")
     case StandInCorner => throw new StandInCornerException("Child refuses to stand in corner!")
-    case _ => println("Child received an invalid message.")
-  }
-
-  override def preStart(): Unit = {
-    super.preStart()
-    println("Child pre-start event.")
-  }
-
-  override def postStop(): Unit = {
-    super.postStop()
-    println("Child post-stop event.")
-  }
-
-  override def preRestart(reason: Throwable, message: Option[Any]): Unit = {
-    super.preRestart(reason, message)
-    println(s"Child pre-restart event cause: ${reason.getMessage}.")
-  }
-
-  override def postRestart(reason: Throwable): Unit = {
-    super.postRestart(reason)
-    println(s"Child post-restart event cause: ${reason.getMessage}.")
+    case _ => log.info("Child received an invalid message.")
   }
 }
 
-class Watcher extends Actor {
+class Watcher extends Actor with ActorLogging {
   private implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   private val futureChild = context.system.actorSelection("/user/nanny/*").resolveOne()
   futureChild onSuccess { case child => context.watch(child)}
 
   def receive = {
-    case Terminated(child) => println(s"Watcher terminated event: ${child.path.name} TERMINATED!")
+    case Terminated(child) => log.info(s"Watcher terminated event: ${child.path.name} TERMINATED!")
   }
 }
 

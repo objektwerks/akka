@@ -2,7 +2,7 @@ package akka
 
 import java.util.concurrent.TimeUnit
 
-import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import akka.actor._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
@@ -14,29 +14,29 @@ case object Bike
 case object Run
 case object Finish
 
-class Triathlete extends Actor {
+class Triathlete extends Actor with ActorLogging {
   def receive = prepare
 
   def prepare: Actor.Receive = {
-    case Ready => println("Triathlete ready!")
-    case Swim => println("Triathlete swimming!"); context.become(swim)
+    case Ready => log.info("Triathlete ready!")
+    case Swim => log.info("Triathlete swimming!"); context.become(swim)
   }
 
   def swim: Actor.Receive = {
-    case Bike => println("Triathlete biking!"); context.become(bike)
+    case Bike => log.info("Triathlete biking!"); context.become(bike)
   }
 
   def bike: Actor.Receive = {
-    case Run => println("Triathlete running!"); context.become(run)
+    case Run => log.info("Triathlete running!"); context.become(run)
   }
 
   def run: Actor.Receive = {
-    case Finish => println("Triathlete finished race!"); context.become(prepare)
+    case Finish => log.info("Triathlete finished race!"); context.become(prepare)
   }
 
   override def unhandled(message: Any): Unit = {
     super.unhandled(message)
-    println(s"Triathlete failed to handle message: $message.")
+    log.info(s"Triathlete failed to handle message: $message.")
   }
 }
 
