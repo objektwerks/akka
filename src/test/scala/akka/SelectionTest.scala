@@ -6,7 +6,6 @@ import akka.actor._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
-import scala.concurrent.ExecutionContext.Implicits.{global => ec}
 import scala.concurrent.duration._
 
 class Identifier extends Actor with ActorLogging {
