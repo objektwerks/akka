@@ -41,12 +41,12 @@ class Triathlete extends Actor with ActorLogging {
 }
 
 class BehaviorTest extends FunSuite with BeforeAndAfterAll {
-  private implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
-  private val system: ActorSystem = ActorSystem.create("funky")
-  private val triathlete: ActorRef = system.actorOf(Props[Triathlete], name = "triathlete")
+  implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
+  val system: ActorSystem = ActorSystem.create("funky")
+  val triathlete: ActorRef = system.actorOf(Props[Triathlete], name = "triathlete")
 
   override protected def afterAll(): Unit = {
-    system.shutdown
+    system.shutdown()
     system.awaitTermination(3 seconds)
   }
 

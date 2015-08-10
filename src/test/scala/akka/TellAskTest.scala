@@ -22,8 +22,8 @@ case class Message(kindOf: KindOf, from: String, message: String)
 
 class Master extends Actor with ActorLogging {
   log.info(s"Master created: $self")
-  private implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
-  private val worker: ActorRef = context.actorOf(Props[Worker], name = "worker")
+  implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
+  val worker: ActorRef = context.actorOf(Props[Worker], name = "worker")
 
   def receive = {
     case Message(Tell, from, message) => log.info(s"\nMaster received $message from $from.")
@@ -47,30 +47,15 @@ class Worker extends Actor with ActorLogging {
   }
 }
 
-class Identifier extends Actor with ActorLogging {
-  def receive = {
-    case path: String => context.actorSelection(path) ! Identify(path)
-    case ActorIdentity(path, Some(ref)) => log.info(s"Actor identified: $ref at path: $path.")
-    case ActorIdentity(path, None) => log.info(s"Actor NOT identified at path: $path.")
-  }
-}
-
 class TellAskTest extends FunSuite with BeforeAndAfterAll {
-  private val log = LoggerFactory.getLogger(classOf[TellAskTest])
-  private implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
-  private val system: ActorSystem = ActorSystem.create("funky")
-  private val master: ActorRef = system.actorOf(Props[Master], name = "master")
-  private val identifier: ActorRef = system.actorOf(Props[Identifier], name = "identifier")
+  val log = LoggerFactory.getLogger(classOf[TellAskTest])
+  implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
+  val system: ActorSystem = ActorSystem.create("funky")
+  val master: ActorRef = system.actorOf(Props[Master], name = "master")
 
   override protected def afterAll(): Unit = {
-    system.shutdown
+    system.shutdown()
     system.awaitTermination(3 seconds)
-  }
-
-  test("actor selection") {
-    identifier ! "/user/*"
-    identifier ! "/user/master/*"
-    identifier ! "/funky/*"
   }
 
   test("system ! master") {

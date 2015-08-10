@@ -35,13 +35,13 @@ class Time extends Actor {
 }
 
 class RouterTest extends FunSuite with BeforeAndAfterAll {
-  private val log = LoggerFactory.getLogger(classOf[TellAskTest])
-  private implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
-  private val system: ActorSystem = ActorSystem.create("funky")
-  private val clock: ActorRef = system.actorOf(Props[Clock], name = "clock")
+  val log = LoggerFactory.getLogger(classOf[TellAskTest])
+  implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
+  val system: ActorSystem = ActorSystem.create("funky")
+  val clock: ActorRef = system.actorOf(Props[Clock], name = "clock")
 
   override protected def afterAll(): Unit = {
-    system.shutdown
+    system.shutdown()
     system.awaitTermination(3 seconds)
   }
 

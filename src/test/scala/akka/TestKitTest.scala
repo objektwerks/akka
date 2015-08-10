@@ -14,11 +14,11 @@ class Ping extends Actor with ActorLogging {
 }
 
 class TestKitTest extends TestKit(ActorSystem("funky")) with ImplicitSender
-with WordSpecLike with Matchers with BeforeAndAfterAll {
-  private val ping: ActorRef = system.actorOf(Props[Ping], name = "ping")
+  with WordSpecLike with Matchers with BeforeAndAfterAll {
+  val ping: ActorRef = system.actorOf(Props[Ping], name = "ping")
 
   override protected def afterAll(): Unit = {
-    system.shutdown
+    system.shutdown()
     system.awaitTermination(3 seconds)
   }
 
