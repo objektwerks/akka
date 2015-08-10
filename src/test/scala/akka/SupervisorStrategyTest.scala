@@ -6,7 +6,6 @@ import akka.actor.SupervisorStrategy.{Restart, Stop}
 import akka.actor._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
-import org.slf4j.LoggerFactory
 
 import scala.concurrent.ExecutionContext.Implicits.{global => ec}
 import scala.concurrent.duration._
