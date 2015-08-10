@@ -50,7 +50,7 @@ class Children extends Actor with ActorLogging {
 class SelectionTest extends FunSuite with BeforeAndAfterAll {
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val system: ActorSystem = ActorSystem.create("funky")
-  system.actorOf(Props[GrandParents], name = "grandparents")
+  val grandparents = system.actorOf(Props[GrandParents], name = "grandparents")
 
   override protected def afterAll(): Unit = {
     system.shutdown()
@@ -66,7 +66,7 @@ class SelectionTest extends FunSuite with BeforeAndAfterAll {
       case Success(message) => assert(message == "parents")
       case Failure(failure) => throw failure
     }
-    (system.actorSelection("/user/grandparents") ? ToChildren) onComplete {
+    (system.actorSelection("/user/*") ? ToChildren) onComplete {
       case Success(message) => assert(message == "children")
       case Failure(failure) => throw failure
     }
@@ -77,14 +77,14 @@ class SelectionTest extends FunSuite with BeforeAndAfterAll {
       case Success(message) => assert(message == "parents")
       case Failure(failure) => throw failure
     }
-    (system.actorSelection("/user/grandparents/parents") ? ToChildren) onComplete {
+    (system.actorSelection("/user/grandparents/*") ? ToChildren) onComplete {
       case Success(message) => assert(message == "children")
       case Failure(failure) => throw failure
     }
   }
 
   test("children") {
-    (system.actorSelection("/user/grandparents/parents/children") ? ToChildren) onComplete {
+    (system.actorSelection("/user/grandparents/parents/*") ? ToChildren) onComplete {
       case Success(message) => assert(message == "children")
       case Failure(failure) => throw failure
     }
