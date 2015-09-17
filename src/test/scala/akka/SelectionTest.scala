@@ -7,6 +7,7 @@ import akka.pattern._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.{global => ec}
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}
@@ -53,8 +54,7 @@ class SelectionTest extends FunSuite with BeforeAndAfterAll {
   val grandparents = system.actorOf(Props[GrandParents], name = "grandparents")
 
   override protected def afterAll(): Unit = {
-    system.shutdown()
-    system.awaitTermination(3 seconds)
+    Await.result(system.terminate(), 3 seconds)
   }
 
   test("grand parents") {

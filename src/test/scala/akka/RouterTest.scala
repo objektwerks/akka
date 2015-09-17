@@ -10,6 +10,7 @@ import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import org.slf4j.LoggerFactory
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.{global => ec}
 import scala.concurrent.duration._
 
@@ -41,8 +42,7 @@ class RouterTest extends FunSuite with BeforeAndAfterAll {
   val clock: ActorRef = system.actorOf(Props[Clock], name = "clock")
 
   override protected def afterAll(): Unit = {
-    system.shutdown()
-    system.awaitTermination(3 seconds)
+    Await.result(system.terminate(), 3 seconds)
   }
 
   test("router") {

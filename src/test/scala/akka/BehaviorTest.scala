@@ -6,6 +6,7 @@ import akka.actor._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
+import scala.concurrent.Await
 import scala.concurrent.duration._
 
 case object Ready
@@ -46,8 +47,7 @@ class BehaviorTest extends FunSuite with BeforeAndAfterAll {
   val triathlete: ActorRef = system.actorOf(Props[Triathlete], name = "triathlete")
 
   override protected def afterAll(): Unit = {
-    system.shutdown()
-    system.awaitTermination(3 seconds)
+    Await.result(system.terminate(), 3 seconds)
   }
 
   test("race") {

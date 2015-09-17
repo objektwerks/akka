@@ -7,6 +7,7 @@ import akka.actor._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.{global => ec}
 import scala.concurrent.duration._
 
@@ -75,8 +76,7 @@ class SupervisorStrategyTest extends FunSuite with BeforeAndAfterAll {
   system.actorOf(Props[Time], name = "watcher")
 
   override protected def afterAll(): Unit = {
-    system.shutdown
-    system.awaitTermination(3 seconds)
+    Await.result(system.terminate(), 3 seconds)
   }
 
   test("nanny ! child") {

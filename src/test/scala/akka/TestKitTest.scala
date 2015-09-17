@@ -4,6 +4,7 @@ import akka.actor._
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
+import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class Ping extends Actor with ActorLogging {
@@ -18,8 +19,7 @@ class TestKitTest extends TestKit(ActorSystem("funky")) with ImplicitSender
   val ping: ActorRef = system.actorOf(Props[Ping], name = "ping")
 
   override protected def afterAll(): Unit = {
-    system.shutdown()
-    system.awaitTermination(3 seconds)
+    Await.result(system.terminate(), 3 seconds)
   }
 
   "Ping actor" should {
