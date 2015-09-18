@@ -43,7 +43,7 @@ class Computer extends PersistentActor {
         context.system.eventStream.publish(event)
       }
     case "snapshot"  => saveSnapshot(state)
-    case "println" => println(state)
+    case "state" => state
   }
 }
 
