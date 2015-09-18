@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
+case object SnapshotCommand
+case object StateCommand
 case class ComputeCommand(number: Int)
 
 case class ComputeEvent(number: Int)
@@ -42,8 +44,8 @@ class Computer extends PersistentActor {
         updateState(event)
         context.system.eventStream.publish(event)
       }
-    case "snapshot"  => saveSnapshot(state)
-    case "state" => state
+    case SnapshotCommand  => saveSnapshot(state)
+    case StateCommand => state
   }
 }
 
