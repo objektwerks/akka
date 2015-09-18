@@ -12,40 +12,34 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 
 case object SnapshotCommand
-case object StateCommand
 case class ComputeCommand(number: Int)
 
 case class ComputeEvent(number: Int)
 
-case class ComputeState(events: List[Int] = Nil) {
-  def updated(event: ComputeEvent): ComputeState = copy(event.number :: events)
-
-  def size: Int = events.size
-
-  override def toString: String = events.reverse.toString()
+case class ComputeState(computeEvents: List[ComputeEvent] = Nil) {
+  def addComputeEvent(computeEvent: ComputeEvent): ComputeState = copy(computeEvent :: computeEvents)
 }
 
 class Computer extends PersistentActor {
   override def persistenceId: String = "1"
 
-  var state = ComputeState()
+  var computeState = ComputeState()
 
-  def updateState(event: ComputeEvent): Unit = state = state.updated(event)
+  def updateComputeState(computeEvent: ComputeEvent): Unit = computeState = computeState.addComputeEvent(computeEvent)
 
   override def receiveCommand: Receive = {
-    case event: ComputeEvent => updateState(event)
-    case SnapshotOffer(_, snapshot: ComputeState) => state = snapshot
+    case computeEvent: ComputeEvent => updateComputeState(computeEvent)
+    case SnapshotOffer(_, snapshot: ComputeState) => computeState = snapshot
   }
 
   override def receiveRecover: Receive = {
     case ComputeCommand(number) =>
-      persist(ComputeEvent(number))(updateState)
-      persist(ComputeEvent(number)) { event =>
-        updateState(event)
-        context.system.eventStream.publish(event)
+      persist(ComputeEvent(number))(updateComputeState)
+      persist(ComputeEvent(number)) { computeEvent =>
+        updateComputeState(computeEvent)
+        context.system.eventStream.publish(computeEvent)
       }
-    case SnapshotCommand  => saveSnapshot(state)
-    case StateCommand => state
+    case SnapshotCommand  => saveSnapshot(computeState)
   }
 }
 
