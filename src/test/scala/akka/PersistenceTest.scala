@@ -39,7 +39,7 @@ class Computer extends PersistentActor {
         updateComputeState(computeEvent)
         context.system.eventStream.publish(computeEvent)
       }
-    case SnapshotCommand  => saveSnapshot(computeState)
+    case SnapshotCommand => saveSnapshot(computeState)
   }
 }
 
