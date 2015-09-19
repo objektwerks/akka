@@ -2,7 +2,7 @@ package akka
 
 import java.util.concurrent.TimeUnit
 
-import akka.actor.{ActorRef, ActorSystem, Props}
+import akka.actor.{ActorLogging, ActorRef, ActorSystem, Props}
 import akka.pattern._
 import akka.persistence.{PersistentActor, SnapshotOffer}
 import akka.util.Timeout
@@ -14,9 +14,7 @@ import scala.concurrent.{Await, ExecutionContext}
 import scala.util.{Failure, Success}
 
 case object SnapshotCommand
-case object ComputedStateCommand
 case class ComputeCommand(number: Int)
-case object ShutdownCommand
 
 case class ComputedEvent(number: Int)
 
@@ -24,29 +22,34 @@ case class ComputedState(computedEvents: List[ComputedEvent] = Nil) {
   def addComputedEvent(computedEvent: ComputedEvent): ComputedState = copy(computedEvent :: computedEvents)
 }
 
-class Computer extends PersistentActor {
+class Computer extends PersistentActor with ActorLogging {
   override def persistenceId: String = "computer-persistence-id"
 
   var computedState = ComputedState()
 
-  def updateComputedState(computedEvent: ComputedEvent): Unit = computedState = computedState.addComputedEvent(computedEvent)
+  def updateComputedState(computedEvent: ComputedEvent): Unit = {
+    log.info("Updating computed state.")
+    computedState = computedState.addComputedEvent(computedEvent)
+  }
 
   // WARNING: Commands are NOT received!!!
   override def receiveCommand: Receive = {
     case ComputeCommand(number) =>
+      log.info("Received ComputeCommand.")
+      sender ! computedState.computedEvents.size
       persist(ComputedEvent(number))(updateComputedState)
-      persist(ComputedEvent(number)) { computedEvent =>
-        updateComputedState(computedEvent)
-        context.system.eventStream.publish(computedEvent)
-      }
-    case ComputedStateCommand => sender ! computedState.computedEvents.size
-    case SnapshotCommand => saveSnapshot(computedState)
-    case ShutdownCommand => context.stop(self)
+    case SnapshotCommand =>
+      log.info("Received SnapshotCommand.")
+      saveSnapshot(computedState)
   }
 
   override def receiveRecover: Receive = {
-    case computedEvent: ComputedEvent => updateComputedState(computedEvent)
-    case SnapshotOffer(_, snapshot: ComputedState) => computedState = snapshot
+    case computedEvent: ComputedEvent =>
+      log.info("Recovered ComputeEvent.")
+      updateComputedState(computedEvent)
+    case SnapshotOffer(_, snapshot: ComputedState) =>
+      log.info("Recovered snapshot of ComputedState.")
+      computedState = snapshot
   }
 }
 
@@ -62,13 +65,11 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("command") {
-    computer ! ComputeCommand(1)
-    computer ! SnapshotCommand
-    val future = computer ? ComputedStateCommand
+    val future = computer ? ComputeCommand(1)
     future onComplete {
       case Success(count) => assert(count == 1)
       case Failure(failure) => log.error(failure.getMessage); throw failure
     }
-    computer ! ShutdownCommand
+    computer ! SnapshotCommand
   }
 }
