@@ -67,7 +67,7 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
     val future = computer ? ComputeCommand(1)
     future onComplete {
       case Success(count) => assert(count == 1)
-      case Failure(failure) => log.error(failure.getMessage)
+      case Failure(failure) => log.error(failure.getMessage); throw failure
     }
     computer ! SnapshotCommand
   }
