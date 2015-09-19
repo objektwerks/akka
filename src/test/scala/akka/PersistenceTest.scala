@@ -36,8 +36,7 @@ class Computer extends PersistentActor with ActorLogging {
   override def receiveCommand: Receive = {
     case ComputeCommand(number) =>
       log.info("*** Received ComputeCommand.")
-      sender ! computedState.computedEvents.size
-      persist(ComputedEvent(number))(updateComputedState)
+      persistAsync(ComputedEvent(number)) { event => sender ! computedState.computedEvents.size }
     case SnapshotCommand =>
       log.info("*** Received SnapshotCommand.")
       saveSnapshot(computedState)
@@ -68,7 +67,7 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
     val future = computer ? ComputeCommand(1)
     future onComplete {
       case Success(count) => assert(count == 1)
-      case Failure(failure) => log.error(failure.getMessage); throw failure
+      case Failure(failure) => log.error(failure.getMessage)
     }
     computer ! SnapshotCommand
   }
