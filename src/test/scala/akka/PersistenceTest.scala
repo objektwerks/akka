@@ -23,7 +23,7 @@ case class ComputedState(computedEvents: List[ComputedEvent] = Nil) {
 }
 
 class Computer extends PersistentActor with ActorLogging {
-  log.info("*** Computer persisten actor initialized.")
+  log.info("*** Computer persistent actor initialized.")
   override def persistenceId: String = "computer-persistence-id"
 
   var computedState = ComputedState()
