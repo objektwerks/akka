@@ -3,16 +3,21 @@ package akka
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{ActorRef, ActorSystem, Props}
-import akka.persistence.{SnapshotOffer, PersistentActor}
+import akka.pattern._
+import akka.persistence.{PersistentActor, SnapshotOffer}
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import org.slf4j.LoggerFactory
 
-import scala.concurrent.Await
 import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext}
+import scala.util.{Failure, Success}
 
 case object SnapshotCommand
+case object ComputedStateCommand
 case class ComputeCommand(number: Int)
+
+case object Shutdown
 
 case class ComputedEvent(number: Int)
 
@@ -21,7 +26,7 @@ case class ComputedState(computedEvents: List[ComputedEvent] = Nil) {
 }
 
 class Computer extends PersistentActor {
-  override def persistenceId: String = "1"
+  override def persistenceId: String = "computer-persistence-id"
 
   var computedState = ComputedState()
 
@@ -34,7 +39,9 @@ class Computer extends PersistentActor {
         updateComputedState(computedEvent)
         context.system.eventStream.publish(computedEvent)
       }
+    case ComputedStateCommand => sender ! computedState.computedEvents.size
     case SnapshotCommand => saveSnapshot(computedState)
+    case Shutdown => context.stop(self)
   }
 
   override def receiveRecover: Receive = {
@@ -45,9 +52,10 @@ class Computer extends PersistentActor {
 
 class PersistenceTest extends FunSuite with BeforeAndAfterAll {
   val log = LoggerFactory.getLogger(classOf[PersistenceTest])
+  implicit val ec = ExecutionContext.global
   implicit val timeout = new Timeout(3, TimeUnit.SECONDS)
   val system: ActorSystem = ActorSystem.create("persistence")
-  val computer: ActorRef = system.actorOf(Props[Computer], name = "compute")
+  val computer: ActorRef = system.actorOf(Props[Computer], name = "computer")
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 3 seconds)
@@ -56,5 +64,11 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
   test("command") {
     computer ! ComputeCommand(1)
     computer ! SnapshotCommand
+    val future = computer ? ComputedStateCommand
+    future onComplete {
+      case Success(count) => assert(count == 1)
+      case Failure(failure) => log.error(failure.getMessage); throw failure
+    }
+    computer ! Shutdown
   }
 }

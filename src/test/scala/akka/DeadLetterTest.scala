@@ -23,7 +23,7 @@ class Listener extends Actor with ActorLogging {
 
 class DeadLetterTest extends FunSuite  with BeforeAndAfterAll {
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
-  val system: ActorSystem = ActorSystem.create("funky")
+  val system: ActorSystem = ActorSystem.create("deadletter")
   val service: ActorRef = system.actorOf(Props[Service], name = "service")
   val listener: ActorRef = system.actorOf(Props[Listener], name = "listener")
   system.eventStream.subscribe(listener, classOf[DeadLetter])

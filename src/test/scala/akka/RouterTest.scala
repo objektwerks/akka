@@ -38,7 +38,7 @@ class Time extends Actor {
 class RouterTest extends FunSuite with BeforeAndAfterAll {
   val log = LoggerFactory.getLogger(classOf[TellAskTest])
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
-  val system: ActorSystem = ActorSystem.create("funky")
+  val system: ActorSystem = ActorSystem.create("router")
   val clock: ActorRef = system.actorOf(Props[Clock], name = "clock")
 
   override protected def afterAll(): Unit = {

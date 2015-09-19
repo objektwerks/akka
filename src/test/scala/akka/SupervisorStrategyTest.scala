@@ -71,7 +71,7 @@ class Watcher extends Actor with ActorLogging {
 
 class SupervisorStrategyTest extends FunSuite with BeforeAndAfterAll {
   private implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
-  private val system: ActorSystem = ActorSystem.create("funky")
+  private val system: ActorSystem = ActorSystem.create("supervisor")
   private val nanny: ActorRef = system.actorOf(Props[Nanny], name = "nanny")
   system.actorOf(Props[Time], name = "watcher")
 

@@ -51,7 +51,7 @@ class Worker extends Actor with ActorLogging {
 class TellAskTest extends FunSuite with BeforeAndAfterAll {
   val log = LoggerFactory.getLogger(classOf[TellAskTest])
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
-  val system: ActorSystem = ActorSystem.create("funky")
+  val system: ActorSystem = ActorSystem.create("tellask")
   val master: ActorRef = system.actorOf(Props[Master], name = "master")
 
   override protected def afterAll(): Unit = {
@@ -70,15 +70,15 @@ class TellAskTest extends FunSuite with BeforeAndAfterAll {
     val future = master ? Message(Ask, "System", "ask ? message")
     future onComplete {
       case Success(message) => assert(message.toString.nonEmpty); log.info(message.toString)
-      case Failure(failure) => log.error(failure.getMessage)
+      case Failure(failure) => log.error(failure.getMessage); throw failure
     }
   }
 
   test("system ? master ? worker") {
     val future = master ? Message(AskWorker, "System", "ask ? message")
     future onComplete  {
-      case Success(message) => assert(message.toString.nonEmpty);  log.info(message.toString)
-      case Failure(failure) => log.error(failure.getMessage)
+      case Success(message) => assert(message.toString.nonEmpty); log.info(message.toString)
+      case Failure(failure) => log.error(failure.getMessage); throw failure
     }
   }
 
