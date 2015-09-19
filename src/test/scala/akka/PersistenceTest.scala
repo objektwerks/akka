@@ -16,8 +16,7 @@ import scala.util.{Failure, Success}
 case object SnapshotCommand
 case object ComputedStateCommand
 case class ComputeCommand(number: Int)
-
-case object Shutdown
+case object ShutdownCommand
 
 case class ComputedEvent(number: Int)
 
@@ -41,7 +40,7 @@ class Computer extends PersistentActor {
       }
     case ComputedStateCommand => sender ! computedState.computedEvents.size
     case SnapshotCommand => saveSnapshot(computedState)
-    case Shutdown => context.stop(self)
+    case ShutdownCommand => context.stop(self)
   }
 
   override def receiveRecover: Receive = {
@@ -69,6 +68,6 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
       case Success(count) => assert(count == 1)
       case Failure(failure) => log.error(failure.getMessage); throw failure
     }
-    computer ! Shutdown
+    computer ! ShutdownCommand
   }
 }
