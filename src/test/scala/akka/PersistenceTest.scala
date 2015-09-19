@@ -31,6 +31,7 @@ class Computer extends PersistentActor {
 
   def updateComputedState(computedEvent: ComputedEvent): Unit = computedState = computedState.addComputedEvent(computedEvent)
 
+  // WARNING: Commands are NOT received!!!
   override def receiveCommand: Receive = {
     case ComputeCommand(number) =>
       persist(ComputedEvent(number))(updateComputedState)
