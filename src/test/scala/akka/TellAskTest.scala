@@ -18,7 +18,6 @@ case object Tell extends MessageType
 case object TellWorker extends MessageType
 case object Ask extends MessageType
 case object AskWorker extends MessageType
-case object AbortWorker extends MessageType
 case class Message(messageType: MessageType, from: String, message: String)
 
 class Master extends Actor with ActorLogging {
@@ -31,7 +30,6 @@ class Master extends Actor with ActorLogging {
     case Message(TellWorker, from, message) => worker ! Message(Tell, s"$from -> Master", message)
     case Message(Ask, from, message) => sender ! s"Master received and responded to $message from $from."
     case Message(AskWorker, from, message) => worker ? Message(AskWorker, s"$from -> Master", message) pipeTo sender
-    case Message(AbortWorker, from, message) => worker ! Message(AbortWorker, s"$from -> Master", message)
     case _ => log.info("Master received an invalid message.")
   }
 }
@@ -43,7 +41,6 @@ class Worker extends Actor with ActorLogging {
   def receive = {
     case Message(Tell, from, message) => log.info(s"Worker received $message from $from.")
     case Message(AskWorker, from, message) => sender ! s"Worker received and responded to $message from $from."
-    case Message(AbortWorker, from, message) => throw new Exception(message)
     case _ => log.info("Worker received an invalid message.")
   }
 }
@@ -80,10 +77,5 @@ class TellAskTest extends FunSuite with BeforeAndAfterAll {
       case Success(message) => assert(message.toString.nonEmpty); log.info(message.toString)
       case Failure(failure) => log.error(failure.getMessage); throw failure
     }
-  }
-
-  test("system ! master ! abort worker") {
-    master ! Message(AbortWorker, "System", "abort ! message")
-    master ! Message(TellWorker, "System", "AFTER ABORT tell ! message")
   }
 }
