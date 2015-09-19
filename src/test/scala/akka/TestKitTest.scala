@@ -14,7 +14,7 @@ class Ping extends Actor with ActorLogging {
   }
 }
 
-class TestKitTest extends TestKit(ActorSystem("funky")) with ImplicitSender
+class TestKitTest extends TestKit(ActorSystem("testkit")) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
   val ping: ActorRef = system.actorOf(Props[Ping], name = "ping")
 
