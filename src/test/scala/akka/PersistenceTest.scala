@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit
 
 import akka.actor.{ActorLogging, ActorRef, ActorSystem, Props}
 import akka.pattern._
-import akka.persistence.{Recovery, PersistentActor, SnapshotOffer}
+import akka.persistence.{PersistentActor, SnapshotOffer}
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import org.slf4j.LoggerFactory
