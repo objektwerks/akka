@@ -13,8 +13,8 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext}
 import scala.util.{Failure, Success}
 
-case object SnapshotCommand
 case class ComputeCommand(number: Int)
+case object SnapshotCommand
 
 case class ComputedEvent(number: Int)
 
@@ -28,27 +28,27 @@ class Computer extends PersistentActor with ActorLogging {
   var computedState = ComputedState()
 
   def updateComputedState(computedEvent: ComputedEvent): Unit = {
-    log.info("Updating computed state.")
+    log.info("*** Updating computed state.")
     computedState = computedState.addComputedEvent(computedEvent)
   }
 
   // WARNING: Commands are NOT received!!!
   override def receiveCommand: Receive = {
     case ComputeCommand(number) =>
-      log.info("Received ComputeCommand.")
+      log.info("*** Received ComputeCommand.")
       sender ! computedState.computedEvents.size
       persist(ComputedEvent(number))(updateComputedState)
     case SnapshotCommand =>
-      log.info("Received SnapshotCommand.")
+      log.info("*** Received SnapshotCommand.")
       saveSnapshot(computedState)
   }
 
   override def receiveRecover: Receive = {
     case computedEvent: ComputedEvent =>
-      log.info("Recovered ComputeEvent.")
+      log.info("*** Recovered ComputeEvent.")
       updateComputedState(computedEvent)
     case SnapshotOffer(_, snapshot: ComputedState) =>
-      log.info("Recovered snapshot of ComputedState.")
+      log.info("*** Recovered snapshot of ComputedState.")
       computedState = snapshot
   }
 }
