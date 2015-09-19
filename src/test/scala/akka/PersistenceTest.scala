@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit
 
 import akka.actor.{ActorLogging, ActorRef, ActorSystem, Props}
 import akka.pattern._
-import akka.persistence.{PersistentActor, SnapshotOffer}
+import akka.persistence.{Recovery, PersistentActor, SnapshotOffer}
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import org.slf4j.LoggerFactory
@@ -23,6 +23,7 @@ case class ComputedState(computedEvents: List[ComputedEvent] = Nil) {
 }
 
 class Computer extends PersistentActor with ActorLogging {
+  log.info("*** Computer persisten actor initialized.")
   override def persistenceId: String = "computer-persistence-id"
 
   var computedState = ComputedState()
