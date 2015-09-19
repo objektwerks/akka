@@ -6,7 +6,6 @@ import akka.actor._
 import akka.pattern._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
-import org.slf4j.LoggerFactory
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.{global => ec}
@@ -46,7 +45,6 @@ class Worker extends Actor with ActorLogging {
 }
 
 class TellAskTest extends FunSuite with BeforeAndAfterAll {
-  val log = LoggerFactory.getLogger(classOf[TellAskTest])
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val system: ActorSystem = ActorSystem.create("tellask")
   val master: ActorRef = system.actorOf(Props[Master], name = "master")
@@ -66,16 +64,16 @@ class TellAskTest extends FunSuite with BeforeAndAfterAll {
   test("system ? master") {
     val future = master ? Message(Ask, "System", "ask ? message")
     future onComplete {
-      case Success(message) => assert(message.toString.nonEmpty); log.info(message.toString)
-      case Failure(failure) => log.error(failure.getMessage); throw failure
+      case Success(message) => assert(message.toString.nonEmpty)
+      case Failure(failure) => throw failure
     }
   }
 
   test("system ? master ? worker") {
     val future = master ? Message(AskWorker, "System", "ask ? message")
     future onComplete  {
-      case Success(message) => assert(message.toString.nonEmpty); log.info(message.toString)
-      case Failure(failure) => log.error(failure.getMessage); throw failure
+      case Success(message) => assert(message.toString.nonEmpty)
+      case Failure(failure) => throw failure
     }
   }
 }

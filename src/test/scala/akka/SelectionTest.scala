@@ -6,7 +6,6 @@ import akka.actor._
 import akka.pattern._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
-import org.slf4j.LoggerFactory
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.{global => ec}
@@ -50,7 +49,6 @@ class Children extends Actor with ActorLogging {
 }
 
 class SelectionTest extends FunSuite with BeforeAndAfterAll {
-  val log = LoggerFactory.getLogger(classOf[SelectionTest])
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val system: ActorSystem = ActorSystem.create("selection")
   val grandparents = system.actorOf(Props[GrandParents], name = "grandparents")
@@ -62,33 +60,33 @@ class SelectionTest extends FunSuite with BeforeAndAfterAll {
   test("grand parents") {
     (system.actorSelection("/user/grandparents") ? ToGrandParents) onComplete {
       case Success(message) => assert(message == "grandparents")
-      case Failure(failure) => log.error(failure.getMessage); throw failure
+      case Failure(failure) => throw failure
     }
     (system.actorSelection("/user/grandparents") ? ToParents) onComplete {
       case Success(message) => assert(message == "parents")
-      case Failure(failure) => log.error(failure.getMessage); throw failure
+      case Failure(failure) => throw failure
     }
     (system.actorSelection("/user/*") ? ToChildren) onComplete {
       case Success(message) => assert(message == "children")
-      case Failure(failure) => log.error(failure.getMessage); throw failure
+      case Failure(failure) => throw failure
     }
   }
 
   test("parents") {
     (system.actorSelection("/user/grandparents/parents") ? ToParents) onComplete {
       case Success(message) => assert(message == "parents")
-      case Failure(failure) => log.error(failure.getMessage); throw failure
+      case Failure(failure) => throw failure
     }
     (system.actorSelection("/user/grandparents/*") ? ToChildren) onComplete {
       case Success(message) => assert(message == "children")
-      case Failure(failure) => log.error(failure.getMessage); throw failure
+      case Failure(failure) => throw failure
     }
   }
 
   test("children") {
     (system.actorSelection("/user/grandparents/parents/*") ? ToChildren) onComplete {
       case Success(message) => assert(message == "children")
-      case Failure(failure) => log.error(failure.getMessage); throw failure
+      case Failure(failure) => throw failure
     }
   }
 }

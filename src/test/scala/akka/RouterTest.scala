@@ -8,7 +8,6 @@ import akka.pattern._
 import akka.routing.{ActorRefRoutee, RoundRobinRoutingLogic, Router}
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
-import org.slf4j.LoggerFactory
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.{global => ec}
@@ -36,7 +35,6 @@ class Time extends Actor {
 }
 
 class RouterTest extends FunSuite with BeforeAndAfterAll {
-  val log = LoggerFactory.getLogger(classOf[TellAskTest])
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val system: ActorSystem = ActorSystem.create("router")
   val clock: ActorRef = system.actorOf(Props[Clock], name = "clock")
@@ -46,8 +44,8 @@ class RouterTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("router") {
-    clock ? "time a: " onSuccess { case t: String => assert(t.nonEmpty); log.info(t) }
-    clock ? "time b: " onSuccess { case t: String => assert(t.nonEmpty); log.info(t) }
-    clock ? "time c: " onSuccess { case t: String => assert(t.nonEmpty); log.info(t) }
+    clock ? "time a: " onSuccess { case t: String => assert(t.nonEmpty) }
+    clock ? "time b: " onSuccess { case t: String => assert(t.nonEmpty) }
+    clock ? "time c: " onSuccess { case t: String => assert(t.nonEmpty) }
   }
 }

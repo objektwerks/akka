@@ -7,7 +7,6 @@ import akka.pattern._
 import akka.persistence.{PersistentActor, SnapshotOffer}
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
-import org.slf4j.LoggerFactory
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext}
@@ -58,7 +57,6 @@ class Computer extends PersistentActor with ActorLogging {
 }
 
 class PersistenceTest extends FunSuite with BeforeAndAfterAll {
-  val log = LoggerFactory.getLogger(classOf[PersistenceTest])
   implicit val ec = ExecutionContext.global
   implicit val timeout = new Timeout(3, TimeUnit.SECONDS)
   val system: ActorSystem = ActorSystem.create("persistence")
@@ -72,7 +70,7 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
     val future = computer ? ComputeCommand(1)
     future onComplete {
       case Success(count) => assert(count == 1)
-      case Failure(failure) => log.error(failure.getMessage); throw failure
+      case Failure(failure) => throw failure
     }
     computer ! SnapshotCommand
   }
