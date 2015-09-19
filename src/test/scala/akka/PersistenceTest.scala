@@ -28,11 +28,6 @@ class Computer extends PersistentActor {
   def updateComputedState(computedEvent: ComputedEvent): Unit = computedState = computedState.addComputedEvent(computedEvent)
 
   override def receiveCommand: Receive = {
-    case computedEvent: ComputedEvent => updateComputedState(computedEvent)
-    case SnapshotOffer(_, snapshot: ComputedState) => computedState = snapshot
-  }
-
-  override def receiveRecover: Receive = {
     case ComputeCommand(number) =>
       persist(ComputedEvent(number))(updateComputedState)
       persist(ComputedEvent(number)) { computedEvent =>
@@ -40,6 +35,11 @@ class Computer extends PersistentActor {
         context.system.eventStream.publish(computedEvent)
       }
     case SnapshotCommand => saveSnapshot(computedState)
+  }
+
+  override def receiveRecover: Receive = {
+    case computedEvent: ComputedEvent => updateComputedState(computedEvent)
+    case SnapshotOffer(_, snapshot: ComputedState) => computedState = snapshot
   }
 }
 
@@ -53,7 +53,8 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
     Await.result(system.terminate(), 3 seconds)
   }
 
-  test("actor") {
-
+  test("command") {
+    computer ! ComputeCommand(1)
+    computer ! SnapshotCommand
   }
 }
