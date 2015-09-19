@@ -22,7 +22,6 @@ case class ComputedState(computedEvents: List[ComputedEvent] = Nil) {
 }
 
 class Computer extends PersistentActor with ActorLogging {
-  log.info("*** Computer persistent actor initialized.")
   override def persistenceId: String = "computer-persistence-id"
 
   var computedState = ComputedState()
@@ -32,7 +31,6 @@ class Computer extends PersistentActor with ActorLogging {
     computedState = computedState.addComputedEvent(computedEvent)
   }
 
-  // WARNING: Commands are NOT received!!!
   override def receiveCommand: Receive = {
     case ComputeCommand(number) =>
       log.info("*** Received ComputeCommand.")
@@ -72,6 +70,7 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
       case Success(count) => assert(count == 1)
       case Failure(failure) => throw failure
     }
+    Await.result(future, 3 seconds)
     computer ! SnapshotCommand
   }
 }
