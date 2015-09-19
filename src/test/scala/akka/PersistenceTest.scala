@@ -36,7 +36,11 @@ class Computer extends PersistentActor with ActorLogging {
   override def receiveCommand: Receive = {
     case ComputeCommand(number) =>
       log.info("*** Received ComputeCommand.")
-      persistAsync(ComputedEvent(number)) { event => sender ! computedState.computedEvents.size }
+      persist(ComputedEvent(number)) { event =>
+        updateComputedState(event)
+        context.system.eventStream.publish(event)
+        sender ! computedState.computedEvents.size
+      }
     case SnapshotCommand =>
       log.info("*** Received SnapshotCommand.")
       saveSnapshot(computedState)
