@@ -12,11 +12,13 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext}
 import scala.util.{Failure, Success}
 
-case class ComputeCommand(f: (Int) => Int, x: Int) {
-  val number = f(x)
+abstract class Command[T](f: (T) => T, x: T) {
+  def execute: T = f(x)
 }
+case class ComputeCommand(f: (Int) => Int, x: Int) extends Command(f, x)
 
-case class ComputedEvent(number: Int)
+abstract class Event[T](v: T)
+case class ComputedEvent(v: Int) extends Event(v)
 
 case class ComputedState(computedEvents: List[ComputedEvent] = Nil) {
   def addComputedEvent(computedEvent: ComputedEvent): ComputedState = copy(computedEvent :: computedEvents)
@@ -35,7 +37,7 @@ class Computer extends PersistentActor {
 
   override def receiveCommand: Receive = {
     case command: ComputeCommand =>
-      persist(ComputedEvent(command.number)) { event =>
+      persist(ComputedEvent(command.execute)) { event =>
         updateComputedState(event)
         context.system.eventStream.publish(event)
         sender ! computedState.computedEvents.size
@@ -61,7 +63,7 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
 
   test("command > event") {
     val command = ComputeCommand((x: Int) => x * x, 2)
-    assert(command.number == 4)
+    assert(command.execute == 4)
     val future = computer ? ComputeCommand((x: Int) => x * x, 3)
     future onComplete {
       case Success(count) => assert(count == 1)
