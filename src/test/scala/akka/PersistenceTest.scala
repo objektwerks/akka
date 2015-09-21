@@ -14,16 +14,14 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext}
 import scala.util.{Failure, Success}
 
-sealed trait Command
-case class Compute(f: (Int) => Int, n: Int) extends Command {
+case class Compute(f: (Int) => Int, n: Int) {
   def execute: Int = f(n)
 }
 
-sealed trait Event
-case class Computed(value: Int, created: LocalDateTime = LocalDateTime.now()) extends Event
+case class Computed(value: Int, created: LocalDateTime = LocalDateTime.now())
 
-case class ComputedState(computedEvents: List[Computed] = Nil) {
-  def addComputedEvent(computedEvent: Computed): ComputedState = copy(computedEvent :: computedEvents)
+case class Events(events: List[Computed] = Nil) {
+  def addComputedEvent(event: Computed): Events = copy(event :: events)
 }
 
 case object State
@@ -33,10 +31,10 @@ case object Shutdown
 class Computer extends PersistentActor with ActorLogging {
   override def persistenceId: String = "computer-persistence-id"
 
-  var state = ComputedState()
+  var state = Events()
 
-  def updateState(computedEvent: Computed): Unit = {
-    state = state.addComputedEvent(computedEvent)
+  def updateState(event: Computed): Unit = {
+    state = state.addComputedEvent(event)
   }
 
   override def receiveCommand: Receive = {
@@ -45,7 +43,7 @@ class Computer extends PersistentActor with ActorLogging {
         updateState(event)
         context.system.eventStream.publish(event)
       }
-    case State => sender ! state.computedEvents.size
+    case State => sender ! state.events.size
     case Snapshot => saveSnapshot(state)
     case SaveSnapshotSuccess(metadata) => log.info(s"Computer snapshot successful: $metadata")
     case SaveSnapshotFailure(metadata, reason) => throw reason
@@ -54,7 +52,7 @@ class Computer extends PersistentActor with ActorLogging {
 
   override def receiveRecover: Receive = {
     case computedEvent: Computed => updateState(computedEvent)
-    case SnapshotOffer(_, snapshot: ComputedState) => state = snapshot
+    case SnapshotOffer(_, snapshot: Events) => state = snapshot
     case RecoveryCompleted => log.info("Computer snapshot recovery completed.")
   }
 }
