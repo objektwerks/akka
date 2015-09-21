@@ -25,6 +25,7 @@ case class ComputedState(computedEvents: List[ComputedEvent] = Nil) {
   def addComputedEvent(computedEvent: ComputedEvent): ComputedState = copy(computedEvent :: computedEvents)
 }
 
+case object State
 case object Snapshot
 case object Shutdown
 
@@ -42,8 +43,8 @@ class Computer extends PersistentActor {
       persist(ComputedEvent(command.execute)) { event =>
         updateComputedState(event)
         context.system.eventStream.publish(event)
-        sender ! computedState.computedEvents.size
       }
+    case State => sender ! computedState.computedEvents.size
     case Snapshot => saveSnapshot(computedState)
     case Shutdown => context.stop(self)
   }
@@ -69,7 +70,8 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
     assert(command.execute == 4)
     val event = ComputedEvent(command.execute)
     assert(event.value == 4)
-    val future = computer ? ComputeCommand((x: Int) => x * x, 3)
+    computer ! ComputeCommand((x: Int) => x * x, 3)
+    val future = computer ? State
     future onComplete {
       case Success(count) => assert(count == 1)
       case Failure(failure) => throw failure
