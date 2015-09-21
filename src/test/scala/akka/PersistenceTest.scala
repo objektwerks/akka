@@ -21,7 +21,7 @@ case class Compute(f: (Int) => Int, n: Int) {
 case class Computed(value: Int, created: LocalDateTime = LocalDateTime.now())
 
 case class Events(events: List[Computed] = Nil) {
-  def addEvent(event: Computed): Events = copy(event :: events)
+  def add(event: Computed): Events = copy(event :: events)
 }
 
 case object State
@@ -34,7 +34,7 @@ class Computer extends PersistentActor with ActorLogging {
   var state = Events()
 
   def updateState(event: Computed): Unit = {
-    state = state.addEvent(event)
+    state = state.add(event)
   }
 
   override def receiveCommand: Receive = {
@@ -43,10 +43,10 @@ class Computer extends PersistentActor with ActorLogging {
         updateState(event)
         context.system.eventStream.publish(event)
       }
-    case State => sender ! state.events.size
     case Snapshot => saveSnapshot(state)
     case SaveSnapshotSuccess(metadata) => log.info(s"Computer snapshot successful: $metadata")
     case SaveSnapshotFailure(metadata, reason) => throw reason
+    case State => sender ! state.events.size
     case Shutdown => context.stop(self)
   }
 
