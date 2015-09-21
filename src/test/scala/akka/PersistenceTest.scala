@@ -21,7 +21,7 @@ case class Compute(f: (Int) => Int, n: Int) {
 case class Computed(value: Int, created: LocalDateTime = LocalDateTime.now())
 
 case class Events(events: List[Computed] = Nil) {
-  def addComputedEvent(event: Computed): Events = copy(event :: events)
+  def addEvent(event: Computed): Events = copy(event :: events)
 }
 
 case object State
@@ -34,7 +34,7 @@ class Computer extends PersistentActor with ActorLogging {
   var state = Events()
 
   def updateState(event: Computed): Unit = {
-    state = state.addComputedEvent(event)
+    state = state.addEvent(event)
   }
 
   override def receiveCommand: Receive = {
