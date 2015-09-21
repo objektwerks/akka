@@ -4,15 +4,13 @@ import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{ActorLogging, ActorRef, ActorSystem, Props}
-import akka.pattern._
 import akka.persistence._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 import scala.annotation.tailrec
 import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext}
-import scala.util.{Failure, Success}
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 case class Compute(f: (Int) => Int, n: Int) {
   def execute: Int = f(n)
@@ -24,7 +22,6 @@ case class Events(events: List[Computed] = Nil) {
   def add(event: Computed): Events = copy(event :: events)
 }
 
-case object State
 case object Snapshot
 case object Shutdown
 
@@ -38,15 +35,10 @@ class Computer extends PersistentActor with ActorLogging {
   }
 
   override def receiveCommand: Receive = {
-    case command: Compute =>
-      persist(Computed(command.execute)) { event =>
-        updateState(event)
-        context.system.eventStream.publish(event)
-      }
+    case command: Compute => persistAsync(Computed(command.execute))(updateState)
     case Snapshot => saveSnapshot(state)
     case SaveSnapshotSuccess(metadata) => log.info(s"Computer snapshot successful: $metadata")
     case SaveSnapshotFailure(metadata, reason) => throw reason
-    case State => sender ! state.events.size
     case Shutdown => context.stop(self)
   }
 
@@ -76,7 +68,7 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
     Await.result(system.terminate(), 3 seconds)
   }
 
-  test("persistent") {
+  test("command > event") {
     val command = Compute(fibonacci, 1)
     assert(command.execute == 1)
 
@@ -85,15 +77,9 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
 
     for (n <- 1 to 100) {
       computer ! Compute(fibonacci, n)
-      if (n % 25 == 0) computer ! Snapshot
+      if (n % 50 == 0) computer ! Snapshot
     }
-
-    val state = computer ? State
-    state onComplete {
-      case Success(count) => assert(count == 100)
-      case Failure(failure) => throw failure
-    }
-    Await.result(state, 1 second)
+    Await.result(Future { Thread.sleep(3000) }, 3 seconds)
 
     computer ! Shutdown
   }
