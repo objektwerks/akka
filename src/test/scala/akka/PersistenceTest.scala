@@ -62,17 +62,17 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
   val system: ActorSystem = ActorSystem.create("persistence")
   val computer: ActorRef = system.actorOf(Props[Computer], name = "computer")
 
-  override protected def afterAll(): Unit = {
-    Await.result(system.terminate(), 3 seconds)
-  }
-
-  private def fibonacci(n: Int): Int = {
+  def fibonacci(n: Int): Int = {
     @tailrec
     def loop(n: Int, a: Int, b: Int): Int = n match {
       case 0 => a
       case _ => loop(n - 1, b, a + b)
     }
     loop(n, 0, 1)
+  }
+
+  override protected def afterAll(): Unit = {
+    Await.result(system.terminate(), 3 seconds)
   }
 
   test("persistent") {
