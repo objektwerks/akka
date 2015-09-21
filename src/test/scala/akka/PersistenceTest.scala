@@ -9,14 +9,15 @@ import akka.persistence.{PersistentActor, SnapshotOffer}
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
+import scala.annotation.tailrec
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext}
 import scala.util.{Failure, Success}
 
-abstract class Command[T](f: (T) => T, x: T) {
-  def execute: T = f(x)
+abstract class Command[T](f: (T) => T, n: T) {
+  def execute: T = f(n)
 }
-case class ComputeCommand(f: (Int) => Int, x: Int) extends Command(f, x)
+case class ComputeCommand(f: (Int) => Int, n: Int) extends Command(f, n)
 
 abstract class Event[T](value: T, created: LocalDateTime = LocalDateTime.now())
 case class ComputedEvent(value: Int) extends Event(value)
@@ -57,7 +58,7 @@ class Computer extends PersistentActor {
 
 class PersistenceTest extends FunSuite with BeforeAndAfterAll {
   implicit val ec = ExecutionContext.global
-  implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
+  implicit val timeout = new Timeout(3, TimeUnit.SECONDS)
   val system: ActorSystem = ActorSystem.create("persistence")
   val computer: ActorRef = system.actorOf(Props[Computer], name = "computer")
 
@@ -65,15 +66,24 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
     Await.result(system.terminate(), 3 seconds)
   }
 
+  private def fibonacci(n: Int): Int = {
+    @tailrec
+    def loop(n: Int, a: Int, b: Int): Int = n match {
+      case 0 => a
+      case _ => loop(n - 1, b, a + b)
+    }
+    loop(n, 0, 1)
+  }
+
   test("persistent") {
-    val command = ComputeCommand((x: Int) => x + x, 1)
-    assert(command.execute == 2)
+    val command = ComputeCommand(fibonacci, 1)
+    assert(command.execute == 1)
 
     val event = ComputedEvent(command.execute)
-    assert(event.value == 2)
+    assert(event.value == 1)
 
     for (n <- 1 to 10) {
-      computer ! ComputeCommand((x: Int) => x + x, n)
+      computer ! ComputeCommand(fibonacci, n)
     }
     computer ! Snapshot
 
