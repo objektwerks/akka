@@ -72,12 +72,14 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
     val event = ComputedEvent(command.execute)
     assert(event.value == 4)
 
-    computer ! ComputeCommand((x: Int) => x * x, 3)
+    for (factor <- 1 to 10) {
+      computer ! ComputeCommand((x: Int) => x * x, factor)
+    }
     computer ! Snapshot
 
     val future = computer ? State
     future onComplete {
-      case Success(state) => assert(state == 1)
+      case Success(state) => assert(state == 10)
       case Failure(failure) => throw failure
     }
     Await.result(future, 1 second)
