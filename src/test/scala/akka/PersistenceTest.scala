@@ -26,6 +26,7 @@ case class ComputedState(computedEvents: List[ComputedEvent] = Nil) {
 }
 
 case object Snapshot
+case object Shutdown
 
 class Computer extends PersistentActor {
   override def persistenceId: String = "computer-persistence-id"
@@ -44,6 +45,7 @@ class Computer extends PersistentActor {
         sender ! computedState.computedEvents.size
       }
     case Snapshot => saveSnapshot(computedState)
+    case Shutdown => context.stop(self)
   }
 
   override def receiveRecover: Receive = {
@@ -74,5 +76,6 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
     }
     Await.result(future, 3 seconds)
     computer ! Snapshot
+    computer ! Shutdown
   }
 }
