@@ -57,7 +57,7 @@ class Computer extends PersistentActor {
 
 class PersistenceTest extends FunSuite with BeforeAndAfterAll {
   implicit val ec = ExecutionContext.global
-  implicit val timeout = new Timeout(3, TimeUnit.SECONDS)
+  implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val system: ActorSystem = ActorSystem.create("persistence")
   val computer: ActorRef = system.actorOf(Props[Computer], name = "computer")
 
@@ -79,7 +79,7 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
       case Success(state) => assert(state == 1)
       case Failure(failure) => throw failure
     }
-    Await.result(future, 3 seconds)
+    Await.result(future, 1 second)
 
     computer ! Snapshot
     computer ! Shutdown
