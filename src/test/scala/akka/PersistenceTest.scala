@@ -1,5 +1,6 @@
 package akka
 
+import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{ActorRef, ActorSystem, Props}
@@ -17,8 +18,8 @@ abstract class Command[T](f: (T) => T, x: T) {
 }
 case class ComputeCommand(f: (Int) => Int, x: Int) extends Command(f, x)
 
-abstract class Event[T](v: T)
-case class ComputedEvent(v: Int) extends Event(v)
+abstract class Event[T](value: T, created: LocalDateTime = LocalDateTime.now())
+case class ComputedEvent(value: Int) extends Event(value)
 
 case class ComputedState(computedEvents: List[ComputedEvent] = Nil) {
   def addComputedEvent(computedEvent: ComputedEvent): ComputedState = copy(computedEvent :: computedEvents)
@@ -64,6 +65,8 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
   test("command > event") {
     val command = ComputeCommand((x: Int) => x * x, 2)
     assert(command.execute == 4)
+    val event = ComputedEvent(command.execute)
+    assert(event.value == 4)
     val future = computer ? ComputeCommand((x: Int) => x * x, 3)
     future onComplete {
       case Success(count) => assert(count == 1)
