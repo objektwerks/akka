@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit
 
 import akka.actor.{ActorLogging, ActorRef, ActorSystem, Props}
 import akka.pattern._
-import akka.persistence.{SaveSnapshotSuccess, PersistentActor, SaveSnapshotFailure, SnapshotOffer}
+import akka.persistence._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
@@ -55,6 +55,7 @@ class Computer extends PersistentActor with ActorLogging {
   override def receiveRecover: Receive = {
     case computedEvent: ComputedEvent => updateState(computedEvent)
     case SnapshotOffer(_, snapshot: ComputedState) => state = snapshot
+    case RecoveryCompleted => log.info("Computer snapshot recovery completed.")
   }
 }
 
