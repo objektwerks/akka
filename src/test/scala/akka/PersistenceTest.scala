@@ -66,14 +66,14 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("persistent") {
-    val command = ComputeCommand((x: Int) => x * x, 2)
-    assert(command.execute == 4)
+    val command = ComputeCommand((x: Int) => x + x, 1)
+    assert(command.execute == 2)
 
     val event = ComputedEvent(command.execute)
-    assert(event.value == 4)
+    assert(event.value == 2)
 
-    for (factor <- 1 to 10) {
-      computer ! ComputeCommand((x: Int) => x * x, factor)
+    for (n <- 1 to 10) {
+      computer ! ComputeCommand((x: Int) => x + x, n)
     }
     computer ! Snapshot
 
