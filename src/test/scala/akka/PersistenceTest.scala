@@ -14,16 +14,16 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext}
 import scala.util.{Failure, Success}
 
-abstract class Command[T](f: (T) => T, n: T) {
-  def execute: T = f(n)
+sealed trait Command
+case class Compute(f: (Int) => Int, n: Int) extends Command {
+  def execute: Int = f(n)
 }
-case class ComputeCommand(f: (Int) => Int, n: Int) extends Command(f, n)
 
-abstract class Event[T](value: T, created: LocalDateTime = LocalDateTime.now())
-case class ComputedEvent(value: Int) extends Event(value)
+sealed trait Event
+case class Computed(value: Int, created: LocalDateTime = LocalDateTime.now()) extends Event
 
-case class ComputedState(computedEvents: List[ComputedEvent] = Nil) {
-  def addComputedEvent(computedEvent: ComputedEvent): ComputedState = copy(computedEvent :: computedEvents)
+case class ComputedState(computedEvents: List[Computed] = Nil) {
+  def addComputedEvent(computedEvent: Computed): ComputedState = copy(computedEvent :: computedEvents)
 }
 
 case object State
@@ -35,13 +35,13 @@ class Computer extends PersistentActor with ActorLogging {
 
   var state = ComputedState()
 
-  def updateState(computedEvent: ComputedEvent): Unit = {
+  def updateState(computedEvent: Computed): Unit = {
     state = state.addComputedEvent(computedEvent)
   }
 
   override def receiveCommand: Receive = {
-    case command: ComputeCommand =>
-      persist(ComputedEvent(command.execute)) { event =>
+    case command: Compute =>
+      persist(Computed(command.execute)) { event =>
         updateState(event)
         context.system.eventStream.publish(event)
       }
@@ -53,7 +53,7 @@ class Computer extends PersistentActor with ActorLogging {
   }
 
   override def receiveRecover: Receive = {
-    case computedEvent: ComputedEvent => updateState(computedEvent)
+    case computedEvent: Computed => updateState(computedEvent)
     case SnapshotOffer(_, snapshot: ComputedState) => state = snapshot
     case RecoveryCompleted => log.info("Computer snapshot recovery completed.")
   }
@@ -79,14 +79,14 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("persistent") {
-    val command = ComputeCommand(fibonacci, 1)
+    val command = Compute(fibonacci, 1)
     assert(command.execute == 1)
 
-    val event = ComputedEvent(command.execute)
+    val event = Computed(command.execute)
     assert(event.value == 1)
 
     for (n <- 1 to 100) {
-      computer ! ComputeCommand(fibonacci, n)
+      computer ! Compute(fibonacci, n)
       if (n % 25 == 0) computer ! Snapshot
     }
 
