@@ -32,26 +32,26 @@ case object Shutdown
 class Computer extends PersistentActor {
   override def persistenceId: String = "computer-persistence-id"
 
-  var computedState = ComputedState()
+  var state = ComputedState()
 
-  def updateComputedState(computedEvent: ComputedEvent): Unit = {
-    computedState = computedState.addComputedEvent(computedEvent)
+  def updateState(computedEvent: ComputedEvent): Unit = {
+    state = state.addComputedEvent(computedEvent)
   }
 
   override def receiveCommand: Receive = {
     case command: ComputeCommand =>
       persist(ComputedEvent(command.execute)) { event =>
-        updateComputedState(event)
+        updateState(event)
         context.system.eventStream.publish(event)
       }
-    case State => sender ! computedState.computedEvents.size
-    case Snapshot => saveSnapshot(computedState)
+    case State => sender ! state.computedEvents.size
+    case Snapshot => saveSnapshot(state)
     case Shutdown => context.stop(self)
   }
 
   override def receiveRecover: Receive = {
-    case computedEvent: ComputedEvent => updateComputedState(computedEvent)
-    case SnapshotOffer(_, snapshot: ComputedState) => computedState = snapshot
+    case computedEvent: ComputedEvent => updateState(computedEvent)
+    case SnapshotOffer(_, snapshot: ComputedState) => state = snapshot
   }
 }
 
