@@ -7,7 +7,7 @@ import akka.pattern._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
-import scala.concurrent.{ExecutionContext, Await}
+import scala.concurrent.Await
 import scala.concurrent.duration._
 
 sealed trait MessageType
@@ -45,7 +45,6 @@ class Worker extends Actor with ActorLogging {
 }
 
 class TellAskTest extends FunSuite with BeforeAndAfterAll {
-  implicit val ec = ExecutionContext.global
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val system: ActorSystem = ActorSystem.create("tellask")
   val master: ActorRef = system.actorOf(Props[Master], name = "master")
@@ -63,14 +62,10 @@ class TellAskTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("system ? master") {
-    val future = master ? Message(Ask, "System", "ask ? message")
-    val message = Await.result(future, 1 second).asInstanceOf[String]
-    assert(message.nonEmpty)
+    assert(Await.result(master ? Message(Ask, "System", "ask ? message"), 1 second).asInstanceOf[String].nonEmpty)
   }
 
   test("system ? master ? worker") {
-    val future = master ? Message(AskWorker, "System", "ask ? message")
-    val message = Await.result(future, 1 second).asInstanceOf[String]
-    assert(message.nonEmpty)
+    assert(Await.result(master ? Message(AskWorker, "System", "ask ? message"), 1 second).asInstanceOf[String].nonEmpty)
   }
 }
