@@ -7,9 +7,8 @@ import akka.pattern._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
-import scala.concurrent.{ExecutionContext, Await}
 import scala.concurrent.duration._
-import scala.util.{Failure, Success}
+import scala.concurrent.{Await, ExecutionContext}
 
 case object ToGrandParents
 case object ToParents
@@ -62,35 +61,17 @@ class SelectionTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("grand parents") {
-    (system.actorSelection("/user/grandparents") ? ToGrandParents) onComplete {
-      case Success(message) => assert(message == "grandparents")
-      case Failure(failure) => throw failure
-    }
-    (system.actorSelection("/user/grandparents") ? ToParents) onComplete {
-      case Success(message) => assert(message == "parents")
-      case Failure(failure) => throw failure
-    }
-    (system.actorSelection("/user/*") ? ToChildren) onComplete {
-      case Success(message) => assert(message == "children")
-      case Failure(failure) => throw failure
-    }
+    assert("grandparents" == Await.result(system.actorSelection("/user/grandparents") ? ToGrandParents, 1 second).asInstanceOf[String])
+    assert("parents" == Await.result(system.actorSelection("/user/grandparents") ? ToParents, 1 second).asInstanceOf[String])
+    assert("children" == Await.result(system.actorSelection("/user/grandparents") ? ToChildren, 1 second).asInstanceOf[String])
   }
 
   test("parents") {
-    (system.actorSelection("/user/grandparents/parents") ? ToParents) onComplete {
-      case Success(message) => assert(message == "parents")
-      case Failure(failure) => throw failure
-    }
-    (system.actorSelection("/user/grandparents/*") ? ToChildren) onComplete {
-      case Success(message) => assert(message == "children")
-      case Failure(failure) => throw failure
-    }
+    assert("parents" == Await.result(system.actorSelection("/user/grandparents/parents") ? ToParents, 1 second).asInstanceOf[String])
+    assert("children" == Await.result(system.actorSelection("/user/grandparents/*") ? ToChildren, 1 second).asInstanceOf[String])
   }
 
   test("children") {
-    (system.actorSelection("/user/grandparents/parents/*") ? ToChildren) onComplete {
-      case Success(message) => assert(message == "children")
-      case Failure(failure) => throw failure
-    }
+    assert("children" == Await.result(system.actorSelection("/user/grandparents/parents/*") ? ToChildren, 1 second).asInstanceOf[String])
   }
 }
