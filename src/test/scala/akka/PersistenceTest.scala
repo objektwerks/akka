@@ -69,10 +69,10 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
   }
 
   override protected def afterAll(): Unit = {
-    Await.result(system.terminate(), 3 seconds)
+    Await.result(system.terminate(), 1 second)
   }
 
-  test("command > event") {
+  test("persistence") {
     val command = Compute(fibonacci, 1)
     assert(command.execute == 1)
 
@@ -80,12 +80,12 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
     assert(event.value == 1)
 
     for (n <- 1 to 10) computer ! Compute(fibonacci, n)
-    Await.result(Future { Thread.sleep(3000) }, 3 seconds)
+    Await.result(Future { Thread.sleep(1000) }, 1 second)
 
     computer ! Snapshot
 
     val future = computer ? Result
-    val result = Await.result(future, 3 seconds).asInstanceOf[List[Int]]
+    val result = Await.result(future, 1 second).asInstanceOf[List[Int]]
     assert(result.size == 10)
 
     computer ! Shutdown
