@@ -7,10 +7,8 @@ import akka.pattern._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
-import scala.concurrent.Await
-import scala.concurrent.ExecutionContext.Implicits.{global => ec}
+import scala.concurrent.{ExecutionContext, Await}
 import scala.concurrent.duration._
-import scala.util.{Failure, Success}
 
 sealed trait MessageType
 case object Tell extends MessageType
@@ -20,6 +18,8 @@ case object AskWorker extends MessageType
 case class Message(messageType: MessageType, from: String, message: String)
 
 class Master extends Actor with ActorLogging {
+  import context.dispatcher
+
   log.info(s"Master created: $self")
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val worker: ActorRef = context.actorOf(Props[Worker], name = "worker")
@@ -45,6 +45,7 @@ class Worker extends Actor with ActorLogging {
 }
 
 class TellAskTest extends FunSuite with BeforeAndAfterAll {
+  implicit val ec = ExecutionContext.global
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val system: ActorSystem = ActorSystem.create("tellask")
   val master: ActorRef = system.actorOf(Props[Master], name = "master")
@@ -63,17 +64,13 @@ class TellAskTest extends FunSuite with BeforeAndAfterAll {
 
   test("system ? master") {
     val future = master ? Message(Ask, "System", "ask ? message")
-    future onComplete {
-      case Success(message) => assert(message.toString.nonEmpty)
-      case Failure(failure) => throw failure
-    }
+    val message = Await.result(future, 1 second).asInstanceOf[String]
+    assert(message.toString.nonEmpty)
   }
 
   test("system ? master ? worker") {
     val future = master ? Message(AskWorker, "System", "ask ? message")
-    future onComplete  {
-      case Success(message) => assert(message.toString.nonEmpty)
-      case Failure(failure) => throw failure
-    }
+    val message = Await.result(future, 1 second).asInstanceOf[String]
+    assert(message.toString.nonEmpty)
   }
 }
