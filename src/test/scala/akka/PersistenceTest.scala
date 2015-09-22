@@ -84,9 +84,7 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
 
     computer ! Snapshot
 
-    val future = computer ? Result
-    val result = Await.result(future, 3 seconds).asInstanceOf[List[Int]]
-    assert(result.size == 10)
+    assert(Await.result(computer ? Result, 3 seconds).asInstanceOf[List[Int]].size == 10)
 
     computer ! Shutdown
   }
