@@ -51,7 +51,7 @@ class Children extends Actor with ActorLogging {
 class SelectionTest extends FunSuite with BeforeAndAfterAll {
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val system: ActorSystem = ActorSystem.create("selection")
-  val grandparents = system.actorOf(Props[GrandParents], name = "grandparents")
+  val grandparents: ActorRef = system.actorOf(Props[GrandParents], name = "grandparents")
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 1 second)
