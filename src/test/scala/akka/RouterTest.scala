@@ -10,7 +10,6 @@ import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 import scala.concurrent.Await
-import scala.concurrent.ExecutionContext.Implicits.{global => ec}
 import scala.concurrent.duration._
 
 class Clock extends Actor {
@@ -44,8 +43,8 @@ class RouterTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("router") {
-    clock ? "time a: " onSuccess { case t: String => assert(t.nonEmpty) }
-    clock ? "time b: " onSuccess { case t: String => assert(t.nonEmpty) }
-    clock ? "time c: " onSuccess { case t: String => assert(t.nonEmpty) }
+    assert(Await.result(clock ? "time a: ", 1 second).asInstanceOf[String].nonEmpty)
+    assert(Await.result(clock ? "time b: ", 1 second).asInstanceOf[String].nonEmpty)
+    assert(Await.result(clock ? "time c: ", 1 second).asInstanceOf[String].nonEmpty)
   }
 }
