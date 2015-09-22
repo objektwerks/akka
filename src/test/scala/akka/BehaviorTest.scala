@@ -47,7 +47,7 @@ class BehaviorTest extends FunSuite with BeforeAndAfterAll {
   val triathlete: ActorRef = system.actorOf(Props[Triathlete], name = "triathlete")
 
   override protected def afterAll(): Unit = {
-    Await.result(system.terminate(), 3 seconds)
+    Await.result(system.terminate(), 1 second)
   }
 
   test("race") {

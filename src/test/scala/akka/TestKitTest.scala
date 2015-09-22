@@ -19,7 +19,7 @@ class TestKitTest extends TestKit(ActorSystem("testkit")) with ImplicitSender
   val ping: ActorRef = system.actorOf(Props[Ping], name = "ping")
 
   override protected def afterAll(): Unit = {
-    Await.result(system.terminate(), 3 seconds)
+    Await.result(system.terminate(), 1 second)
   }
 
   "Ping actor" should {

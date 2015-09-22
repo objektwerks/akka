@@ -54,7 +54,7 @@ class SelectionTest extends FunSuite with BeforeAndAfterAll {
   val grandparents = system.actorOf(Props[GrandParents], name = "grandparents")
 
   override protected def afterAll(): Unit = {
-    Await.result(system.terminate(), 3 seconds)
+    Await.result(system.terminate(), 1 second)
   }
 
   test("grand parents") {

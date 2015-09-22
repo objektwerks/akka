@@ -40,7 +40,7 @@ class RouterTest extends FunSuite with BeforeAndAfterAll {
   val clock: ActorRef = system.actorOf(Props[Clock], name = "clock")
 
   override protected def afterAll(): Unit = {
-    Await.result(system.terminate(), 3 seconds)
+    Await.result(system.terminate(), 1 second)
   }
 
   test("router") {

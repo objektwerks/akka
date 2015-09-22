@@ -76,7 +76,7 @@ class SupervisorStrategyTest extends FunSuite with BeforeAndAfterAll {
   system.actorOf(Props[Time], name = "watcher")
 
   override protected def afterAll(): Unit = {
-    Await.result(system.terminate(), 3 seconds)
+    Await.result(system.terminate(), 1 second)
   }
 
   test("nanny ! child") {

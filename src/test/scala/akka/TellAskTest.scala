@@ -50,7 +50,7 @@ class TellAskTest extends FunSuite with BeforeAndAfterAll {
   val master: ActorRef = system.actorOf(Props[Master], name = "master")
 
   override protected def afterAll(): Unit = {
-    Await.result(system.terminate(), 3 seconds)
+    Await.result(system.terminate(), 1 second)
   }
 
   test("system ! master") {

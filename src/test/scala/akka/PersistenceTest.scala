@@ -80,7 +80,7 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
     assert(event.value == 1)
 
     for (n <- 1 to 10) computer ! Compute(fibonacci, n)
-    Await.result(Future { Thread.sleep(1000) }, 1 second)
+    Await.result(Future { Thread.sleep(1000) }, 3 seconds)
 
     computer ! Snapshot
 

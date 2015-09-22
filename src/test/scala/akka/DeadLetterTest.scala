@@ -29,7 +29,7 @@ class DeadLetterTest extends FunSuite  with BeforeAndAfterAll {
   system.eventStream.subscribe(listener, classOf[DeadLetter])
 
   override protected def afterAll(): Unit = {
-    Await.result(system.terminate(), 3 seconds)
+    Await.result(system.terminate(), 1 second)
   }
 
   test("dead letter") {
