@@ -11,8 +11,7 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 import scala.annotation.tailrec
 import scala.concurrent.duration._
-import scala.concurrent.{Future, Await, ExecutionContext}
-import scala.util.{Failure, Success}
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 case class Compute(f: (Int) => Int, n: Int) {
   def execute: Int = f(n)
