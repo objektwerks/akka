@@ -8,7 +8,6 @@ import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 import scala.concurrent.Await
-import scala.concurrent.ExecutionContext.Implicits.{global => ec}
 import scala.concurrent.duration._
 
 trait Task
@@ -60,6 +59,8 @@ class Child extends Actor with ActorLogging {
 }
 
 class Watcher extends Actor with ActorLogging {
+  import context.dispatcher
+
   private implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   private val futureChild = context.system.actorSelection("/user/nanny/*").resolveOne()
   futureChild onSuccess { case child => context.watch(child)}
