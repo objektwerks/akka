@@ -7,8 +7,8 @@ import akka.pattern._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
+import scala.concurrent.Await
 import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext}
 
 case object ToGrandParents
 case object ToParents
@@ -51,7 +51,6 @@ class Children extends Actor with ActorLogging {
 }
 
 class SelectionTest extends FunSuite with BeforeAndAfterAll {
-  implicit val ec = ExecutionContext.global
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val system: ActorSystem = ActorSystem.create("selection")
   val grandparents: ActorRef = system.actorOf(Props[GrandParents], name = "grandparents")
