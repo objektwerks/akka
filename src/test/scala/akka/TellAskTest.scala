@@ -65,12 +65,12 @@ class TellAskTest extends FunSuite with BeforeAndAfterAll {
   test("system ? master") {
     val future = master ? Message(Ask, "System", "ask ? message")
     val message = Await.result(future, 1 second).asInstanceOf[String]
-    assert(message.toString.nonEmpty)
+    assert(message.nonEmpty)
   }
 
   test("system ? master ? worker") {
     val future = master ? Message(AskWorker, "System", "ask ? message")
     val message = Await.result(future, 1 second).asInstanceOf[String]
-    assert(message.toString.nonEmpty)
+    assert(message.nonEmpty)
   }
 }
