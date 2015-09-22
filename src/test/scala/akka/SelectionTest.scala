@@ -7,8 +7,7 @@ import akka.pattern._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
-import scala.concurrent.Await
-import scala.concurrent.ExecutionContext.Implicits.{global => ec}
+import scala.concurrent.{ExecutionContext, Await}
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 
@@ -17,6 +16,8 @@ case object ToParents
 case object ToChildren
 
 class GrandParents extends Actor with ActorLogging {
+  import context.dispatcher
+
   log.info(s"GrandParents created: $self")
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val parent: ActorRef = context.actorOf(Props[Parents], name = "parents")
@@ -29,6 +30,8 @@ class GrandParents extends Actor with ActorLogging {
 }
 
 class Parents extends Actor with ActorLogging {
+  import context.dispatcher
+
   log.info(s"Parents created: $self")
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val child: ActorRef = context.actorOf(Props[Children], name = "children")
@@ -49,6 +52,7 @@ class Children extends Actor with ActorLogging {
 }
 
 class SelectionTest extends FunSuite with BeforeAndAfterAll {
+  implicit val ec = ExecutionContext.global
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val system: ActorSystem = ActorSystem.create("selection")
   val grandparents: ActorRef = system.actorOf(Props[GrandParents], name = "grandparents")
