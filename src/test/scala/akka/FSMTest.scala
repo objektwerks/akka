@@ -17,7 +17,7 @@ case class Data(flowRate: Int)
 
 case class Event(state: State, data: Data)
 
-class Pump extends Actor with FSM[State, Data] with LoggingFSM[State, Data] {
+class Pump extends Actor with FSM[State, Data] {
   startWith(Off, Data(0))
   when(Off) {
     case Event(On, Data(flowRate)) => goto(On) using Data(flowRate)
