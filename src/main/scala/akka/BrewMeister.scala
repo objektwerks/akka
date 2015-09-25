@@ -6,7 +6,7 @@ import scalafx.scene.Scene
 import scalafx.scene.control._
 import scalafx.scene.layout.VBox
 
-object App extends JFXApp {
+object BrewMeister extends JFXApp {
   val contentPane = new VBox {
     maxWidth = 400
     maxHeight = 400
