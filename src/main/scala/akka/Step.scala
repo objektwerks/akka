@@ -2,6 +2,6 @@ package akka
 
 import akka.actor.Actor
 
-class Step extends Actor {
+case class Step(ingrediants: List[Ingrediant]) extends Actor {
   override def receive: Receive = ???
 }
