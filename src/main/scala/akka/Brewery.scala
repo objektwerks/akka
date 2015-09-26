@@ -7,16 +7,16 @@ import scalafx.scene.control._
 import scalafx.scene.layout.VBox
 
 object Brewery extends JFXApp {
+  val toolbar = new ToolBar {
+    content = List()
+  }
+
   val contentPane = new VBox {
     maxWidth = 400
     maxHeight = 400
     spacing = 6
     padding = Insets(6)
     children = List()
-  }
-
-  val toolbar = new ToolBar {
-    content = List()
   }
 
   val appPane = new VBox {
