@@ -9,6 +9,7 @@ ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
 libraryDependencies ++= {
   val akkaVersion = "2.4.0-RC3"
   Seq(
+    "com.typesafe.phoenix" %% "cinnamon-takipi" % "0.2.0",
     "com.typesafe.akka" % "akka-actor_2.11" % akkaVersion,
     "com.typesafe.akka" % "akka-cluster_2.11" % akkaVersion,
     "com.typesafe.akka" % "akka-persistence_2.11" % akkaVersion,
