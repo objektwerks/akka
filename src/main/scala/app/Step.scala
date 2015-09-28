@@ -1,4 +1,4 @@
-package akka
+package app
 
 import akka.actor.Actor
 

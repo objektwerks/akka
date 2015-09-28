@@ -1,4 +1,4 @@
-package akka
+package app
 
 import java.time.LocalDateTime
 

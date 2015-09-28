@@ -1,4 +1,4 @@
-package akka
+package app
 
 case class Recipe(steps: List[Step]) {
 

@@ -1,6 +1,6 @@
-package akka
+package app
 
-import akka.actor.{Props, ActorRef, ActorSystem}
+import akka.actor.{ActorRef, ActorSystem, Props}
 
 object BrewMeister extends App {
   val system: ActorSystem = ActorSystem.create("IPAFactory")
