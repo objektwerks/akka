@@ -14,6 +14,6 @@ class Brewer extends Actor {
   }
 
   override def receive: Receive = {
-    case brew: Brew => router.route(brew, sender)
+    case recipe: Recipe => router.route(recipe, sender)
   }
 }
