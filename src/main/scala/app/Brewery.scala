@@ -2,7 +2,7 @@ package app
 
 import akka.actor.Actor
 
-class Brewer extends Actor {
+class Brewery extends Actor {
   override def receive: Receive = {
     case recipe: Recipe =>
   }
