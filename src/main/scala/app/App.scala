@@ -10,7 +10,7 @@ import scalafx.scene.layout.VBox
 
 object App extends JFXApp {
   val system: ActorSystem = ActorSystem.create("IPAFactory")
-  val brewer: ActorRef = system.actorOf(Props[BrewMeister], name = "brewer")
+  val brewmeister: ActorRef = system.actorOf(Props[BrewMeister], name = "brewmeister")
 
   val toolbar = new ToolBar {
     content = List()
