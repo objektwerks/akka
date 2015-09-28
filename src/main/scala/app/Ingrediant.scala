@@ -1,5 +1,5 @@
 package app
 
-case class Ingrediant(name: String, amount: Float) {
-
+trait Ingrediant {
+  def name: String
 }
