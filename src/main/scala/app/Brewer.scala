@@ -1,11 +1,19 @@
 package app
 
-import akka.actor.Actor
-
-case class Brew(batch: Batch)
+import akka.actor.{Props, Actor}
+import akka.routing.{RoundRobinRoutingLogic, Router, ActorRefRoutee}
 
 class Brewer extends Actor {
+  var router = {
+    val routees = Vector.fill(3) {
+      val routee = context.actorOf(Props[Batch])
+      context watch routee
+      ActorRefRoutee(routee)
+    }
+    Router(RoundRobinRoutingLogic(), routees)
+  }
+
   override def receive: Receive = {
-    case Brew(batch) => batch.brew()
+    case brew: Brew => router.route(brew, sender)
   }
 }

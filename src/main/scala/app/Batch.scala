@@ -1,12 +1,11 @@
 package app
 
-import java.time.LocalDateTime
+import akka.actor.Actor
 
-case class Batch(recipe: Recipe,
-                 initiated: LocalDateTime = LocalDateTime.now(),
-                 completed: LocalDateTime = LocalDateTime.now()) {
-  def brew(): Unit = {
-    recipe.brew()
-    completed.adjustInto(LocalDateTime.now())
+class Batch extends Actor {
+  override def receive: Receive = {
+    case Brew(recipe, _, _) =>
+      val brewed = recipe.brew()
+      sender.tell(brewed, context.parent)
   }
 }
