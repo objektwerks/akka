@@ -14,8 +14,6 @@ class BatchListener(batchEventListener: BatchEventListener) extends Actor {
   }
 }
 
-class BatchEventListener {
-  def onEvent(batch: Batch): Unit = {
-
-  }
+trait BatchEventListener {
+  def onEvent(batch: Batch): Unit
 }

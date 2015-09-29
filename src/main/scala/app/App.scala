@@ -7,7 +7,11 @@ import scalafx.scene.control.ToolBar
 import scalafx.scene.layout.VBox
 
 object App extends JFXApp {
-  val listener = new BatchEventListener()
+  val listener = new BatchEventListener() {
+    override def onEvent(batch: Batch): Unit = {
+
+    }
+  }
   val brewery = new Brewery(listener)
 
   val toolbar = new ToolBar {
