@@ -1,6 +1,6 @@
 package app
 
-import akka.actor.{Props, ActorRef, Actor}
+import akka.actor.{Actor, ActorRef, Props}
 
 class Masher extends Actor {
   val boiler: ActorRef = context.actorOf(Props[Boiler], name = "boiler")
