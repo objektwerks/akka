@@ -4,6 +4,6 @@ import akka.actor.Actor
 
 class Bottler extends Actor {
   override def receive: Receive = {
-    case bootle: Bottle =>
+    case recipe: Recipe =>
   }
 }
