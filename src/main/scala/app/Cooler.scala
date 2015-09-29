@@ -6,6 +6,6 @@ class Cooler extends Actor {
   val fermenter: ActorRef = context.actorOf(Props[Fermenter], name = "fermenter")
 
   override def receive: Receive = {
-    case recipe: Recipe =>
+    case recipe: Recipe => fermenter ! recipe
   }
 }
