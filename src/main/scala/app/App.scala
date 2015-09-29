@@ -1,7 +1,5 @@
 package app
 
-import akka.actor.{ActorRef, ActorSystem, Props}
-
 import scalafx.application.JFXApp
 import scalafx.geometry.Insets
 import scalafx.scene.Scene
@@ -9,8 +7,7 @@ import scalafx.scene.control.ToolBar
 import scalafx.scene.layout.VBox
 
 object App extends JFXApp {
-  val system: ActorSystem = ActorSystem.create("Brewery")
-  val brewer: ActorRef = system.actorOf(Props[Brewer], name = "brewer")
+  val brewery = new Brewery()
 
   val toolbar = new ToolBar {
     content = List()
