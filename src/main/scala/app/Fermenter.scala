@@ -1,10 +1,8 @@
 package app
 
-import akka.actor.{Actor, ActorRef, Props}
+import akka.actor.{Actor, ActorRef}
 
-class Fermenter extends Actor {
-  val conditioner: ActorRef = context.actorOf(Props[Conditioner], name = "conditioner")
-
+class Fermenter(conditioner: ActorRef) extends Actor {
   override def receive: Receive = {
     case batch: Batch => conditioner ! batch
   }

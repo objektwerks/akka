@@ -30,6 +30,7 @@ class BreweryTest extends FunSuite with BeforeAndAfterAll {
 
   test("brew") {
     brewery.brew(IPA())
+    logger.info("Brewing...")
     Await.result(Future { Thread.sleep(3000) }, 4 seconds)
   }
 }

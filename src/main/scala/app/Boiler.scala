@@ -1,10 +1,8 @@
 package app
 
-import akka.actor.{Actor, ActorRef, Props}
+import akka.actor.{Actor, ActorRef}
 
-class Boiler extends Actor {
-  val cooler: ActorRef = context.actorOf(Props[Cooler], name = "cooler")
-
+class Boiler(cooler: ActorRef) extends Actor {
   override def receive: Receive = {
     case batch: Batch => cooler ! batch
   }
