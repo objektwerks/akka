@@ -4,7 +4,8 @@ import java.time.LocalDateTime
 
 import akka.actor.Actor
 
-case class Batch(initiated: LocalDateTime,
+case class Batch(number: Int,
+                 initiated: LocalDateTime,
                  completed: LocalDateTime,
                  recipe: Recipe)
 
