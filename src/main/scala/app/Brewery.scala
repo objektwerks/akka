@@ -1,11 +1,14 @@
 package app
 
 import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor._
+import akka.util.Timeout
 
 class Brewery(batchEventListener: BatchEventListener) {
+  implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val batchNumber = new AtomicInteger()
   val system: ActorSystem = ActorSystem.create("Brewery")
   val brewer: ActorRef = system.actorOf(Props[Brewer], name = "brewer")
