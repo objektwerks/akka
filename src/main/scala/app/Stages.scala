@@ -1,14 +1,12 @@
 package app
 
-case class Recipe(name: String, description: String)
+case class Mash(recipe: Recipe)
 
-case class Mash(recipe: Recipe, malt: Malt)
-
-case class Boil(recipe: Recipe, hops: Hops)
+case class Boil(recipe: Recipe)
 
 case class Cool(recipe: Recipe)
 
-case class Ferment(recipe: Recipe, yeast: Yeast)
+case class Ferment(recipe: Recipe)
 
 case class Condition(recipe: Recipe)
 
