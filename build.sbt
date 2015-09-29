@@ -37,7 +37,6 @@ scalacOptions ++= Seq(
 )
 
 javaOptions += "-server -Xss1m -Xmx2g"
-javaOptions in run += "-agentlib:TakipiAgent"
 
 fork in run := true
 fork in test := true
