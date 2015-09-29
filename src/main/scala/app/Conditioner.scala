@@ -4,6 +4,6 @@ import akka.actor.Actor
 
 class Conditioner extends Actor {
   override def receive: Receive = {
-    case condition: Brew.Condition =>
+    case condition: Condition =>
   }
 }

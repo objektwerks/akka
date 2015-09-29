@@ -4,6 +4,6 @@ import akka.actor.Actor
 
 class Boiler extends Actor {
   override def receive: Receive = {
-    case boil: Brew.Boil =>
+    case boil: Boil =>
   }
 }
