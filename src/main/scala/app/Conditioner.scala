@@ -6,6 +6,6 @@ class Conditioner extends Actor {
   val bottler: ActorRef = context.actorOf(Props[Bottler], name = "bottler")
 
   override def receive: Receive = {
-    case recipe: Recipe => bottler ! recipe
+    case batch: Batch => bottler ! batch
   }
 }

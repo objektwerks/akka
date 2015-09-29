@@ -6,6 +6,6 @@ class Brewer extends Actor {
   val masher: ActorRef = context.actorOf(Props[Masher], name = "masher")
 
   override def receive: Receive = {
-    case recipe: Recipe => masher ! recipe
+    case batch: Batch => masher ! batch
   }
 }

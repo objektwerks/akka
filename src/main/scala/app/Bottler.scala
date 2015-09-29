@@ -4,6 +4,6 @@ import akka.actor.Actor
 
 class Bottler extends Actor {
   override def receive: Receive = {
-    case recipe: Recipe =>
+    case batch: Batch => context.system.eventStream.publish(batch)
   }
 }
