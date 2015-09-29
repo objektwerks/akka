@@ -1,7 +1,6 @@
 package app
 
 import akka.actor.{ActorRef, ActorSystem, Props}
-import com.typesafe.config.ConfigFactory
 
 import scalafx.application.JFXApp
 import scalafx.geometry.Insets
@@ -10,7 +9,7 @@ import scalafx.scene.control.ToolBar
 import scalafx.scene.layout.VBox
 
 object Brewery extends JFXApp {
-  val system: ActorSystem = ActorSystem.create("Brewery", ConfigFactory.load("brewery.conf"))
+  val system: ActorSystem = ActorSystem.create("Brewery")
   val brewer: ActorRef = system.actorOf(Props[Brewer], name = "brewer")
 
   val toolbar = new ToolBar {
