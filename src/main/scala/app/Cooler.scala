@@ -1,10 +1,14 @@
 package app
 
+import java.util.concurrent.TimeUnit
+
 import akka.actor.{ActorLogging, Actor, ActorRef}
 import akka.cluster.Cluster
 import akka.cluster.ClusterEvent._
+import akka.util.Timeout
 
 class Cooler(fermenter: ActorRef) extends Actor with ActorLogging {
+  implicit val timeout = new Timeout(10, TimeUnit.SECONDS)
   val cluster = Cluster(context.system)
 
   override def preStart(): Unit = {

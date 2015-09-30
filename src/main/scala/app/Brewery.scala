@@ -12,7 +12,7 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class Brewery(batchEventListener: BatchEventListener) {
-  implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
+  implicit val timeout = new Timeout(10, TimeUnit.SECONDS)
   val batchNumber = new AtomicInteger()
 
   val system: ActorSystem = ActorSystem.create("Brewery", ConfigFactory.load("brewery.conf"))
