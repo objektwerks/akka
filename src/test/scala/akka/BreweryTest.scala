@@ -11,15 +11,13 @@ import scala.concurrent.{ExecutionContext, Future, Await}
 import scala.concurrent.duration._
 
 class BreweryTest extends FunSuite with BeforeAndAfterAll {
-  val logger = LoggerFactory.getLogger(this.getClass)
   implicit val ec = ExecutionContext.global
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
+  val log = LoggerFactory.getLogger(this.getClass)
   val listener = new BatchEventListener() {
     override def onEvent(batch: Batch): Unit = {
       assert(batch != null)
-      logger.info("*********")
-      logger.info(s"Batch received: $batch")
-      logger.info("*********")
+      log.info(s"*** Batch received: $batch")
     }
   }
   val brewery = new Brewery(listener)
@@ -29,9 +27,8 @@ class BreweryTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("brew") {
-    Await.result(Future { Thread.sleep(2000) }, 3 seconds)
     brewery.brew(IPA())
-    logger.info("Brewing...")
+    log.info("*** Brewing...")
     Await.result(Future { Thread.sleep(2000) }, 3 seconds)
   }
 }
