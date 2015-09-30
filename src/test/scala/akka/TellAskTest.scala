@@ -46,7 +46,7 @@ class Worker extends Actor with ActorLogging {
 
 class TellAskTest extends FunSuite with BeforeAndAfterAll {
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
-  val system: ActorSystem = ActorSystem.create("tellask")
+  val system: ActorSystem = ActorSystem.create("tellask", Conf.config)
   val master: ActorRef = system.actorOf(Props[Master], name = "master")
 
   override protected def afterAll(): Unit = {

@@ -35,7 +35,7 @@ class Time extends Actor {
 
 class RouterTest extends FunSuite with BeforeAndAfterAll {
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
-  val system: ActorSystem = ActorSystem.create("router")
+  val system: ActorSystem = ActorSystem.create("router", Conf.config)
   val clock: ActorRef = system.actorOf(Props[Clock], name = "clock")
 
   override protected def afterAll(): Unit = {

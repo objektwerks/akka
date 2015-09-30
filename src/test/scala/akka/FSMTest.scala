@@ -30,7 +30,7 @@ class Pump extends Actor with FSM[State, Data] {
 
 class FSMTest extends FunSuite with BeforeAndAfterAll {
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
-  val system: ActorSystem = ActorSystem.create("fsm")
+  val system: ActorSystem = ActorSystem.create("fsm", Conf.config)
   val pump: ActorRef = system.actorOf(Props[Pump], name = "pump")
 
   override protected def afterAll(): Unit = {
