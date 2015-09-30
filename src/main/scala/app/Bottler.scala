@@ -11,6 +11,7 @@ import akka.util.Timeout
 class Bottler extends Actor with ActorLogging {
   implicit val timeout = new Timeout(10, TimeUnit.SECONDS)
   val cluster = Cluster(context.system)
+  log.info("Bottler activated!")
 
   override def preStart(): Unit = {
     cluster.subscribe(self, initialStateMode = InitialStateAsEvents, classOf[MemberEvent], classOf[UnreachableMember])

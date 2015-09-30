@@ -10,6 +10,7 @@ import akka.util.Timeout
 class Masher(boiler: ActorRef) extends Actor with ActorLogging {
   implicit val timeout = new Timeout(10, TimeUnit.SECONDS)
   val cluster = Cluster(context.system)
+  log.info("Masher activated!")
 
   override def preStart(): Unit = {
     cluster.subscribe(self, initialStateMode = InitialStateAsEvents, classOf[MemberEvent], classOf[UnreachableMember])
