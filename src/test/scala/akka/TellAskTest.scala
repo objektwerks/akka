@@ -25,7 +25,7 @@ class Master extends Actor with ActorLogging {
   val worker: ActorRef = context.actorOf(Props[Worker], name = "worker")
 
   def receive = {
-    case Message(Tell, from, message) => log.info(s"\nMaster received $message from $from.")
+    case Message(Tell, from, message) => log.info(s"Master received $message from $from.")
     case Message(TellWorker, from, message) => worker ! Message(Tell, s"$from -> Master", message)
     case Message(Ask, from, message) => sender ! s"Master received and responded to $message from $from."
     case Message(AskWorker, from, message) => worker ? Message(AskWorker, s"$from -> Master", message) pipeTo sender
