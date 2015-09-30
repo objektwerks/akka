@@ -1,5 +1,7 @@
 package app
 
+import java.time.LocalDateTime
+
 case class Malt(kind: String)
 
 case class Hop(kind: String)
@@ -23,3 +25,8 @@ case class IPA(name: String = "IPA",
                hops: List[Hop] = List(Hop("Cascade"), Hop("Amarillo")),
                yeast: Yeast = Yeast("Brewers"),
                water: Water = Water("Spring")) extends Recipe
+
+case class Batch(number: Int,
+                 initiated: LocalDateTime,
+                 completed: LocalDateTime,
+                 recipe: Recipe)
