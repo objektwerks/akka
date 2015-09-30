@@ -28,7 +28,7 @@ object App extends JFXApp {
   }
 
   stage = new JFXApp.PrimaryStage {
-    title.value = "IPA Factory"
+    title = "IPA Brewery"
     scene = new Scene {
       root = appPane
     }
