@@ -6,12 +6,13 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor._
 import akka.util.Timeout
+import com.typesafe.config.ConfigFactory
 
 class Brewery(batchEventListener: BatchEventListener) {
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val batchNumber = new AtomicInteger()
 
-  val system: ActorSystem = ActorSystem.create("Brewery")
+  val system: ActorSystem = ActorSystem.create("Brewery", ConfigFactory.load("brewery.conf"))
   val bottler: ActorRef = system.actorOf(Props[Bottler], name = "bottler")
   val conditioner: ActorRef = system.actorOf(Props(new Conditioner(bottler)), name = "conditioner")
   val fermenter: ActorRef = system.actorOf(Props(new Fermenter(conditioner)), name = "fermenter")
