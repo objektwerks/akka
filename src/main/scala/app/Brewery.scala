@@ -1,8 +1,6 @@
 package app
 
-import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor._
 import akka.util.Timeout
@@ -12,10 +10,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-class Brewery(batchEventListener: BatchEventListener) {
+object Brewery extends App {
   implicit val timeout = new Timeout(10, TimeUnit.SECONDS)
   val log = LoggerFactory.getLogger(this.getClass)
-  val batchNumber = new AtomicInteger()
 
   val system: ActorSystem = ActorSystem.create("Brewery", ConfigFactory.load("brewery.conf"))
   val bottler: ActorRef = system.actorOf(Props[Bottler], name = "bottler")
@@ -26,19 +23,12 @@ class Brewery(batchEventListener: BatchEventListener) {
   val masher: ActorRef = system.actorOf(Props(new Masher(boiler)), name = "masher")
   val brewer: ActorRef = system.actorOf(Props(new Brewer(masher)), name = "brewer")
 
-  val listener: ActorRef = system.actorOf(Props(new BatchListener(batchEventListener)), name = "listener")
-  system.eventStream.subscribe(listener, classOf[Batch])
+  system.eventStream.subscribe(brewer, classOf[Batch])
   log.info("Brewery initialized!")
 
-  def brew(recipe: Recipe): Unit = {
-    log.info(s"Brewery brewing this recipe: $recipe")
-    brewer ! Batch(batchNumber.incrementAndGet(), LocalDateTime.now, LocalDateTime.now, recipe)
-  }
-
-  def shutdown: Boolean = {
+  sys addShutdownHook {
     log.info("Brewery shutting down...")
     Await.result(system.terminate(), 3 seconds)
     log.info("Brewery shutdown.")
-    true
   }
 }
