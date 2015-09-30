@@ -7,12 +7,14 @@ import java.util.concurrent.atomic.AtomicInteger
 import akka.actor._
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
+import org.slf4j.{LoggerFactory, Logger}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class Brewery(batchEventListener: BatchEventListener) {
   implicit val timeout = new Timeout(10, TimeUnit.SECONDS)
+  val log = LoggerFactory.getLogger(this.getClass)
   val batchNumber = new AtomicInteger()
 
   val system: ActorSystem = ActorSystem.create("Brewery", ConfigFactory.load("brewery.conf"))
@@ -26,13 +28,17 @@ class Brewery(batchEventListener: BatchEventListener) {
 
   val listener: ActorRef = system.actorOf(Props(new BatchListener(batchEventListener)), name = "listener")
   system.eventStream.subscribe(listener, classOf[Batch])
+  log.info("Brewery initialized!")
 
   def brew(recipe: Recipe): Unit = {
+    log.info(s"Brewery brewing this recipe: $recipe")
     brewer ! Batch(batchNumber.incrementAndGet(), LocalDateTime.now, LocalDateTime.now, recipe)
   }
 
   def shutdown: Boolean = {
+    log.info("Brewery shutting down...")
     Await.result(system.terminate(), 3 seconds)
+    log.info("Brewery shutdown.")
     true
   }
 }
