@@ -26,8 +26,7 @@ object Brewery extends App {
   log.info("Brewery initialized!")
 
   sys addShutdownHook {
-    log.info("Brewery shutting down...")
     Await.result(system.terminate(), 3 seconds)
-    log.info("Brewery shutdown.")
+    log.info("Brewery shutdown!")
   }
 }
