@@ -8,6 +8,9 @@ import akka.actor._
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 
+import scala.concurrent.Await
+import scala.concurrent.duration._
+
 class Brewery(batchEventListener: BatchEventListener) {
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
   val batchNumber = new AtomicInteger()
@@ -26,5 +29,10 @@ class Brewery(batchEventListener: BatchEventListener) {
 
   def brew(recipe: Recipe): Unit = {
     brewer ! Batch(batchNumber.incrementAndGet(), LocalDateTime.now, LocalDateTime.now, recipe)
+  }
+
+  def shutdown: Boolean = {
+    Await.result(system.terminate(), 3 seconds)
+    true
   }
 }

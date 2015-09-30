@@ -1,5 +1,6 @@
 package app
 
+import scalafx.Includes._
 import scalafx.application.JFXApp
 import scalafx.geometry.Insets
 import scalafx.scene.Scene
@@ -39,5 +40,6 @@ object App extends JFXApp {
     scene = new Scene {
       root = appPane
     }
+    onCloseRequest = handle { brewery.shutdown }
   }
 }
