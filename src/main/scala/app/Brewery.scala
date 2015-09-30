@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import akka.actor._
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
-import org.slf4j.{LoggerFactory, Logger}
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
