@@ -1,14 +1,21 @@
 package app
 
+import scalafx.Includes._
 import scalafx.application.JFXApp
+import scalafx.event.ActionEvent
 import scalafx.geometry.Insets
 import scalafx.scene.Scene
-import scalafx.scene.control.ToolBar
+import scalafx.scene.control.{Button, ToolBar}
 import scalafx.scene.layout.VBox
 
 object App extends JFXApp {
+  val brewButton = new Button {
+    text = "Brew"
+    onAction = { ae: ActionEvent => println("Clicked!") }
+  }
+
   val toolbar = new ToolBar {
-    content = List()
+    content = List(brewButton)
   }
 
   val contentPane = new VBox {
