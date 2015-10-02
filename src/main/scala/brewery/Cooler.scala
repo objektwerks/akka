@@ -1,11 +1,12 @@
-package app
+package brewery
 
 import java.util.concurrent.TimeUnit
 
-import akka.actor.{ActorLogging, Actor, ActorRef}
+import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.cluster.Cluster
 import akka.cluster.ClusterEvent._
 import akka.util.Timeout
+import app.Brew
 
 class Cooler(fermenter: ActorRef) extends Actor with ActorLogging {
   implicit val timeout = new Timeout(10, TimeUnit.SECONDS)

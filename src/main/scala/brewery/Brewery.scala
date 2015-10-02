@@ -1,9 +1,10 @@
-package app
+package brewery
 
 import java.util.concurrent.TimeUnit
 
 import akka.actor._
 import akka.util.Timeout
+import app._
 import com.typesafe.config.ConfigFactory
 import org.slf4j.LoggerFactory
 
