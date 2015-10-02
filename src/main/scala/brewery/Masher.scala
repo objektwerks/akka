@@ -6,7 +6,7 @@ import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.cluster.Cluster
 import akka.cluster.ClusterEvent._
 import akka.util.Timeout
-import app.Brew
+import command.Brew
 
 class Masher(boiler: ActorRef) extends Actor with ActorLogging {
   implicit val timeout = new Timeout(10, TimeUnit.SECONDS)

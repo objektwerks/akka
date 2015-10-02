@@ -1,6 +1,4 @@
-package app
-
-import java.time.LocalDateTime
+package domain
 
 case class Malt(kind: String)
 
@@ -25,12 +23,3 @@ case class IPA(name: String = "IPA",
                hops: List[Hop] = List(Hop("Cascade"), Hop("Amarillo")),
                yeast: Yeast = Yeast("Brewers"),
                water: Water = Water("Spring")) extends Recipe
-
-case class Brew(number: Int,
-                initiated: LocalDateTime,
-                recipe: Recipe)
-
-case class Brewed(number: Int,
-                  initiated: LocalDateTime,
-                  completed: LocalDateTime,
-                  recipe: Recipe)

@@ -4,8 +4,8 @@ import java.util.concurrent.TimeUnit
 
 import akka.actor._
 import akka.util.Timeout
-import app._
 import com.typesafe.config.ConfigFactory
+import event.Brewed
 import org.slf4j.LoggerFactory
 
 import scala.concurrent.Await
