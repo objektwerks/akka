@@ -22,8 +22,8 @@ class Brewer(masher: ActorRef) extends Actor with ActorLogging {
   override def postStop(): Unit = cluster.unsubscribe(self)
 
   override def receive: Receive = {
-    case recipe: Recipe => masher ! Batch(batchNumber.incrementAndGet(), LocalDateTime.now, LocalDateTime.now, recipe)
-    case batch: Batch => log.info(s"Batch received: $batch")
+    case recipe: Recipe => masher ! Brew(batchNumber.incrementAndGet(), LocalDateTime.now, recipe)
+    case brewed: Brewed => log.info(s"Brewed: $brewed")
     case MemberUp(member) => log.info("Member is Up: {}", member.address)
     case UnreachableMember(member) => log.warning("Member detected as unreachable: {}", member)
     case MemberRemoved(member, previousStatus) => log.info("Member is Removed: {} after {}", member.address, previousStatus)

@@ -20,7 +20,7 @@ class Bottler extends Actor with ActorLogging {
   override def postStop(): Unit = cluster.unsubscribe(self)
 
   override def receive: Receive = {
-    case batch: Batch => context.system.eventStream.publish(batch.completed.adjustInto(LocalDateTime.now))
+    case brew: Brew => context.system.eventStream.publish(Brewed(brew.number, brew.initiated, LocalDateTime.now, brew.recipe))
     case MemberUp(member) => log.info("Member is Up: {}", member.address)
     case UnreachableMember(member) => log.warning("Member detected as unreachable: {}", member)
     case MemberRemoved(member, previousStatus) => log.info("Member is Removed: {} after {}", member.address, previousStatus)

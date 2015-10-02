@@ -26,7 +26,11 @@ case class IPA(name: String = "IPA",
                yeast: Yeast = Yeast("Brewers"),
                water: Water = Water("Spring")) extends Recipe
 
-case class Batch(number: Int,
-                 initiated: LocalDateTime,
-                 completed: LocalDateTime,
-                 recipe: Recipe)
+case class Brew(number: Int,
+                initiated: LocalDateTime,
+                recipe: Recipe)
+
+case class Brewed(number: Int,
+                  initiated: LocalDateTime,
+                  completed: LocalDateTime,
+                  recipe: Recipe)

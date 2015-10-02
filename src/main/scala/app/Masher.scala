@@ -19,7 +19,7 @@ class Masher(boiler: ActorRef) extends Actor with ActorLogging {
   override def postStop(): Unit = cluster.unsubscribe(self)
 
   override def receive: Receive = {
-    case batch: Batch => boiler ! batch
+    case batch: Brew => boiler ! batch
     case MemberUp(member) => log.info("Member is Up: {}", member.address)
     case UnreachableMember(member) => log.warning("Member detected as unreachable: {}", member)
     case MemberRemoved(member, previousStatus) => log.info("Member is Removed: {} after {}", member.address, previousStatus)

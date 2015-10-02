@@ -22,7 +22,7 @@ object Brewery extends App {
   val boiler: ActorRef = system.actorOf(Props(new Boiler(cooler)), name = "boiler")
   val masher: ActorRef = system.actorOf(Props(new Masher(boiler)), name = "masher")
   val brewer: ActorRef = system.actorOf(Props(new Brewer(masher)), name = "brewer")
-  system.eventStream.subscribe(brewer, classOf[Batch])
+  system.eventStream.subscribe(brewer, classOf[Brewed])
   log.info("Brewery initialized!")
 
   sys addShutdownHook {
