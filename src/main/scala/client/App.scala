@@ -1,4 +1,4 @@
-package app
+package client
 
 import scalafx.Includes._
 import scalafx.application.JFXApp

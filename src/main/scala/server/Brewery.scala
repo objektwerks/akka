@@ -1,4 +1,4 @@
-package brewery
+package server
 
 import java.util.concurrent.TimeUnit
 
