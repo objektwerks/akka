@@ -13,15 +13,15 @@ import scalafx.scene.Scene
 import scalafx.scene.control.{Button, ToolBar}
 import scalafx.scene.layout.VBox
 
-object BreweryProxy {
+object BreweryClient {
   val system = ActorSystem.create("Brewery", ConfigFactory.load("app.conf"))
   val seeds = Set(ActorPath.fromString("akka.tcp://Brewery@host1:2551/system/receptionist"),
                   ActorPath.fromString("akka.tcp://Brewery@host2:2552/system/receptionist"))
   val settings = ClusterClientSettings(system).withInitialContacts(seeds)
-  val proxy: ActorRef = system.actorOf(ClusterClient.props(settings), name = "proxy")
+  val client: ActorRef = system.actorOf(ClusterClient.props(settings), name = "proxy")
 
   def brew(recipe: Recipe): Unit = {
-    proxy ! ClusterClient.Publish("brew", IPA())
+    client ! ClusterClient.Publish("brew", IPA())
   }
 }
 
