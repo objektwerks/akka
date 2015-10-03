@@ -21,14 +21,14 @@ object BreweryClient {
   val client: ActorRef = system.actorOf(ClusterClient.props(settings), name = "proxy")
 
   def brew(recipe: Recipe): Unit = {
-    client ! ClusterClient.Publish("brew", IPA())
+    client ! ClusterClient.Publish("brew", recipe)
   }
 }
 
 object App extends JFXApp {
   val brewButton = new Button {
     text = "Brew"
-    onAction = { ae: ActionEvent => println("Clicked!") }
+    onAction = { ae: ActionEvent => BreweryClient.brew(IPA()) }
   }
 
   val toolbar = new ToolBar {
