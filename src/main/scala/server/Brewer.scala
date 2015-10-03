@@ -9,7 +9,7 @@ import akka.cluster.Cluster
 import akka.cluster.ClusterEvent._
 import akka.util.Timeout
 import command.Brew
-import domain.{IPA, Recipe}
+import domain.Recipe
 import event.Brewed
 
 class Brewer(masher: ActorRef) extends Actor with ActorLogging {

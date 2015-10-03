@@ -1,11 +1,9 @@
 package client
 
-import akka.actor.Actor.Receive
-import akka.actor.{Actor, ActorRef, ActorPath, ActorSystem}
+import akka.actor.{ActorPath, ActorRef, ActorSystem}
 import akka.cluster.client.{ClusterClient, ClusterClientSettings}
 import com.typesafe.config.ConfigFactory
 import domain.{IPA, Recipe}
-import event.Brewed
 
 import scalafx.Includes._
 import scalafx.application.JFXApp

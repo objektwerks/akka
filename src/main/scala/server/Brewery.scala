@@ -2,7 +2,6 @@ package server
 
 import java.util.concurrent.TimeUnit
 
-import akka.actor
 import akka.actor._
 import akka.cluster.client.ClusterClientReceptionist
 import akka.util.Timeout
