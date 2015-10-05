@@ -1,9 +1,11 @@
 package client
 
-import akka.actor.{ActorPath, ActorRef, ActorSystem}
-import akka.cluster.client.{ClusterClient, ClusterClientSettings}
+import akka.actor._
+import akka.cluster.pubsub.DistributedPubSubMediator.SubscribeAck
+import akka.cluster.pubsub.{DistributedPubSub, DistributedPubSubMediator}
 import com.typesafe.config.ConfigFactory
 import domain.{IPA, Recipe}
+import event.Brewed
 
 import scalafx.Includes._
 import scalafx.application.JFXApp
@@ -13,15 +15,37 @@ import scalafx.scene.Scene
 import scalafx.scene.control.{Button, ToolBar}
 import scalafx.scene.layout.VBox
 
+class BreweryClientPublisher extends Actor {
+  import DistributedPubSubMediator.Publish
+  val mediator = DistributedPubSub(context.system).mediator
+
+  override def receive: Receive = {
+    case recipe: Recipe => mediator ! Publish(topic = "recipe", recipe)
+  }
+}
+
+class BreweryClientSubscriber extends Actor with ActorLogging {
+  import DistributedPubSubMediator.Subscribe
+  val mediator = DistributedPubSub(context.system).mediator
+  mediator ! Subscribe(topic = "brewed", self)
+
+  override def receive: Receive = {
+    case brewed: Brewed => log.info(s"Beer brewed: $brewed")
+    case SubscribeAck(Subscribe("brewed", None, `self`)) => log.info("Brewery Client Subscriber subscribing to brewed topic.")
+  }
+}
+
 object BreweryClient {
   val system = ActorSystem.create("Brewery", ConfigFactory.load("app.conf"))
-  val seeds = Set(ActorPath.fromString("akka.tcp://Brewery@host1:2551/system/receptionist"),
-                  ActorPath.fromString("akka.tcp://Brewery@host2:2552/system/receptionist"))
-  val settings = ClusterClientSettings(system).withInitialContacts(seeds)
-  val client: ActorRef = system.actorOf(ClusterClient.props(settings), name = "proxy")
+  val publisher: ActorRef = system.actorOf(Props[BreweryClientPublisher], name = "brewery.client.publisher")
+  val subscriber: ActorRef = system.actorOf(Props[BreweryClientSubscriber], name = "brewery.client.subscriber")
 
   def brew(recipe: Recipe): Unit = {
-    client ! ClusterClient.Publish("brew", recipe)
+    publisher ! recipe
+  }
+
+  def brewed(listener: Any): Unit = {
+
   }
 }
 
