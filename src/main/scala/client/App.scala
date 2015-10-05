@@ -41,21 +41,21 @@ object BreweryClient {
   val system = ActorSystem.create("Brewery", ConfigFactory.load("app.conf"))
   val publisher: ActorRef = system.actorOf(Props[BreweryClientPublisher], name = "brewery.client.publisher")
   val subscriber: ActorRef = system.actorOf(Props[BreweryClientSubscriber], name = "brewery.client.subscriber")
-  var recipePropertyListener: ObjectProperty[Recipe] = _
-  var brewedPropertyListener: ObjectProperty[Brewed] = _
+  var recipePropertyListener: Option[ObjectProperty[Recipe]] = None
+  var brewedPropertyListener: Option[ObjectProperty[Brewed]] = None
 
   def register(recipeProperty: ObjectProperty[Recipe], brewedProperty: ObjectProperty[Brewed]): Unit = {
-    recipePropertyListener = recipeProperty
-    brewedPropertyListener = brewedProperty
+    recipePropertyListener = Some(recipeProperty)
+    brewedPropertyListener = Some(brewedProperty)
   }
 
   def brew(recipe: Recipe): Unit = {
+    recipePropertyListener foreach { _.value = recipe }
     publisher ! recipe
-    recipePropertyListener.value = recipe
   }
 
   def brewed(brewed: Brewed): Unit = {
-    brewedPropertyListener.value = brewed
+    brewedPropertyListener foreach { _.value = brewed }
   }
 }
 
