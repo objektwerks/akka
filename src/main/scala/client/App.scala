@@ -32,7 +32,7 @@ class BreweryClientSubscriber extends Actor with ActorLogging {
   mediator ! Subscribe(topic = "brewed", self)
 
   override def receive: Receive = {
-    case brewed: Brewed => log.info(s"Beer brewed: $brewed")
+    case brewed: Brewed => BreweryClient.brewed(brewed)
     case SubscribeAck(Subscribe("brewed", None, `self`)) => log.info("Brewery Client Subscriber subscribing to brewed topic.")
   }
 }
@@ -41,13 +41,21 @@ object BreweryClient {
   val system = ActorSystem.create("Brewery", ConfigFactory.load("app.conf"))
   val publisher: ActorRef = system.actorOf(Props[BreweryClientPublisher], name = "brewery.client.publisher")
   val subscriber: ActorRef = system.actorOf(Props[BreweryClientSubscriber], name = "brewery.client.subscriber")
+  var recipePropertyListener: ObjectProperty[Recipe] = _
+  var brewedPropertyListener: ObjectProperty[Brewed] = _
+
+  def register(recipeProperty: ObjectProperty[Recipe], brewedProperty: ObjectProperty[Brewed]): Unit = {
+    recipePropertyListener = recipeProperty
+    brewedPropertyListener = brewedProperty
+  }
 
   def brew(recipe: Recipe): Unit = {
     publisher ! recipe
+    recipePropertyListener.value = recipe
   }
 
-  def brewed(listener: Any): Unit = {
-
+  def brewed(brewed: Brewed): Unit = {
+    brewedPropertyListener.value = brewed
   }
 }
 
@@ -63,14 +71,14 @@ object App extends JFXApp {
     content = List(brewButton, new Separator(), statusBar)
   }
 
-  val brewedText = new Text
+  val statusText = new Text
 
   val contentPane = new VBox {
     maxWidth = 400
     maxHeight = 400
     spacing = 6
     padding = Insets(6)
-    children = List(brewedText)
+    children = List(statusText)
   }
 
   val appPane = new VBox {
@@ -91,10 +99,14 @@ object App extends JFXApp {
   val recipeProperty = new ObjectProperty[Recipe]()
   recipeProperty.onChange({
     statusBar.text = "Brewing..."
+    statusText.text = recipeProperty.value.toString
   })
 
   val brewedProperty = new ObjectProperty[Brewed]()
   brewedProperty.onChange({
     statusBar.text = "Brewed!"
+    statusText.text = brewedProperty.value.toString
   })
+
+  BreweryClient.register(recipeProperty, brewedProperty)
 }
