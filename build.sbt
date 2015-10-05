@@ -7,7 +7,7 @@ scalaVersion := "2.11.7"
 ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
 
 libraryDependencies ++= {
-  val akkaVersion = "2.4.0-RC3"
+  val akkaVersion = "2.4.0"
   Seq(
     "com.typesafe.akka" % "akka-actor_2.11" % akkaVersion,
     "com.typesafe.akka" % "akka-persistence_2.11" % akkaVersion,
