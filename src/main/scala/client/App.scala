@@ -9,11 +9,13 @@ import event.Brewed
 
 import scalafx.Includes._
 import scalafx.application.JFXApp
+import scalafx.beans.property.ObjectProperty
 import scalafx.event.ActionEvent
 import scalafx.geometry.Insets
 import scalafx.scene.Scene
-import scalafx.scene.control.{Button, ToolBar}
+import scalafx.scene.control.{Separator, Label, Button, ToolBar}
 import scalafx.scene.layout.VBox
+import scalafx.scene.text.Text
 
 class BreweryClientPublisher extends Actor {
   import DistributedPubSubMediator.Publish
@@ -55,16 +57,20 @@ object App extends JFXApp {
     onAction = { ae: ActionEvent => BreweryClient.brew(IPA()) }
   }
 
+  val statusBar = new Label
+
   val toolbar = new ToolBar {
-    content = List(brewButton)
+    content = List(brewButton, new Separator(), statusBar)
   }
+
+  val brewedText = new Text
 
   val contentPane = new VBox {
     maxWidth = 400
     maxHeight = 400
     spacing = 6
     padding = Insets(6)
-    children = List()
+    children = List(brewedText)
   }
 
   val appPane = new VBox {
@@ -81,4 +87,14 @@ object App extends JFXApp {
       root = appPane
     }
   }
+
+  val recipeProperty = new ObjectProperty[Recipe]()
+  recipeProperty.onChange({
+    statusBar.text = "Brewing..."
+  })
+
+  val brewedProperty = new ObjectProperty[Brewed]()
+  brewedProperty.onChange({
+    statusBar.text = "Brewed!"
+  })
 }
