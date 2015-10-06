@@ -61,6 +61,9 @@ object App extends JFXApp {
     scene = new Scene {
       root = appPane
     }
+    onCloseRequest = handle {
+      BreweryProxy.shutdown()
+    }
   }
 
   brewButton.onAction = { ae: ActionEvent =>

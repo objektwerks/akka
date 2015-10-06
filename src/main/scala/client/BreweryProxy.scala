@@ -11,7 +11,8 @@ import domain.Recipe
 import event.Brewed
 import org.slf4j.LoggerFactory
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.duration._
 import scalafx.beans.property.ObjectProperty
 
 class BreweryPublisher extends Actor with ActorLogging {
@@ -59,5 +60,10 @@ object BreweryProxy {
 
   def brewed(brewed: Brewed): Unit = {
     brewedPropertyListener foreach { _.value = brewed }
+  }
+
+  def shutdown(): Unit = {
+    Await.result(system.terminate(), 3 seconds)
+    log.info("Brew Meister shutdown!")
   }
 }
