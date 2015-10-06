@@ -33,7 +33,7 @@ class Brewer(masher: ActorRef) extends Actor with ActorLogging {
   override def receive: Receive = {
     case recipe: Recipe => masher ! Brew(batchNumber.incrementAndGet(), LocalDateTime.now, recipe)
     case brewed: Brewed => mediator ! Publish(topic = "brewed", brewed)
-    case SubscribeAck(Subscribe("recipe", None, `self`)) => log.info("Brewer subscribing to recipe topic.")
+    case SubscribeAck(Subscribe("recipe", None, `self`)) => log.info("Brewer subscribed to recipe topic.")
     case MemberUp(member) => log.info("Member is Up: {}", member.address)
     case UnreachableMember(member) => log.warning("Member detected as unreachable: {}", member)
     case MemberRemoved(member, previousStatus) => log.info("Member is Removed: {} after {}", member.address, previousStatus)

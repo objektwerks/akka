@@ -25,7 +25,7 @@ class BrewerySubscriber extends Actor with ActorLogging {
 
   override def receive: Receive = {
     case brewed: Brewed => BreweryProxy.brewed(brewed)
-    case SubscribeAck(Subscribe("brewed", None, `self`)) => log.info("Brewery Client Subscriber subscribing to brewed topic.")
+    case SubscribeAck(Subscribe("brewed", None, `self`)) => log.info("Brewery Subscriber subscribed to brewed topic.")
   }
 }
 
