@@ -20,7 +20,6 @@ object App extends JFXApp {
 
   val brewButton = new Button {
     text = "Brew"
-    onAction = { ae: ActionEvent => BreweryProxy.brew(IPA()) }
   }
 
   val statusBar = new Label
@@ -56,6 +55,13 @@ object App extends JFXApp {
     scene = new Scene {
       root = appPane
     }
+  }
+
+  brewButton.onAction = { ae: ActionEvent =>
+    statusBar.text = ""
+    recipeText.text = ""
+    brewedText.text = ""
+    BreweryProxy.brew(IPA())
   }
 
   recipeProperty.onChange({
