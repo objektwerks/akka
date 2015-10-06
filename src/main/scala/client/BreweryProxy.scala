@@ -20,7 +20,7 @@ class BreweryPublisher extends Actor with ActorLogging {
 
   override def receive: Receive = {
     case recipe: Recipe =>
-      log.info(s"Brewery Publisher recipe: $recipe")
+      log.info(s"Brewery Publisher published recipe: $recipe")
       mediator ! Publish(topic = "recipe", recipe)
   }
 }
@@ -32,7 +32,7 @@ class BrewerySubscriber extends Actor with ActorLogging {
 
   override def receive: Receive = {
     case brewed: Brewed =>
-      log.info(s"Brewery Subscriber brewed: $brewed")
+      log.info(s"Brewery Subscriber received brewed event: $brewed")
       BreweryProxy.brewed(brewed)
     case SubscribeAck(Subscribe("brewed", None, `self`)) => log.info("Brewery Subscriber subscribed to brewed topic.")
   }
@@ -49,6 +49,7 @@ object BreweryProxy {
   log.info("Brewery Proxy initialized!")
 
   def register(brewedProperty: ObjectProperty[Brewed]): Unit = {
+    log.info("Brewery Proxy registered App brewed object property.")
     brewedPropertyListener = Some(brewedProperty)
   }
 
