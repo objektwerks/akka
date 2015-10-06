@@ -9,7 +9,7 @@ import scalafx.beans.property.ObjectProperty
 import scalafx.event.ActionEvent
 import scalafx.geometry.Insets
 import scalafx.scene.Scene
-import scalafx.scene.control.{Button, Label, Separator, ToolBar}
+import scalafx.scene.control._
 import scalafx.scene.layout.VBox
 import scalafx.scene.text.Text
 
@@ -19,12 +19,19 @@ object App extends JFXApp {
 
   val brewButton = new Button {
     text = "Brew"
+    disable = false
+  }
+
+  val brewingIndicator = new ProgressIndicator {
+    prefWidth = 50
+    progress = -1.0
+    visible = false
   }
 
   val statusBar = new Label
 
   val toolbar = new ToolBar {
-    content = List(brewButton, new Separator(), statusBar)
+    content = List(brewButton, new Separator(), brewingIndicator, new Separator(), statusBar)
   }
 
   val recipeLabel = new Label
@@ -34,7 +41,7 @@ object App extends JFXApp {
   val brewedText = new Text
 
   val contentPane = new VBox {
-    maxWidth = 600
+    maxWidth = 800
     maxHeight = 600
     spacing = 6
     padding = Insets(6)
@@ -42,7 +49,7 @@ object App extends JFXApp {
   }
 
   val appPane = new VBox {
-    maxWidth = 600
+    maxWidth = 800
     maxHeight = 600
     spacing = 6
     padding = Insets(6)
@@ -58,6 +65,8 @@ object App extends JFXApp {
 
   brewButton.onAction = { ae: ActionEvent =>
     val recipe = IPA()
+    brewingIndicator.visible = true
+    brewButton.disable = true
     statusBar.text = "Brewing..."
     recipeText.text = recipe.toString
     brewedText.text = ""
@@ -65,6 +74,8 @@ object App extends JFXApp {
   }
 
   brewedProperty.onChange({
+    brewingIndicator.visible = false
+    brewButton.disable = false
     statusBar.text = "Brewed!"
     brewedText.text = brewedProperty.value.toString
   })
