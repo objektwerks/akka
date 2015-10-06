@@ -1,10 +1,10 @@
 package client
 
-import domain.{IPA, Recipe}
+import domain.IPA
 import event.Brewed
 
 import scalafx.Includes._
-import scalafx.application.{Platform, JFXApp}
+import scalafx.application.{JFXApp, Platform}
 import scalafx.beans.property.ObjectProperty
 import scalafx.event.ActionEvent
 import scalafx.geometry.Insets
@@ -14,9 +14,8 @@ import scalafx.scene.layout.VBox
 import scalafx.scene.text.Text
 
 object App extends JFXApp {
-  val recipeProperty = new ObjectProperty[Recipe]()
   val brewedProperty = new ObjectProperty[Brewed]()
-  BreweryProxy.register(recipeProperty, brewedProperty)
+  BreweryProxy.register(brewedProperty)
 
   val brewButton = new Button {
     text = "Brew"
@@ -58,18 +57,12 @@ object App extends JFXApp {
   }
 
   brewButton.onAction = { ae: ActionEvent =>
-    statusBar.text = ""
-    recipeText.text = ""
+    val recipe = IPA()
+    statusBar.text = "Brewing..."
+    recipeText.text = recipe.toString
     brewedText.text = ""
-    BreweryProxy.brew(IPA())
+    BreweryProxy.brew(recipe)
   }
-
-  recipeProperty.onChange({
-    Platform.runLater({
-      statusBar.text = "Brewing..."
-      recipeText.text = recipeProperty.value.toString
-    })
-  })
 
   brewedProperty.onChange({
     Platform.runLater({

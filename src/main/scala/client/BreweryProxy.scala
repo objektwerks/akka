@@ -1,13 +1,17 @@
 package client
 
+import java.util.concurrent.TimeUnit
+
 import akka.actor._
 import akka.cluster.pubsub.DistributedPubSubMediator.SubscribeAck
 import akka.cluster.pubsub.{DistributedPubSub, DistributedPubSubMediator}
+import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 import domain.Recipe
 import event.Brewed
-import org.slf4j.{LoggerFactory, Logger}
+import org.slf4j.LoggerFactory
 
+import scala.concurrent.{ExecutionContext, Future}
 import scalafx.beans.property.ObjectProperty
 
 class BreweryPublisher extends Actor with ActorLogging {
@@ -35,22 +39,21 @@ class BrewerySubscriber extends Actor with ActorLogging {
 }
 
 object BreweryProxy {
+  implicit val ec = ExecutionContext.global
+  implicit val timeout = new Timeout(3, TimeUnit.SECONDS)
   val log = LoggerFactory.getLogger(this.getClass)
   val system = ActorSystem.create("Brewery", ConfigFactory.load("app.conf"))
   val publisher: ActorRef = system.actorOf(Props[BreweryPublisher], name = "brewery.client.publisher")
   val subscriber: ActorRef = system.actorOf(Props[BrewerySubscriber], name = "brewery.client.subscriber")
-  var recipePropertyListener: Option[ObjectProperty[Recipe]] = None
   var brewedPropertyListener: Option[ObjectProperty[Brewed]] = None
   log.info("Brewery Proxy initialized!")
 
-  def register(recipeProperty: ObjectProperty[Recipe], brewedProperty: ObjectProperty[Brewed]): Unit = {
-    recipePropertyListener = Some(recipeProperty)
+  def register(brewedProperty: ObjectProperty[Brewed]): Unit = {
     brewedPropertyListener = Some(brewedProperty)
   }
 
   def brew(recipe: Recipe): Unit = {
-    recipePropertyListener foreach { _.value = recipe }
-    publisher ! recipe
+    Future { publisher ! recipe }
   }
 
   def brewed(brewed: Brewed): Unit = {
