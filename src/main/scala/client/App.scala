@@ -16,7 +16,7 @@ import scalafx.scene.text.Text
 object App extends JFXApp {
   val brewButton = new Button {
     text = "Brew"
-    onAction = { ae: ActionEvent => BreweryClient.brew(IPA()) }
+    onAction = { ae: ActionEvent => BreweryProxy.brew(IPA()) }
   }
 
   val statusBar = new Label
@@ -62,5 +62,5 @@ object App extends JFXApp {
     statusText.text = brewedProperty.value.toString
   })
 
-  BreweryClient.register(recipeProperty, brewedProperty)
+  BreweryProxy.register(recipeProperty, brewedProperty)
 }

@@ -9,7 +9,7 @@ import event.Brewed
 
 import scalafx.beans.property.ObjectProperty
 
-class BreweryClientPublisher extends Actor {
+class BreweryPublisher extends Actor {
   import DistributedPubSubMediator.Publish
   val mediator = DistributedPubSub(context.system).mediator
 
@@ -18,21 +18,21 @@ class BreweryClientPublisher extends Actor {
   }
 }
 
-class BreweryClientSubscriber extends Actor with ActorLogging {
+class BrewerySubscriber extends Actor with ActorLogging {
   import DistributedPubSubMediator.Subscribe
   val mediator = DistributedPubSub(context.system).mediator
   mediator ! Subscribe(topic = "brewed", self)
 
   override def receive: Receive = {
-    case brewed: Brewed => BreweryClient.brewed(brewed)
+    case brewed: Brewed => BreweryProxy.brewed(brewed)
     case SubscribeAck(Subscribe("brewed", None, `self`)) => log.info("Brewery Client Subscriber subscribing to brewed topic.")
   }
 }
 
-object BreweryClient {
+object BreweryProxy {
   val system = ActorSystem.create("Brewery", ConfigFactory.load("app.conf"))
-  val publisher: ActorRef = system.actorOf(Props[BreweryClientPublisher], name = "brewery.client.publisher")
-  val subscriber: ActorRef = system.actorOf(Props[BreweryClientSubscriber], name = "brewery.client.subscriber")
+  val publisher: ActorRef = system.actorOf(Props[BreweryPublisher], name = "brewery.client.publisher")
+  val subscriber: ActorRef = system.actorOf(Props[BrewerySubscriber], name = "brewery.client.subscriber")
   var recipePropertyListener: Option[ObjectProperty[Recipe]] = None
   var brewedPropertyListener: Option[ObjectProperty[Brewed]] = None
 
