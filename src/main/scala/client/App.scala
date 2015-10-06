@@ -14,6 +14,10 @@ import scalafx.scene.layout.VBox
 import scalafx.scene.text.Text
 
 object App extends JFXApp {
+  val recipeProperty = new ObjectProperty[Recipe]()
+  val brewedProperty = new ObjectProperty[Brewed]()
+  BreweryProxy.register(recipeProperty, brewedProperty)
+
   val brewButton = new Button {
     text = "Brew"
     onAction = { ae: ActionEvent => BreweryProxy.brew(IPA()) }
@@ -50,17 +54,13 @@ object App extends JFXApp {
     }
   }
 
-  val recipeProperty = new ObjectProperty[Recipe]()
   recipeProperty.onChange({
     statusBar.text = "Brewing..."
     statusText.text = recipeProperty.value.toString
   })
 
-  val brewedProperty = new ObjectProperty[Brewed]()
   brewedProperty.onChange({
     statusBar.text = "Brewed!"
     statusText.text = brewedProperty.value.toString
   })
-
-  BreweryProxy.register(recipeProperty, brewedProperty)
 }
