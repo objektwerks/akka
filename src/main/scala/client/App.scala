@@ -4,7 +4,7 @@ import domain.IPA
 import event.Brewed
 
 import scalafx.Includes._
-import scalafx.application.{JFXApp, Platform}
+import scalafx.application.JFXApp
 import scalafx.beans.property.ObjectProperty
 import scalafx.event.ActionEvent
 import scalafx.geometry.Insets
@@ -65,9 +65,7 @@ object App extends JFXApp {
   }
 
   brewedProperty.onChange({
-    Platform.runLater({
-      statusBar.text = "Brewed!"
-      brewedText.text = brewedProperty.value.toString
-    })
+    statusBar.text = "Brewed!"
+    brewedText.text = brewedProperty.value.toString
   })
 }
