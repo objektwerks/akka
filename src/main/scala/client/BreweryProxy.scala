@@ -41,7 +41,7 @@ object BreweryProxy {
   implicit val ec = ExecutionContext.global
   implicit val timeout = new Timeout(3, TimeUnit.SECONDS)
   val log = LoggerFactory.getLogger(this.getClass)
-  val system = ActorSystem.create("Brewery", ConfigFactory.load("app.conf"))
+  val system = ActorSystem.create("BrewMeister", ConfigFactory.load("app.conf"))
   val publisher: ActorRef = system.actorOf(Props[BreweryPublisher], name = "brewery.client.publisher")
   val subscriber: ActorRef = system.actorOf(Props[BrewerySubscriber], name = "brewery.client.subscriber")
   var brewedPropertyListener: Option[ObjectProperty[Brewed]] = None
