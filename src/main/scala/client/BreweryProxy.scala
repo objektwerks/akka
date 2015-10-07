@@ -3,20 +3,19 @@ package client
 import java.util.concurrent.TimeUnit
 
 import akka.actor._
-import akka.cluster.pubsub.DistributedPubSubMediator.SubscribeAck
-import akka.cluster.pubsub.{DistributedPubSub, DistributedPubSubMediator}
+import akka.cluster.pubsub.DistributedPubSub
+import akka.cluster.pubsub.DistributedPubSubMediator.{Publish, Subscribe, SubscribeAck}
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 import domain.Recipe
 import event.Brewed
 import org.slf4j.LoggerFactory
 
-import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scalafx.beans.property.ObjectProperty
 
 class BreweryPublisher extends Actor with ActorLogging {
-  import DistributedPubSubMediator.Publish
   val mediator = DistributedPubSub(context.system).mediator
 
   override def receive: Receive = {
@@ -27,7 +26,6 @@ class BreweryPublisher extends Actor with ActorLogging {
 }
 
 class BrewerySubscriber extends Actor with ActorLogging {
-  import DistributedPubSubMediator.Subscribe
   val mediator = DistributedPubSub(context.system).mediator
   mediator ! Subscribe(topic = "brewed", self)
 
