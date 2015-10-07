@@ -34,23 +34,37 @@ object App extends JFXApp {
     content = List(brewButton, new Separator(), brewingIndicator, new Separator(), statusBar)
   }
 
-  val recipeLabel = new Label
-  val recipeText = new Text
+  val recipeLabel = new Label {
+    text = "Receipe"
+  }
 
-  val brewedLabel = new Label
-  val brewedText = new Text
+  val recipeText = new Text {
+    wrappingWidth = 600
+    maxWidth(600)
+    maxHeight(200)
+  }
+
+  val brewedLabel = new Label {
+    text = "Brewed"
+  }
+
+  val brewedText = new Text {
+    wrappingWidth = 600
+    maxWidth(600)
+    maxHeight(200)
+  }
 
   val contentPane = new VBox {
-    maxWidth = 800
-    maxHeight = 600
+    maxWidth = 600
+    maxHeight = 400
     spacing = 6
     padding = Insets(6)
     children = List(recipeLabel, recipeText, brewedLabel, brewedText)
   }
 
   val appPane = new VBox {
-    maxWidth = 800
-    maxHeight = 600
+    maxWidth = 600
+    maxHeight = 400
     spacing = 6
     padding = Insets(6)
     children = List(toolbar, contentPane)
