@@ -15,9 +15,9 @@ import scala.concurrent.duration._
 class Clock extends Actor {
   var router = {
     val routees = Vector.fill(3) {
-      val t = context.actorOf(Props[Time])
-      context watch t
-      ActorRefRoutee(t)
+      val time = context.actorOf(Props[Time])
+      context watch time
+      ActorRefRoutee(time)
     }
     Router(RoundRobinRoutingLogic(), routees)
   }
