@@ -1,4 +1,4 @@
-package client
+package app
 
 import domain.IPA
 import event.Brewed

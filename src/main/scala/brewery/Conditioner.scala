@@ -1,4 +1,4 @@
-package server
+package brewery
 
 import akka.actor.{Actor, ActorRef}
 import command.Brew

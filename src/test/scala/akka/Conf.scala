@@ -1,7 +1,7 @@
 package akka
 
 import com.typesafe.config.{Config, ConfigFactory}
-import org.slf4j.{LoggerFactory, Logger}
+import org.slf4j.{Logger, LoggerFactory}
 
 object Conf {
   val config: Config = ConfigFactory.load("test.conf")

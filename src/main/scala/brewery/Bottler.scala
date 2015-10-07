@@ -1,4 +1,4 @@
-package server
+package brewery
 
 import java.time.LocalDateTime
 
