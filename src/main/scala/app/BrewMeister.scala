@@ -23,16 +23,8 @@ object BrewMeister extends JFXApp {
     disable = false
   }
 
-  val brewingIndicator = new ProgressIndicator {
-    prefWidth = 50
-    progress = -1.0
-    visible = false
-  }
-
-  val statusBar = new Label
-
   val toolbar = new ToolBar {
-    content = List(brewButton, new Separator(), brewingIndicator, new Separator(), statusBar)
+    content = List(brewButton)
   }
 
   val recipeLabel = new Label {
@@ -41,8 +33,6 @@ object BrewMeister extends JFXApp {
 
   val recipeText = new Text {
     wrappingWidth = 600
-    maxWidth(600)
-    maxHeight(200)
   }
 
   val brewedLabel = new Label {
@@ -51,21 +41,16 @@ object BrewMeister extends JFXApp {
 
   val brewedText = new Text {
     wrappingWidth = 600
-    maxWidth(600)
-    maxHeight(200)
   }
 
   val contentPane = new VBox {
-    maxWidth = 600
-    maxHeight = 600
     spacing = 6
     padding = Insets(6)
     children = List(recipeLabel, recipeText, brewedLabel, brewedText)
   }
 
   val appPane = new VBox {
-    maxWidth = 600
-    maxHeight = 600
+    prefHeight = 200
     spacing = 6
     padding = Insets(6)
     children = List(toolbar, contentPane)
@@ -83,18 +68,14 @@ object BrewMeister extends JFXApp {
 
   brewButton.onAction = { ae: ActionEvent =>
     val recipe = IPA()
-    brewingIndicator.visible = true
     brewButton.disable = true
-    statusBar.text = "Brewing..."
     recipeText.text = recipe.toString
     brewedText.text = ""
     Brewery.brew(recipe)
   }
 
   brewedProperty.onChange({
-    brewingIndicator.visible = false
     brewButton.disable = false
-    statusBar.text = "Brewed!"
     brewedText.text = brewedProperty.value.toString
   })
 }
