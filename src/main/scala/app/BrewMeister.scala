@@ -57,7 +57,7 @@ object BrewMeister extends JFXApp {
 
   val contentPane = new VBox {
     maxWidth = 600
-    maxHeight = 400
+    maxHeight = 450
     spacing = 6
     padding = Insets(6)
     children = List(recipeLabel, recipeText, brewedLabel, brewedText)
@@ -65,7 +65,7 @@ object BrewMeister extends JFXApp {
 
   val appPane = new VBox {
     maxWidth = 600
-    maxHeight = 400
+    maxHeight = 450
     spacing = 6
     padding = Insets(6)
     children = List(toolbar, contentPane)
