@@ -5,16 +5,12 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.cluster.ClusterEvent._
-import akka.cluster.pubsub.DistributedPubSub
-import akka.cluster.pubsub.DistributedPubSubMediator.{Publish, Subscribe, SubscribeAck}
 import akka.cluster.{Cluster, MemberStatus}
 import command.Brew
 import domain.Recipe
 import event.Brewed
 
 class Brewer(masher: ActorRef) extends Actor with ActorLogging {
-  val mediator = DistributedPubSub(context.system).mediator
-  mediator ! Subscribe(topic = "recipe", self)
   val batchNumber = new AtomicInteger()
 
   override def preStart(): Unit = {
@@ -28,9 +24,7 @@ class Brewer(masher: ActorRef) extends Actor with ActorLogging {
 
   override def receive: Receive = {
     case recipe: Recipe => masher ! Brew(batchNumber.incrementAndGet(), LocalDateTime.now, recipe)
-    case brewed: Brewed => mediator ! Publish(topic = "brewed", brewed)
-
-    case SubscribeAck(Subscribe("recipe", None, `self`)) => log.info("Brewer subscribed to recipe topic.")
+    case brewed: Brewed => Brewery.brewed(brewed)
 
     case MemberUp(member) => log.info(s"$member UP.")
     case MemberExited(member) => log.info(s"$member EXITED.")

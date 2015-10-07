@@ -1,5 +1,6 @@
 package app
 
+import brewery.Brewery
 import domain.IPA
 import event.Brewed
 
@@ -13,9 +14,9 @@ import scalafx.scene.control._
 import scalafx.scene.layout.VBox
 import scalafx.scene.text.Text
 
-object App extends JFXApp {
+object BrewMeister extends JFXApp {
   val brewedProperty = new ObjectProperty[Brewed]()
-  BreweryProxy.register(brewedProperty)
+  Brewery.register(brewedProperty)
 
   val brewButton = new Button {
     text = "Brew"
@@ -76,7 +77,7 @@ object App extends JFXApp {
       root = appPane
     }
     onCloseRequest = handle {
-      BreweryProxy.shutdown()
+      Brewery.shutdown()
     }
   }
 
@@ -87,7 +88,7 @@ object App extends JFXApp {
     statusBar.text = "Brewing..."
     recipeText.text = recipe.toString
     brewedText.text = ""
-    BreweryProxy.brew(recipe)
+    Brewery.brew(recipe)
   }
 
   brewedProperty.onChange({
