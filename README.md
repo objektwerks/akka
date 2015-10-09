@@ -19,7 +19,7 @@ which works as follows:
 3. brewer --- brewed ---> brewery
 4. brewery --- brewed ---> brew meister
 
->Note how the brew command flows through the brewing process until it transforms into a brewed event.
+>Note how the brew command flows through the brewing process until it's transformed into a brewed event.
  
 >During the brewing process, the masher on through to the bottler, emits a stage event to the brewer.
 
