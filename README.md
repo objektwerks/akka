@@ -21,7 +21,8 @@ which works as follows:
 
 >Note how the brew command flows through the brewing process until it's transformed into a brewed event.
  
->During the brewing process, the masher on through to the bottler, emits a stage event to the brewer.
+>During the brewing process, the masher on through to the bottler, emits a stage event to the brewer, which is
+forwarded to the brewery and brew meister.
 
 >The recipe, brew command and stage events are displayed in the brew meister UI for a single brewing session.
 
