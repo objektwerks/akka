@@ -6,11 +6,11 @@ import akka.actor._
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 import domain.Recipe
-import event.{Stage, Brewed}
+import event.{Brewed, Stage}
 import org.slf4j.LoggerFactory
 
 import scala.concurrent.duration._
-import scala.concurrent.{ExecutionContext, Await, Future}
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scalafx.beans.property.ObjectProperty
 
 object Brewery {

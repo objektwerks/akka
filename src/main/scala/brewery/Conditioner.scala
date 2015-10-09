@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 import akka.actor.{Actor, ActorRef}
 import command.Brew
-import event.{Conditioned, Bottled}
+import event.Conditioned
 import simulator.Simulator
 
 class Conditioner(bottler: ActorRef) extends Actor {

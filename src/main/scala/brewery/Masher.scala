@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 import akka.actor.{Actor, ActorRef}
 import command.Brew
-import event.{Mashed, Bottled}
+import event.Mashed
 import simulator.Simulator
 
 class Masher(boiler: ActorRef) extends Actor {

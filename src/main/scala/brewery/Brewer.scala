@@ -8,7 +8,7 @@ import akka.cluster.ClusterEvent._
 import akka.cluster.{Cluster, MemberStatus}
 import command.Brew
 import domain.Recipe
-import event.{Stage, Brewed}
+import event.{Brewed, Stage}
 
 class Brewer(masher: ActorRef) extends Actor with ActorLogging {
   val batchNumber = new AtomicInteger()

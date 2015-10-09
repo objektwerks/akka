@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 import akka.actor.Actor
 import command.Brew
-import event.{Bottled, Boiled, Brewed}
+import event.{Bottled, Brewed}
 import simulator.Simulator
 
 class Bottler extends Actor {

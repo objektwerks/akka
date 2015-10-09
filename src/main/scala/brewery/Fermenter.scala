@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 import akka.actor.{Actor, ActorRef}
 import command.Brew
-import event.{Fermented, Bottled}
+import event.Fermented
 import simulator.Simulator
 
 class Fermenter(conditioner: ActorRef) extends Actor {
