@@ -4,8 +4,8 @@ Akka Tests and Simulation
 
 Simulation
 ----------
->The Akka cluster simulation is modeled from a brewery, to include a brew meister, brewer and staged brewing process.
-The entire process works as follows:
+>The Akka cluster simulation is modeled from a brewery, to include a brew meister, brewer and staged brewing process,
+which works as follows:
 
 1. brew meister --- recipe ---> brewery
 2. brewery --- recipe ---> brewer
