@@ -1,6 +1,6 @@
 Akka Tests and Simulation
 -------------------------
->This project contiains features tests and cluster simulation.
+>This project contains feature tests as well as a cluster simulation.
 
 Simulation
 ----------
