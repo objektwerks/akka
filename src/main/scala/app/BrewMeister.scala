@@ -50,7 +50,7 @@ object BrewMeister extends JFXApp {
   }
 
   val stageList = new ListView[String] {
-    items = new ObservableBuffer[String]()
+    items = ObservableBuffer[String]()
   }
 
   val contentPane = new VBox {
@@ -81,16 +81,16 @@ object BrewMeister extends JFXApp {
     brewButton.disable = true
     recipeText.text = recipe.toString
     brewedText.text = ""
-    stageList.items = new ObservableBuffer[String]()
+    stageList.items.get().clear()
     Brewery.brew(recipe)
   }
 
-  stageProperty.onChange({
-    // stageList.items += stageProperty.value.toString
-  })
+  stageProperty.onChange { (_, _, newValue) =>
+    stageList.items.get().add(newValue.toString)
+  }
 
-  brewedProperty.onChange({
+  brewedProperty.onChange { (_, _, newValue) =>
     brewButton.disable = false
-    brewedText.text = brewedProperty.value.toString
-  })
+    brewedText.text = newValue.toString
+  }
 }
