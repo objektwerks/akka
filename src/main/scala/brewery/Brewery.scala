@@ -6,7 +6,7 @@ import akka.actor._
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 import domain.Recipe
-import event.Brewed
+import event.{Stage, Brewed}
 import org.slf4j.LoggerFactory
 
 import scala.concurrent.duration._
@@ -17,6 +17,7 @@ object Brewery {
   implicit val ec = ExecutionContext.Implicits.global
   implicit val timeout = new Timeout(10, TimeUnit.SECONDS)
   val log = LoggerFactory.getLogger(this.getClass)
+  var stagePropertyListener: Option[ObjectProperty[Stage]] = None
   var brewedPropertyListener: Option[ObjectProperty[Brewed]] = None
 
   val system = ActorSystem.create("Brewery", ConfigFactory.load("brewery.conf"))
@@ -27,16 +28,22 @@ object Brewery {
   val boiler: ActorRef = system.actorOf(Props(new Boiler(cooler)), name = "boiler")
   val masher: ActorRef = system.actorOf(Props(new Masher(boiler)), name = "masher")
   val brewer: ActorRef = system.actorOf(Props(new Brewer(masher)), name = "brewer")
+  system.eventStream.subscribe(brewer, classOf[Stage])
   system.eventStream.subscribe(brewer, classOf[Brewed])
 
   log.info("Brewery initialized!")
 
-  def register(brewedProperty: ObjectProperty[Brewed]): Unit = {
+  def register(stageProperty: ObjectProperty[Stage], brewedProperty: ObjectProperty[Brewed]): Unit = {
+    stagePropertyListener = Some(stageProperty)
     brewedPropertyListener = Some(brewedProperty)
   }
 
   def brew(recipe: Recipe): Unit = {
     Future { brewer ! recipe }
+  }
+
+  def stage(stage: Stage): Unit = {
+    stagePropertyListener foreach { _.value = stage }
   }
 
   def brewed(brewed: Brewed): Unit = {

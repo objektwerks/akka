@@ -2,11 +2,12 @@ package app
 
 import brewery.Brewery
 import domain.IPA
-import event.Brewed
+import event.{Brewed, Stage}
 
 import scalafx.Includes._
 import scalafx.application.JFXApp
 import scalafx.beans.property.ObjectProperty
+import scalafx.collections.ObservableBuffer
 import scalafx.event.ActionEvent
 import scalafx.geometry.Insets
 import scalafx.scene.Scene
@@ -15,8 +16,9 @@ import scalafx.scene.layout.VBox
 import scalafx.scene.text.Text
 
 object BrewMeister extends JFXApp {
+  val stageProperty = new ObjectProperty[Stage]()
   val brewedProperty = new ObjectProperty[Brewed]()
-  Brewery.register(brewedProperty)
+  Brewery.register(stageProperty, brewedProperty)
 
   val brewButton = new Button {
     text = "Brew"
@@ -43,14 +45,22 @@ object BrewMeister extends JFXApp {
     wrappingWidth = 600
   }
 
+  val stageLabel = new Label {
+    text = "Stages"
+  }
+
+  val stageList = new ListView[String] {
+    items = new ObservableBuffer[String]()
+  }
+
   val contentPane = new VBox {
     spacing = 6
     padding = Insets(6)
-    children = List(recipeLabel, recipeText, brewedLabel, brewedText)
+    children = List(recipeLabel, recipeText, brewedLabel, brewedText, stageLabel, stageList)
   }
 
   val appPane = new VBox {
-    prefHeight = 200
+    prefHeight = 300
     spacing = 6
     padding = Insets(6)
     children = List(toolbar, contentPane)
@@ -71,8 +81,13 @@ object BrewMeister extends JFXApp {
     brewButton.disable = true
     recipeText.text = recipe.toString
     brewedText.text = ""
+    stageList.items = new ObservableBuffer[String]()
     Brewery.brew(recipe)
   }
+
+  stageProperty.onChange({
+    // stageList.items += stageProperty.value.toString
+  })
 
   brewedProperty.onChange({
     brewButton.disable = false

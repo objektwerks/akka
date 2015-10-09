@@ -8,7 +8,7 @@ import akka.cluster.ClusterEvent._
 import akka.cluster.{Cluster, MemberStatus}
 import command.Brew
 import domain.Recipe
-import event.Brewed
+import event.{Stage, Brewed}
 
 class Brewer(masher: ActorRef) extends Actor with ActorLogging {
   val batchNumber = new AtomicInteger()
@@ -24,6 +24,7 @@ class Brewer(masher: ActorRef) extends Actor with ActorLogging {
 
   override def receive: Receive = {
     case recipe: Recipe => masher ! Brew(batchNumber.incrementAndGet(), LocalDateTime.now, recipe)
+    case stage: Stage => Brewery.stage(stage)
     case brewed: Brewed => Brewery.brewed(brewed)
 
     case MemberUp(member) => log.info(s"$member UP.")
