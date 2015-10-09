@@ -2,4 +2,4 @@ package event
 
 import java.time.LocalDateTime
 
-case class Fermented(number: Int, completed: LocalDateTime)
+case class Fermented(number: Int, completed: LocalDateTime) extends Stage
