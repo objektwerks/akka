@@ -2,7 +2,7 @@ package simulation
 
 import scala.annotation.tailrec
 
-class Simulator {
+object Simulator {
   private[this] def tailrec(n: Long): BigInt = {
     @tailrec
     def loop(n: Long, a: Long, b: Long): BigInt = n match {
