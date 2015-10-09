@@ -34,7 +34,7 @@ object BrewMeister extends JFXApp {
   }
 
   val recipeText = new Text {
-    wrappingWidth = 550
+    wrappingWidth = 600
   }
 
   val brewedLabel = new Label {
@@ -42,7 +42,7 @@ object BrewMeister extends JFXApp {
   }
 
   val brewedText = new Text {
-    wrappingWidth = 550
+    wrappingWidth = 600
   }
 
   val stageLabel = new Label {
@@ -50,6 +50,7 @@ object BrewMeister extends JFXApp {
   }
 
   val stageList = new ListView[String] {
+    prefHeight = 200
     items = ObservableBuffer[String]()
   }
 
@@ -60,7 +61,6 @@ object BrewMeister extends JFXApp {
   }
 
   val appPane = new VBox {
-    prefHeight = 550
     spacing = 6
     padding = Insets(6)
     children = List(toolbar, contentPane)
