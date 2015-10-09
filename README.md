@@ -23,7 +23,7 @@ process. The entirre process works as follows:
  
 >During the brewing process, the masher on through to the bottler, emits a stage event to the brewer.
 
->The recipe, brew command and stage events are all displayed in the brew meister UI for a single brewing session.
+>The recipe, brew command and stage events are displayed in the brew meister UI for a single brewing session.
 
 Test
 ----
