@@ -60,7 +60,7 @@ object BrewMeister extends JFXApp {
   }
 
   val appPane = new VBox {
-    prefHeight = 450
+    prefHeight = 550
     spacing = 6
     padding = Insets(6)
     children = List(toolbar, contentPane)
