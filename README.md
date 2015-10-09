@@ -19,10 +19,11 @@ process. The entirre process works as follows:
 3. brewer --- brewed ---> brewery
 4. brewery --- brewed ---> brew meister
 
-Note how the 'brew' command flows through the brewing process. Also, the masher on through to the bottler, each emit
-an event to the brewer.
+>Note how the 'brew' command flows through the brewing process until it transforms into a brewed event.
+ 
+>During the brewing process, the masher on through to the bottler, emits a stage event to the brewer.
 
-The recipe, brew command and stage events are all displayed in the brew meister UI for a single brewing session.
+>The recipe, brew command and stage events are all displayed in the brew meister UI for a single brewing session.
 
 Test
 ----
