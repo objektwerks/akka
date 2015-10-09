@@ -34,7 +34,7 @@ object BrewMeister extends JFXApp {
   }
 
   val recipeText = new Text {
-    wrappingWidth = 400
+    wrappingWidth = 550
   }
 
   val brewedLabel = new Label {
@@ -42,7 +42,7 @@ object BrewMeister extends JFXApp {
   }
 
   val brewedText = new Text {
-    wrappingWidth = 400
+    wrappingWidth = 550
   }
 
   val stageLabel = new Label {
