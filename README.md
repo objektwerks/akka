@@ -26,6 +26,9 @@ forwarded to the brewery and brew meister.
 
 >The recipe, brew command and stage events are displayed in the brew meister UI for a single brewing session.
 
+>The relationships between the brew meister, brewery and brewer may seem odd. And they are in the real world. In this
+simulation, however, the brew meister is the ScalaFX UI; the brewery an actor system; and the brewer a principle actor.
+
 Test
 ----
 1. sbt clean test
