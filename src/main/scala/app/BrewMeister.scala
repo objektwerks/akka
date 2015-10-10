@@ -1,6 +1,6 @@
 package app
 
-import brewery.Brewery
+import system.Brewery
 import domain.IPA
 import event.{Brewed, Stage}
 

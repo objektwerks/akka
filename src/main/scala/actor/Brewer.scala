@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.cluster.ClusterEvent._
 import akka.cluster.{Cluster, MemberStatus}
-import brewery.Brewery
+import system.Brewery
 import command.Brew
 import domain.Recipe
 import event.{Brewed, Stage}
