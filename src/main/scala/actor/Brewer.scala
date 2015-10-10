@@ -1,4 +1,4 @@
-package brewery
+package actor
 
 import java.time.LocalDateTime
 import java.util.concurrent.atomic.AtomicInteger
@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.cluster.ClusterEvent._
 import akka.cluster.{Cluster, MemberStatus}
+import brewery.Brewery
 import command.Brew
 import domain.Recipe
 import event.{Brewed, Stage}

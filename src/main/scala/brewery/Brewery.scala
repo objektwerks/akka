@@ -2,6 +2,7 @@ package brewery
 
 import java.util.concurrent.TimeUnit
 
+import actor._
 import akka.actor._
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory

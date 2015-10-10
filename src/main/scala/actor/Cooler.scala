@@ -1,17 +1,17 @@
-package brewery
+package actor
 
 import java.time.LocalDateTime
 
 import akka.actor.{Actor, ActorRef}
 import command.Brew
-import event.Boiled
+import event.Cooled
 import simulator.Simulator
 
-class Boiler(cooler: ActorRef) extends Actor {
+class Cooler(fermenter: ActorRef) extends Actor {
   override def receive: Receive = {
     case brew: Brew =>
       Simulator.simulate(39)
-      context.system.eventStream.publish(Boiled(brew.number, LocalDateTime.now()))
-      cooler ! brew
+      context.system.eventStream.publish(Cooled(brew.number, LocalDateTime.now()))
+      fermenter ! brew
   }
 }

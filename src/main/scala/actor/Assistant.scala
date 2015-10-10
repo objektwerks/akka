@@ -1,6 +1,7 @@
-package brewery
+package actor
 
 import akka.actor.{Actor, ActorLogging, ActorRef}
+import brewery.Brewery
 import command.Brew
 import event.Stage
 

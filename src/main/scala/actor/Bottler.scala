@@ -1,4 +1,4 @@
-package brewery
+package actor
 
 import java.time.LocalDateTime
 
