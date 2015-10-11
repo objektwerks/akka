@@ -24,7 +24,6 @@ object Brewery {
   var brewedPropertyListener: Option[ObjectProperty[Brewed]] = None
 
   val system = ActorSystem.create("Brewery", ConfigFactory.load("brewery.conf"))
-  system.actorOf(Props[Listener], name = "listener")
   val bottler: ActorRef = system.actorOf(Props[Bottler], name = "bottler")
   val conditioner: ActorRef = system.actorOf(Props(new Conditioner(bottler)), name = "conditioner")
   val fermenter: ActorRef = system.actorOf(Props(new Fermenter(conditioner)), name = "fermenter")
@@ -34,6 +33,7 @@ object Brewery {
   val brewer: ActorRef = system.actorOf(Props(new Brewer(masher)), name = "brewer")
   system.eventStream.subscribe(brewer, classOf[Stage])
   system.eventStream.subscribe(brewer, classOf[Brewed])
+  system.actorOf(Props[Listener], name = "listener")
 
   log.info("Brewery initialized!")
 
