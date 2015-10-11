@@ -11,10 +11,11 @@ import event.{Brewed, Stage}
 import system.Brewery
 
 class Brewer(masher: ActorRef) extends Actor with ActorLogging {
+  val assistantNumber = new AtomicInteger()
   val batchNumber = new AtomicInteger()
   var router = {
     val routees = Vector.fill(3) {
-      val assistant = context.actorOf(Props(new Assistant(masher)), name = "assistant")
+      val assistant = context.actorOf(Props(new Assistant(masher)), name = s"assistant-${assistantNumber.incrementAndGet()}")
       context watch assistant
       ActorRefRoutee(assistant)
     }
