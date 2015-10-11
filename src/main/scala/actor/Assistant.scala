@@ -1,13 +1,13 @@
 package actor
 
 import akka.actor.{Actor, ActorLogging, ActorRef}
-import system.Brewery
 import command.Brew
-import event.Stage
+import simulator.Simulator
 
-class Assistant(brewer: ActorRef, masher: ActorRef) extends Actor with ActorLogging {
+class Assistant(masher: ActorRef) extends Actor with ActorLogging {
   override def receive: Receive = {
-    case brew: Brew => masher ! brew
-    case stage: Stage => Brewery.stage(stage)
+    case brew: Brew =>
+      Simulator.simulate(39)
+      masher ! brew
   }
 }
