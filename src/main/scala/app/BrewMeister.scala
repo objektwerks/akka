@@ -51,7 +51,7 @@ object BrewMeister extends JFXApp {
   }
 
   val commandList = new ListView[String] {
-    prefHeight = 50
+    prefHeight = 100
     items = ObservableBuffer[String]()
   }
 
