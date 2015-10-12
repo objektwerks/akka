@@ -12,6 +12,6 @@ class Bottler extends Actor {
     case brew: Brew =>
       Simulator.simulate(39)
       context.system.eventStream.publish(Bottled(brew.number, LocalDateTime.now()))
-      context.system.eventStream.publish(Brewed(brew.number, brew.initiated, LocalDateTime.now, brew.recipe))
+      context.system.eventStream.publish(Brewed(brew.number, brew.initiated, LocalDateTime.now))
   }
 }

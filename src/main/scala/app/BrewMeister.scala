@@ -1,8 +1,9 @@
 package app
 
-import system.Brewery
+import command.Command
 import domain.IPA
-import event.{Brewed, Stage}
+import event.Event
+import system.Brewery
 
 import scalafx.Includes._
 import scalafx.application.JFXApp
@@ -16,9 +17,9 @@ import scalafx.scene.layout.VBox
 import scalafx.scene.text.Text
 
 object BrewMeister extends JFXApp {
-  val stageProperty = new ObjectProperty[Stage]()
-  val brewedProperty = new ObjectProperty[Brewed]()
-  Brewery.register(stageProperty, brewedProperty)
+  val commandProperty = new ObjectProperty[Command]()
+  val eventProperty = new ObjectProperty[Event]()
+  Brewery.register(commandProperty, eventProperty)
 
   val brewButton = new Button {
     text = "Brew"
@@ -45,11 +46,20 @@ object BrewMeister extends JFXApp {
     wrappingWidth = 600
   }
 
-  val stageLabel = new Label {
-    text = "Stages"
+  val commandLabel = new Label {
+    text = "Commands"
   }
 
-  val stageList = new ListView[String] {
+  val commandList = new ListView[String] {
+    prefHeight = 50
+    items = ObservableBuffer[String]()
+  }
+
+  val eventLabel = new Label {
+    text = "Events"
+  }
+
+  val eventList = new ListView[String] {
     prefHeight = 200
     items = ObservableBuffer[String]()
   }
@@ -57,7 +67,7 @@ object BrewMeister extends JFXApp {
   val contentPane = new VBox {
     spacing = 6
     padding = Insets(6)
-    children = List(recipeLabel, recipeText, brewedLabel, brewedText, stageLabel, stageList)
+    children = List(recipeLabel, recipeText, brewedLabel, brewedText, commandLabel, commandList, eventLabel, eventList)
   }
 
   val appPane = new VBox {
@@ -81,16 +91,19 @@ object BrewMeister extends JFXApp {
     brewButton.disable = true
     recipeText.text = recipe.toString
     brewedText.text = ""
-    stageList.items.get().clear()
+    eventList.items.get().clear()
     Brewery.brew(recipe)
   }
 
-  stageProperty.onChange { (_, _, newValue) =>
-    stageList.items.get().add(newValue.toString)
+  commandProperty.onChange { (_, _, newValue) =>
+    commandList.items.get().add(newValue.toString)
   }
 
-  brewedProperty.onChange { (_, _, newValue) =>
-    brewButton.disable = false
-    brewedText.text = newValue.toString
+  eventProperty.onChange { (_, _, newValue) =>
+    eventList.items.get().add(newValue.toString)
+    if (newValue.name == "Brewed") {
+      brewButton.disable = false
+      brewedText.text = newValue.toString
+    }
   }
 }

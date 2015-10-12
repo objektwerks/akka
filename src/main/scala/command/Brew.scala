@@ -6,4 +6,6 @@ import domain.Recipe
 
 case class Brew(number: Int,
                 initiated: LocalDateTime,
-                recipe: Recipe)
+                recipe: Recipe) extends Command {
+  def name: String = "Brew"
+}
