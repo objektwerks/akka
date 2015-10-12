@@ -34,9 +34,7 @@ object BrewMeister extends JFXApp {
     text = "Receipe"
   }
 
-  val recipeText = new Text {
-    wrappingWidth = 600
-  }
+  val recipeText = new Text
 
   val commandLabel = new Label {
     text = "Commands"
@@ -63,6 +61,7 @@ object BrewMeister extends JFXApp {
   }
 
   val appPane = new VBox {
+    prefWidth = 875
     spacing = 6
     padding = Insets(6)
     children = List(toolbar, contentPane)
@@ -93,8 +92,8 @@ object BrewMeister extends JFXApp {
 
   eventProperty.onChange { (_, _, newValue) =>
     eventList.items.get().add(newValue.toString)
-    if (newValue.isInstanceOf[Brewed]) {
-      brewButton.disable = false
+    newValue match {
+      case event: Brewed => brewButton.disable = false
     }
   }
 }
