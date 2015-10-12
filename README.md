@@ -9,7 +9,7 @@ which works as follows:
 
 1. brew meister --- recipe ---> brewery
 2. brewery --- recipe ---> brewer
-    1. brewer --- brew ---> 3 assistant --- brew ---> masher
+    1. brewer --- brew ---> masher
     2. masher --- brew ---> boiler  | masher --- mashed ---> brewer
     3. boiler --- brew ---> cooler  | boiler --- boiled ---> brewer
     4. cooler --- brew ---> fermenter   | cooler --- cooled ---> brewer
@@ -21,16 +21,13 @@ which works as follows:
 
 >Note how the brew command flows through the brewing process until it's transformed into a brewed event.
  
->During the brewing process, the masher on through to the bottler, emits a stage event to the brewer, which is
+>During the brewing process, the masher on through to the bottler, emits an event to the brewer, which is
 forwarded to the brewery and brew meister.
 
->The recipe, brew command and stage events are displayed in the brew meister UI for a single brewing session.
+>The recipe, brew command and brewing events are displayed in the brew meister UI for a single brewing session.
 
->The relationships between the brew meister, brewery and brewer may seem odd. And they are in the real world. In this
-simulation, however, the brew meister is the ScalaFX UI; the brewery is an actor system; and the brewer is the principle
-actor.
-
->TODO: 1.) Rethink stage actors as FSMs; 2.) Refactor UI to capture multiple brew sessions.
+>The relationships between the brew meister, brewery and brewer may seem odd. In this simulation, however, the brew
+meister is the ScalaFX UI; the brewery is an actor system; and the brewer is the principle actor.
 
 Test
 ----
