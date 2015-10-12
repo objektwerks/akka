@@ -30,7 +30,7 @@ forwarded to the brewery and brew meister.
 simulation, however, the brew meister is the ScalaFX UI; the brewery is an actor system; and the brewer is the principle
 actor.
 
-TODO: Much remains to be comopleted with this simulation.
+>TODO: 1.) Rethink stage actors as FSMs; 2.) Refactor UI to capture multiple brew sessions.
 
 Test
 ----
