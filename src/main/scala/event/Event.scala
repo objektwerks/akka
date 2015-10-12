@@ -1,5 +1,3 @@
 package event
 
-trait Event {
-  def name: String
-}
+trait Event

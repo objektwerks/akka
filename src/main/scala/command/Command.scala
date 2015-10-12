@@ -1,5 +1,3 @@
 package command
 
-trait Command {
-  def name: String
-}
+trait Command

@@ -2,6 +2,4 @@ package event
 
 import java.time.LocalDateTime
 
-case class Conditioned(number: Int, completed: LocalDateTime) extends Event {
-  def name: String = "Conditioned"
-}
+case class Conditioned(number: Int, completed: LocalDateTime) extends Event
