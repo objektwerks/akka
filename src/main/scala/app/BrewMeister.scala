@@ -91,6 +91,7 @@ object BrewMeister extends JFXApp {
     brewButton.disable = true
     recipeText.text = recipe.toString
     brewedText.text = ""
+    commandList.items.get().clear()
     eventList.items.get().clear()
     Brewery.brew(recipe)
   }
