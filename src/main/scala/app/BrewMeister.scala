@@ -38,14 +38,6 @@ object BrewMeister extends JFXApp {
     wrappingWidth = 600
   }
 
-  val brewedLabel = new Label {
-    text = "Brewed"
-  }
-
-  val brewedText = new Text {
-    wrappingWidth = 600
-  }
-
   val commandLabel = new Label {
     text = "Commands"
   }
@@ -67,7 +59,7 @@ object BrewMeister extends JFXApp {
   val contentPane = new VBox {
     spacing = 6
     padding = Insets(6)
-    children = List(recipeLabel, recipeText, brewedLabel, brewedText, commandLabel, commandList, eventLabel, eventList)
+    children = List(recipeLabel, recipeText, commandLabel, commandList, eventLabel, eventList)
   }
 
   val appPane = new VBox {
@@ -90,7 +82,6 @@ object BrewMeister extends JFXApp {
     val recipe = IPA()
     brewButton.disable = true
     recipeText.text = recipe.toString
-    brewedText.text = ""
     commandList.items.get().clear()
     eventList.items.get().clear()
     Brewery.brew(recipe)
@@ -104,7 +95,6 @@ object BrewMeister extends JFXApp {
     eventList.items.get().add(newValue.toString)
     if (newValue.name == "Brewed") {
       brewButton.disable = false
-      brewedText.text = newValue.toString
     }
   }
 }
