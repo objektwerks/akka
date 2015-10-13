@@ -22,7 +22,7 @@ object Brewery {
   var commandPropertyListener: Option[ObjectProperty[Command]] = None
   var eventPropertyListener: Option[ObjectProperty[Event]] = None
   val system = ActorSystem.create("Brewery", ConfigFactory.load("brewery.conf"))
-  val bottler: ActorRef = system.actorOf(Props[Bottler], name = "bottler")
+  val bottler: ActorRef = system.actorOf(Props[Casker], name = "bottler")
   val conditioner: ActorRef = system.actorOf(Props(new Conditioner(bottler)), name = "conditioner")
   val fermenter: ActorRef = system.actorOf(Props(new Fermenter(conditioner)), name = "fermenter")
   val cooler: ActorRef = system.actorOf(Props(new Cooler(fermenter)), name = "cooler")
