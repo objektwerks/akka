@@ -2,7 +2,7 @@ package app
 
 import command.Command
 import domain.IPA
-import event.{Bottled, Event}
+import event.{Brewed, Event}
 import system.Brewery
 
 import scalafx.Includes._
@@ -93,7 +93,7 @@ object BrewMeister extends JFXApp {
   eventProperty.onChange { (_, _, newEvent) =>
     eventList.items.get().add(newEvent.toString)
     newEvent match {
-      case event: Bottled => brewButton.disable = false
+      case event: Brewed => brewButton.disable = false
     }
   }
 }
