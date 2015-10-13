@@ -93,7 +93,8 @@ object BrewMeister extends JFXApp {
   eventProperty.onChange { (_, _, newEvent) =>
     eventList.items.get().add(newEvent.toString)
     newEvent match {
-      case event: Brewed => brewButton.disable = false
+      case Brewed(_, _, _) => brewButton.disable = false
+      case _ =>
     }
   }
 }
