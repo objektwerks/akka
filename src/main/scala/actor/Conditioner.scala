@@ -13,9 +13,9 @@ class Conditioner(bottler: ActorRef) extends Actor {
   override def receive: Receive = {
     case brew: Brew =>
       Simulator.simulate()
-      publisher.publish(Conditioning(brew.number, LocalTime.now()))
+      publisher.publish(Conditioning(brew.batch, LocalTime.now()))
       Simulator.simulate()
-      publisher.publish(Conditioned(brew.number, LocalTime.now()))
+      publisher.publish(Conditioned(brew.batch, LocalTime.now()))
       bottler ! brew
   }
 }

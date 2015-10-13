@@ -13,9 +13,9 @@ class Boiler(cooler: ActorRef) extends Actor {
   override def receive: Receive = {
     case brew: Brew =>
       Simulator.simulate()
-      publisher.publish(Boiling(brew.number, LocalTime.now()))
+      publisher.publish(Boiling(brew.batch, LocalTime.now()))
       Simulator.simulate()
-      publisher.publish(Boiled(brew.number, LocalTime.now()))
+      publisher.publish(Boiled(brew.batch, LocalTime.now()))
       cooler ! brew
   }
 }

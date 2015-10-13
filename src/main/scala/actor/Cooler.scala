@@ -13,9 +13,9 @@ class Cooler(fermenter: ActorRef) extends Actor {
   override def receive: Receive = {
     case brew: Brew =>
       Simulator.simulate()
-      publisher.publish(Cooling(brew.number, LocalTime.now()))
+      publisher.publish(Cooling(brew.batch, LocalTime.now()))
       Simulator.simulate()
-      publisher.publish(Cooled(brew.number, LocalTime.now()))
+      publisher.publish(Cooled(brew.batch, LocalTime.now()))
       fermenter ! brew
   }
 }

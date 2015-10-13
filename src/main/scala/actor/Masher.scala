@@ -13,9 +13,9 @@ class Masher(boiler: ActorRef) extends Actor {
   override def receive: Receive = {
     case brew: Brew =>
       Simulator.simulate()
-      publisher.publish(Mashing(brew.number, LocalTime.now()))
+      publisher.publish(Mashing(brew.batch, LocalTime.now()))
       Simulator.simulate()
-      publisher.publish(Mashed(brew.number, LocalTime.now()))
+      publisher.publish(Mashed(brew.batch, LocalTime.now()))
       boiler ! brew
   }
 }

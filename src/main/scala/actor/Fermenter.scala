@@ -13,9 +13,9 @@ class Fermenter(conditioner: ActorRef) extends Actor {
   override def receive: Receive = {
     case brew: Brew =>
       Simulator.simulate()
-      publisher.publish(Fermenting(brew.number, LocalTime.now()))
+      publisher.publish(Fermenting(brew.batch, LocalTime.now()))
       Simulator.simulate()
-      publisher.publish(Fermented(brew.number, LocalTime.now()))
+      publisher.publish(Fermented(brew.batch, LocalTime.now()))
       conditioner ! brew
   }
 }
