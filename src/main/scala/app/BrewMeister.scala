@@ -50,7 +50,7 @@ object BrewMeister extends JFXApp {
   }
 
   val eventList = new ListView[String] {
-    prefHeight = 200
+    prefHeight = 400
     items = ObservableBuffer[String]()
   }
 
