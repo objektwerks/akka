@@ -1,6 +1,6 @@
 package app
 
-import command.Command
+import command.{Brew, Command}
 import domain.IPA
 import event.{Brewed, Event}
 import system.Brewery
@@ -34,15 +34,16 @@ object BrewMeister extends JFXApp {
     text = "Receipe"
   }
 
-  val recipeText = new Text
+  val recipeText = new Text {
+    wrappingWidth = 600
+  }
 
   val commandLabel = new Label {
     text = "Commands"
   }
 
-  val commandList = new ListView[String] {
-    prefHeight = 50
-    items = ObservableBuffer[String]()
+  val commandText = new Text {
+    wrappingWidth = 600
   }
 
   val eventLabel = new Label {
@@ -50,18 +51,18 @@ object BrewMeister extends JFXApp {
   }
 
   val eventList = new ListView[String] {
-    prefHeight = 350
+    prefHeight = 375
     items = ObservableBuffer[String]()
   }
 
   val contentPane = new VBox {
     spacing = 6
     padding = Insets(6)
-    children = List(recipeLabel, recipeText, commandLabel, commandList, eventLabel, eventList)
+    children = List(recipeLabel, recipeText, commandLabel, commandText, eventLabel, eventList)
   }
 
   val appPane = new VBox {
-    prefWidth = 800
+    prefWidth = 660
     spacing = 6
     padding = Insets(6)
     children = List(toolbar, contentPane)
@@ -81,13 +82,18 @@ object BrewMeister extends JFXApp {
     val recipe = IPA()
     brewButton.disable = true
     recipeText.text = recipe.toString
-    commandList.items.get().clear()
+    commandText.text = ""
     eventList.items.get().clear()
     Brewery.brew(recipe)
   }
 
   commandProperty.onChange { (_, _, newCommand) =>
-    commandList.items.get().add(newCommand.toString)
+    newCommand match {
+      case Brew(batch, initiated, _) =>
+        brewButton.disable = false
+        commandText.text = s"Batch: $batch : Initiated: $initiated"
+      case _ =>
+    }
   }
 
   eventProperty.onChange { (_, _, newEvent) =>
