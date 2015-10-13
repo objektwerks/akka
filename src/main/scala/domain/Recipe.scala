@@ -30,14 +30,3 @@ case class IPA(name: String = "IPA",
                yeast: Yeast = Yeast("English Ale", "1oz"),
                water: Water = Water("Spring", "5g"),
                steps: List[Step] = List()) extends Recipe
-
-case class DIPA(name: String = "DIPA",
-                description: String = "Double Indian Pale Ale",
-                ibu: Int = 75,
-                abv: Double = 9.0,
-                ingrediants: List[Ingrediant] = List(),
-                malts: List[Malt] = List(Malt("2 Row Pale", "13lb")),
-                hops: List[Hop] = List(Hop("Simcoe", ".5oz"), Hop("Amarillo", ".5oz"), Hop("Palisade", ".5oz"), Hop("Glacier", ".5oz"), Hop("Warrior", ".5oz")),
-                yeast: Yeast = Yeast("English Ale", "1oz"),
-                water: Water = Water("Spring", "5g"),
-                steps: List[Step] = List()) extends Recipe
