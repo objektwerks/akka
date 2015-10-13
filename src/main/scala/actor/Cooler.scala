@@ -8,12 +8,14 @@ import event.{Cooled, Cooling}
 import simulator.Simulator
 
 class Cooler(fermenter: ActorRef) extends Actor {
+  val publisher = context.system.eventStream
+
   override def receive: Receive = {
     case brew: Brew =>
       Simulator.simulate(39)
-      context.system.eventStream.publish(Cooling(brew.number, LocalTime.now()))
+      publisher.publish(Cooling(brew.number, LocalTime.now()))
       Simulator.simulate(39)
-      context.system.eventStream.publish(Cooled(brew.number, LocalTime.now()))
+      publisher.publish(Cooled(brew.number, LocalTime.now()))
       fermenter ! brew
   }
 }

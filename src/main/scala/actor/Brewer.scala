@@ -12,13 +12,14 @@ import system.Brewery
 
 class Brewer(masher: ActorRef) extends Actor with ActorLogging {
   val batchNumber = new AtomicInteger()
+  val publisher = context.system.eventStream
 
   override def receive: Receive = {
     case recipe: Recipe =>
       val brew = Brew(batchNumber.incrementAndGet(), LocalTime.now, recipe)
-      context.system.eventStream.publish(brew)
+      publisher.publish(brew)
       Simulator.simulate(39)
-      context.system.eventStream.publish(Brewing(brew.number, LocalTime.now()))
+      publisher.publish(Brewing(brew.number, LocalTime.now()))
       masher ! brew
     case command: Command => Brewery.command(command)
     case event: Event => Brewery.event(event)
