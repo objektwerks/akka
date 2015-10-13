@@ -12,7 +12,7 @@ object Simulator {
     loop(n, 0, 1)
   }
 
-  def simulate(): BigInt = {
+  def simulate(factor: Int = 99): BigInt = {
     tailrec(99)
   }
 }
