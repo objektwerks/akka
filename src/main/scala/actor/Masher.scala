@@ -10,7 +10,6 @@ import simulator.Simulator
 class Masher(boiler: ActorRef) extends Actor {
   override def receive: Receive = {
     case brew: Brew =>
-      context.system.eventStream.publish(brew)
       Simulator.simulate(39)
       context.system.eventStream.publish(Mashing(brew.number, LocalTime.now()))
       Simulator.simulate(39)
