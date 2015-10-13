@@ -12,9 +12,9 @@ class Cooler(fermenter: ActorRef) extends Actor {
 
   override def receive: Receive = {
     case brew: Brew =>
-      Simulator.simulate(39)
+      Simulator.simulate()
       publisher.publish(Cooling(brew.number, LocalTime.now()))
-      Simulator.simulate(39)
+      Simulator.simulate()
       publisher.publish(Cooled(brew.number, LocalTime.now()))
       fermenter ! brew
   }

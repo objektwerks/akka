@@ -18,7 +18,7 @@ class Brewer(masher: ActorRef) extends Actor with ActorLogging {
     case recipe: Recipe =>
       val brew = Brew(batchNumber.incrementAndGet(), LocalTime.now, recipe)
       publisher.publish(brew)
-      Simulator.simulate(39)
+      Simulator.simulate()
       publisher.publish(Brewing(brew.number, LocalTime.now()))
       masher ! brew
     case command: Command => Brewery.command(command)
