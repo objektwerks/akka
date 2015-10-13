@@ -1,5 +1,5 @@
 package event
 
-import java.time.LocalDateTime
+import java.time.LocalTime
 
-case class Brewed(batch: Int, initiated: LocalDateTime, completed: LocalDateTime) extends Event
+case class Brewed(batch: Int, initiated: LocalTime, completed: LocalTime) extends Event

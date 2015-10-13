@@ -1,6 +1,6 @@
 package actor
 
-import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.{Actor, ActorLogging, ActorRef}
@@ -13,7 +13,7 @@ class Brewer(masher: ActorRef) extends Actor with ActorLogging {
   val batchNumber = new AtomicInteger()
 
   override def receive: Receive = {
-    case recipe: Recipe => masher ! Brew(batchNumber.incrementAndGet(), LocalDateTime.now, recipe)
+    case recipe: Recipe => masher ! Brew(batchNumber.incrementAndGet(), LocalTime.now, recipe)
     case command: Command => Brewery.command(command)
     case event: Event => Brewery.event(event)
   }

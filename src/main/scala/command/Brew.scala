@@ -1,9 +1,9 @@
 package command
 
-import java.time.LocalDateTime
+import java.time.LocalTime
 
 import domain.Recipe
 
 case class Brew(number: Int,
-                initiated: LocalDateTime,
+                initiated: LocalTime,
                 recipe: Recipe) extends Command

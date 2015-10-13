@@ -1,5 +1,5 @@
 package event
 
-import java.time.LocalDateTime
+import java.time.LocalTime
 
-case class Fermented(number: Int, completed: LocalDateTime) extends Event
+case class Fermented(number: Int, completed: LocalTime) extends Event
