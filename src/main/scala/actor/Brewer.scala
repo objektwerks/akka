@@ -16,10 +16,10 @@ class Brewer(masher: ActorRef) extends Actor with ActorLogging {
 
   override def receive: Receive = {
     case recipe: Recipe =>
-      val brew = Brew(batchNumber.incrementAndGet(), LocalTime.now, recipe)
+      val brew = Brew(batchNumber.incrementAndGet(), recipe)
       publisher.publish(brew)
       Simulator.simulate()
-      publisher.publish(Brewing(brew.batch, LocalTime.now()))
+      publisher.publish(Brewing(brew.batch))
       masher ! brew
     case command: Command => Brewery.command(command)
     case event: Event => Brewery.event(event)

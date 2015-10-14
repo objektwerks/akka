@@ -88,10 +88,10 @@ object BrewMeister extends JFXApp {
   }
 
   commandProperty.onChange { (_, _, newCommand) =>
+    commandText.text = newCommand.toString
     newCommand match {
-      case Brew(batch, initiated, _) =>
+      case Brew(_, _) =>
         brewButton.disable = false
-        commandText.text = s"Batch: $batch : Initiated: $initiated"
       case _ =>
     }
   }
@@ -99,7 +99,7 @@ object BrewMeister extends JFXApp {
   eventProperty.onChange { (_, _, newEvent) =>
     eventList.items.get().add(newEvent.toString)
     newEvent match {
-      case Brewed(_, _, _) => brewButton.disable = false
+      case Brewed(_) => brewButton.disable = false
       case _ =>
     }
   }

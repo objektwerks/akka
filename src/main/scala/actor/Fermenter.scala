@@ -1,7 +1,5 @@
 package actor
 
-import java.time.LocalTime
-
 import akka.actor.{Actor, ActorRef}
 import command.Brew
 import event.{Fermented, Fermenting}
@@ -13,9 +11,9 @@ class Fermenter(conditioner: ActorRef) extends Actor {
   override def receive: Receive = {
     case brew: Brew =>
       Simulator.simulate()
-      publisher.publish(Fermenting(brew.batch, LocalTime.now()))
+      publisher.publish(Fermenting(brew.batch))
       Simulator.simulate()
-      publisher.publish(Fermented(brew.batch, LocalTime.now()))
+      publisher.publish(Fermented(brew.batch))
       conditioner ! brew
   }
 }

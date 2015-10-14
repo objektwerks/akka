@@ -1,7 +1,5 @@
 package actor
 
-import java.time.LocalTime
-
 import akka.actor.{Actor, ActorRef}
 import command.Brew
 import event.{Mashed, Mashing}
@@ -13,9 +11,9 @@ class Masher(boiler: ActorRef) extends Actor {
   override def receive: Receive = {
     case brew: Brew =>
       Simulator.simulate()
-      publisher.publish(Mashing(brew.batch, LocalTime.now()))
+      publisher.publish(Mashing(brew.batch))
       Simulator.simulate()
-      publisher.publish(Mashed(brew.batch, LocalTime.now()))
+      publisher.publish(Mashed(brew.batch))
       boiler ! brew
   }
 }
