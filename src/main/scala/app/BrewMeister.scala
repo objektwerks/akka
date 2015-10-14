@@ -88,19 +88,15 @@ object BrewMeister extends JFXApp {
   }
 
   commandProperty.onChange { (_, _, newCommand) =>
-    commandText.text = newCommand.toString
     newCommand match {
-      case Brew(_, _) =>
-        brewButton.disable = false
-      case _ =>
+      case Brew(batch, _) => commandText.text = s"Command: Brew, Batch: $batch, Executed: ${newCommand.executed}"
     }
   }
 
   eventProperty.onChange { (_, _, newEvent) =>
-    eventList.items.get().add(newEvent.toString)
     newEvent match {
       case Brewed(_) => brewButton.disable = false
-      case _ =>
+      case event => eventList.items.get().add(s"Event: ${event.getClass.getSimpleName}, Batch: ${event.batch}, Executed: ${event.completed}")
     }
   }
 }

@@ -4,6 +4,7 @@ import java.time.LocalTime
 
 sealed trait Event {
   def completed: LocalTime = LocalTime.now()
+  def batch: Int
 }
 
 case class Boiling(batch: Int) extends Event
