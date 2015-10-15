@@ -14,8 +14,8 @@ class Conditioner(bottler: ActorRef, casker: ActorRef) extends Actor {
       publisher.publish(Conditioning(brew.batch))
       Simulator.simulate()
       publisher.publish(Conditioned(brew.batch))
+      publisher.publish(Brewed(brew.batch))
       bottler ! brew
       casker ! brew
-      publisher.publish(Brewed(brew.batch))
   }
 }

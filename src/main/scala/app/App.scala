@@ -51,7 +51,7 @@ object App extends JFXApp {
   }
 
   val eventList = new ListView[String] {
-    prefHeight = 375
+    prefHeight = 420
     items = ObservableBuffer[String]()
   }
 
@@ -88,15 +88,14 @@ object App extends JFXApp {
   }
 
   commandProperty.onChange { (_, _, newCommand) =>
-    newCommand match {
-      case Brew(batch, _) => commandText.text = s"Command: Brew, Batch: $batch, Executed: ${newCommand.executed}"
-    }
+    commandText.text = s"Command: ${newCommand.getClass.getSimpleName}, Batch: ${newCommand.batch}, Executed: ${newCommand.executed}"
   }
 
   eventProperty.onChange { (_, _, newEvent) =>
+    eventList.items.get().add(s"Event: ${newEvent.getClass.getSimpleName}, Batch: ${newEvent.batch}, Executed: ${newEvent.completed}")
     newEvent match {
       case Brewed(_) => brewButton.disable = false
-      case event => eventList.items.get().add(s"Event: ${event.getClass.getSimpleName}, Batch: ${event.batch}, Executed: ${event.completed}")
+      case _ =>
     }
   }
 }
