@@ -4,7 +4,7 @@ Akka Tests and Cluster Simulation
 
 Simulation
 ----------
->The Akka cluster simulation models a brewery as follows:
+>The Akka cluster simulation models a brewing process as follows:
 
 1. app --- recipe ---> brewery
 2. brewery --- recipe ---> brewer
@@ -13,13 +13,14 @@ Simulation
     3. boiler --- brew ---> cooler  | boiler --- boiling ~> boiled ---> brewer
     4. cooler --- brew ---> fermenter   | cooler --- cooling ~> cooled ---> brewer
     5. fermenter --- brew ---> conditioner  | fermenter --- fermenting ~> fermented ---> brewer
-    6. conditioner --- brew ---> bottler & casker   | conditioner --- conditioning ~> conditioned ~> brewed ---> brewer
+    6. conditioner --- brew ---> bottler & kegger & casker   | conditioner --- conditioning ~> conditioned ~> brewed ---> brewer
     7. bottler --- bottling ~> bottled ---> brewer
-    8. casker --- casking ~> casked ---> brewer
+    8. kegger --- kegging ~> kegged ---> brewer
+    9. casker --- casking ~> casked ---> brewer
 3. brewer --- brewed ---> brewery
 4. brewery --- brewed ---> app
 
->The brew command flows through the brewing process, during which events are emitted and display in the app.
+>The brew command flows through the brewing process, during which brewing events are emitted and displayed in the app.
 
 Test
 ----
