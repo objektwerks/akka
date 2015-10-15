@@ -6,7 +6,7 @@ Simulation
 ----------
 >The Akka cluster simulation models a brewery as follows:
 
-1. brew meister --- recipe ---> brewery
+1. app --- recipe ---> brewery
 2. brewery --- recipe ---> brewer
     1. brewer --- brew ---> masher
     2. masher --- brew ---> boiler  | masher --- mashing ~> mashed ---> brewer
@@ -17,7 +17,7 @@ Simulation
     7. bottler --- bottling ~> bottled ---> brewer
     8. casker --- casking ~> casked ---> brewer
 3. brewer --- brewed ---> brewery
-4. brewery --- brewed ---> brew meister
+4. brewery --- brewed ---> app
 
 >The brew command flows through the brewing process, during which events are emitted and display in the app.
 

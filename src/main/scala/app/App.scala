@@ -16,7 +16,7 @@ import scalafx.scene.control._
 import scalafx.scene.layout.VBox
 import scalafx.scene.text.Text
 
-object BrewMeister extends JFXApp {
+object App extends JFXApp {
   val commandProperty = new ObjectProperty[Command]()
   val eventProperty = new ObjectProperty[Event]()
   Brewery.register(commandProperty, eventProperty)
