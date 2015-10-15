@@ -5,7 +5,7 @@ import command.Brew
 import event.{Brewed, Conditioned, Conditioning}
 import simulator.Simulator
 
-class Conditioner(bottler: ActorRef, casker: ActorRef) extends Actor {
+class Conditioner(bottler: ActorRef, kegger: ActorRef, casker: ActorRef) extends Actor {
   val publisher = context.system.eventStream
 
   override def receive: Receive = {
@@ -16,6 +16,7 @@ class Conditioner(bottler: ActorRef, casker: ActorRef) extends Actor {
       publisher.publish(Conditioned(brew.batch))
       publisher.publish(Brewed(brew.batch))
       bottler ! brew
+      kegger ! brew
       casker ! brew
   }
 }

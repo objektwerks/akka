@@ -51,7 +51,7 @@ object App extends JFXApp {
   }
 
   val eventList = new ListView[String] {
-    prefHeight = 420
+    prefHeight = 475
     items = ObservableBuffer[String]()
   }
 

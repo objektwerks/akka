@@ -28,5 +28,8 @@ case class Conditioned(batch: Int) extends Event
 case class Casking(batch: Int) extends Event
 case class Casked(batch: Int) extends Event
 
+case class Kegging(batch: Int) extends Event
+case class Kegged(batch: Int) extends Event
+
 case class Bottling(batch: Int) extends Event
 case class Bottled(batch: Int) extends Event

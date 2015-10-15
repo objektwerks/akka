@@ -1,16 +1,15 @@
 package actor
 
-import java.time.LocalTime
 import java.util.concurrent.atomic.AtomicInteger
 
-import akka.actor.{Actor, ActorLogging, ActorRef}
+import akka.actor.{Actor, ActorRef}
 import command.{Brew, Command}
 import domain.Recipe
 import event.{Brewing, Event}
 import simulator.Simulator
 import system.Brewery
 
-class Brewer(masher: ActorRef) extends Actor with ActorLogging {
+class Brewer(masher: ActorRef) extends Actor {
   val batchNumber = new AtomicInteger()
   val publisher = context.system.eventStream
 
