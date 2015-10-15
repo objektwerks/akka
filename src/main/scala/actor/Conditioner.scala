@@ -2,10 +2,10 @@ package actor
 
 import akka.actor.{Actor, ActorRef}
 import command.Brew
-import event.{Conditioned, Conditioning}
+import event.{Brewed, Conditioned, Conditioning}
 import simulator.Simulator
 
-class Conditioner(bottler: ActorRef) extends Actor {
+class Conditioner(bottler: ActorRef, casker: ActorRef) extends Actor {
   val publisher = context.system.eventStream
 
   override def receive: Receive = {
@@ -15,5 +15,7 @@ class Conditioner(bottler: ActorRef) extends Actor {
       Simulator.simulate()
       publisher.publish(Conditioned(brew.batch))
       bottler ! brew
+      casker ! brew
+      publisher.publish(Brewed(brew.batch))
   }
 }

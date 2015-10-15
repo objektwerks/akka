@@ -2,17 +2,17 @@ package actor
 
 import akka.actor.Actor
 import command.Brew
-import event.{Casked, Casking}
+import event._
 import simulator.Simulator
 
-class Casker extends Actor {
+class Bottler extends Actor {
   val publisher = context.system.eventStream
 
   override def receive: Receive = {
     case brew: Brew =>
       Simulator.simulate()
-      publisher.publish(Casking(brew.batch))
+      publisher.publish(Bottling(brew.batch))
       Simulator.simulate()
-      publisher.publish(Casked(brew.batch))
+      publisher.publish(Bottled(brew.batch))
   }
 }
