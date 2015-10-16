@@ -23,7 +23,6 @@ object App extends JFXApp {
 
   val brewButton = new Button {
     text = "Brew"
-    disable = false
   }
 
   val toolbar = new ToolBar {
