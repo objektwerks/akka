@@ -10,7 +10,6 @@ case class Step(step: String)
 
 sealed trait Recipe {
   def name: String
-  def description: String
   def ibu: Int
   def abv: Double
   def originalGravity: Double
@@ -26,7 +25,6 @@ sealed trait Recipe {
 }
 
 case class IPA(name: String = "IPA",
-               description: String = "Dogfish Head 60' IPA",
                ibu: Int = 60,
                abv: Double = 5.8,
                originalGravity: Double = 1.070,
