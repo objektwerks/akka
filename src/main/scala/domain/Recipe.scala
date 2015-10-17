@@ -24,7 +24,7 @@ sealed trait Recipe {
   def steps: List[Step]
 }
 
-case class IPA(name: String = "IPA",
+case class IPA(name: String = "Dogfish Head 60' IPA",
                ibu: Int = 60,
                abv: Double = 5.8,
                originalGravity: Double = 1.070,
