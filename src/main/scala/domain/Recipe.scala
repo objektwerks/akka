@@ -21,7 +21,7 @@ sealed trait Recipe {
 }
 
 case class IPA(name: String = "IPA",
-               description: String = "Indian Pale Ale",
+               description: String = "Dogfish Head 60' IPA",
                ibu: Int = 60,
                abv: Double = 5.8,
                ingrediants: List[Ingrediant] = List(Ingrediant("Irish Moss", "1 tsp")),
