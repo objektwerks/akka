@@ -30,7 +30,7 @@ object App extends JFXApp {
   }
 
   val recipeLabel = new Label {
-    text = "Receipe"
+    text = "Receipe:"
   }
 
   val recipeText = new Text {
@@ -38,7 +38,7 @@ object App extends JFXApp {
   }
 
   val commandLabel = new Label {
-    text = "Commands"
+    text = "Commands:"
   }
 
   val commandText = new Text {
@@ -46,11 +46,11 @@ object App extends JFXApp {
   }
 
   val eventLabel = new Label {
-    text = "Events"
+    text = "Events:"
   }
 
   val eventList = new ListView[String] {
-    prefHeight = 475
+    prefHeight = 560
     items = ObservableBuffer[String]()
   }
 
