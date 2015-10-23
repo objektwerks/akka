@@ -8,20 +8,20 @@ Simulation
 
 1. app --- recipe ---> brewery
 2. brewery --- recipe ---> brewer
-    1. brewer --- brew ---> masher
-    2. masher --- brew ---> boiler
+    a. brewer --- brew ---> masher
+    b. masher --- brew ---> boiler
         * masher --- mashing ~> mashed ---> brewer
-    3. boiler --- brew ---> cooler
+    c. boiler --- brew ---> cooler
         * boiler --- boiling ~> boiled ---> brewer
-    4. cooler --- brew ---> fermenter
+    c. cooler --- brew ---> fermenter
         * cooler --- cooling ~> cooled ---> brewer
-    5. fermenter --- brew ---> conditioner
+    e. fermenter --- brew ---> conditioner
         * fermenter --- fermenting ~> fermented ---> brewer
-    6. conditioner --- brew ---> bottler & kegger & casker
+    f. conditioner --- brew ---> bottler & kegger & casker
         * conditioner --- conditioning ~> conditioned ~> brewed ---> brewer
-    7. bottler --- bottling ~> bottled ---> brewer
-    8. kegger --- kegging ~> kegged ---> brewer
-    9. casker --- casking ~> casked ---> brewer
+    f. bottler --- bottling ~> bottled ---> brewer
+    h. kegger --- kegging ~> kegged ---> brewer
+    i. casker --- casking ~> casked ---> brewer
 3. brewer --- brewed ---> brewery
 4. brewery --- brewed ---> app
 
