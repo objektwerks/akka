@@ -16,7 +16,7 @@ import scalafx.scene.control._
 import scalafx.scene.layout.VBox
 import scalafx.scene.text.Text
 
-object App extends JFXApp {
+object Simulator extends JFXApp {
   val commandProperty = new ObjectProperty[Command]()
   val eventProperty = new ObjectProperty[Event]()
   Brewery.register(commandProperty, eventProperty)
