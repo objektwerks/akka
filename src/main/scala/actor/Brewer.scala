@@ -6,7 +6,6 @@ import akka.actor.{Props, Actor, ActorRef}
 import command.{Brew, Command}
 import domain.Recipe
 import event.{Brewing, Event}
-import simulator.Simulator
 import system.Brewery
 
 class Brewer() extends Actor {
@@ -26,7 +25,6 @@ class Brewer() extends Actor {
     case recipe: Recipe =>
       val brew = Brew(batchNumber.incrementAndGet(), recipe)
       publisher.publish(brew)
-      Simulator.simulate()
       publisher.publish(Brewing(brew.batch))
       masher ! brew
     case command: Command => Brewery.command(command)
