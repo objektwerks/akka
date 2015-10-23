@@ -10,22 +10,27 @@ Simulation
 2. brewery --- recipe ---> brewer
     1. brewer --- brew ---> masher
     2. masher --- brew ---> boiler
-        1. masher --- mashing ~> mashed ---> brewer
+        * masher --- mashing ~> mashed ---> brewer
     3. boiler --- brew ---> cooler
-        1. boiler --- boiling ~> boiled ---> brewer
+        * boiler --- boiling ~> boiled ---> brewer
     4. cooler --- brew ---> fermenter
-        1. cooler --- cooling ~> cooled ---> brewer
+        * cooler --- cooling ~> cooled ---> brewer
     5. fermenter --- brew ---> conditioner
-        1. fermenter --- fermenting ~> fermented ---> brewer
+        * fermenter --- fermenting ~> fermented ---> brewer
     6. conditioner --- brew ---> bottler & kegger & casker
-        1. conditioner --- conditioning ~> conditioned ~> brewed ---> brewer
+        * conditioner --- conditioning ~> conditioned ~> brewed ---> brewer
     7. bottler --- bottling ~> bottled ---> brewer
     8. kegger --- kegging ~> kegged ---> brewer
     9. casker --- casking ~> casked ---> brewer
 3. brewer --- brewed ---> brewery
 4. brewery --- brewed ---> app
 
->The brew command flows through the brewing process, during which brewing events are emitted and displayed in the app.
+>The brew command flows through the brewing process, during which brewing events are emitted and displayed in the Simulator.
+
+* Message: x --- m ---> y represents a message exchange.
+* Event: x --- e(1) ~> e(n) ---> y represents an event exchange.
+
+>TODO: Refactor Simulator with animations.
 
 Test
 ----
