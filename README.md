@@ -1,10 +1,10 @@
 Akka Tests and Cluster Simulation
 ---------------------------------
->This project contains feature tests and a cluster simulation.
+>This project contains Akka feature tests and an Akka cluster visual simulation.
 
 Simulation
 ----------
->The Akka cluster simulation models a brewing process as follows:
+>The Akka cluster visual simulation models a brewing process as follows:
 
 1. app --- recipe ---> brewery
 2. brewery --- recipe ---> brewer
@@ -28,9 +28,9 @@ Simulation
 >The brew command flows through the brewing process, during which brewing events are emitted and displayed in the Simulator.
 
 * Message: x --- m ---> y represents a message exchange.
-* Event: x --- e(1) ~> e(n) ---> y represents an event exchange.
+* Event: x --- e ~> e ---> y represents an event exchange.
 
->TODO: Refactor Simulator with animations.
+>TODO: Refactor Simulator, to include animations.
 
 Test
 ----
@@ -42,4 +42,4 @@ Run
 
 Output
 ------
-1. ./target/output
+1. target/output
