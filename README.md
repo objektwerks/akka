@@ -30,7 +30,7 @@ Simulation
 * Message: x --- m ---> y represents a message exchange.
 * Event: x --- e ~> e ---> y represents an event exchange.
 
->TODO: Refactor Simulator, to include animations.
+>TODO: Implement AnimatedSimulator.
 
 Test
 ----
