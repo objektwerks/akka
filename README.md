@@ -49,5 +49,5 @@ Sprinkler System
 
 Controller 1 --- controls ---> 1..4 Scheduler 1 --- schedules ---> 1 Timer 1 --- opens / closes ---> 1 Valve 1 --- activates / deactivates ---> 1 Zone
 
-Schedular, also referred to as Program ( A, B, C, D ... )
-Zone, also referred to as Station
+1. Schedular, also referred to as Program ( A, B, C, D ... )
+2. Zone, also referred to as Station
