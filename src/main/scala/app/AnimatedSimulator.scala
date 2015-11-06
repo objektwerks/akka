@@ -14,7 +14,6 @@ import scalafx.scene.Scene
 import scalafx.scene.control.{Button, ToolBar}
 import scalafx.scene.layout.VBox
 
-// TODO
 object AnimatedSimulator extends JFXApp {
   val commandProperty = new ObjectProperty[Command]()
   val eventProperty = new ObjectProperty[Event]()
