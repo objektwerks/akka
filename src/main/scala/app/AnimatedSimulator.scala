@@ -1,8 +1,8 @@
 package app
 
-import command.Command
+import command.{Brew, Command}
 import domain.IPA
-import event.Event
+import event.{Brewed, Event}
 import system.Brewery
 
 import scalafx.Includes._
@@ -51,14 +51,20 @@ object AnimatedSimulator extends JFXApp {
   }
 
   brewButton.onAction = { ae: ActionEvent =>
-    val recipe = IPA()
     brewButton.disable = true
-    Brewery.brew(recipe)
+    Brewery.brew(new IPA())
   }
 
   commandProperty.onChange { (_, _, newCommand) =>
+    newCommand match {
+      case Brew(batch, recipe) => brewButton.disable = false
+    }
   }
 
   eventProperty.onChange { (_, _, newEvent) =>
+    newEvent match {
+      case Brewed(_) => brewButton.disable = false
+      case _ =>
+    }
   }
 }
