@@ -52,7 +52,7 @@ object MetaSimulator extends JFXApp {
   }
 
   val stateList = new ListView[String] {
-    prefHeight = 280
+    prefHeight = 260
     items = ObservableBuffer[String]()
   }
 

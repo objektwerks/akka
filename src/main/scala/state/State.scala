@@ -6,7 +6,6 @@ sealed trait State {
   def started: LocalTime = LocalTime.now()
   def batch: Int
 }
-final case class Brewing(batch: Int) extends State
 final case class Mashing(batch: Int) extends State
 final case class Boiling(batch: Int) extends State
 final case class Cooling(batch: Int) extends State
