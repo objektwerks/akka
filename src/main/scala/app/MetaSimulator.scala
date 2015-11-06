@@ -3,6 +3,7 @@ package app
 import command.Command
 import domain.IPA
 import event.{Brewed, Event}
+import state.State
 import system.Brewery
 
 import scalafx.Includes._
@@ -18,8 +19,9 @@ import scalafx.scene.text.Text
 
 object MetaSimulator extends JFXApp {
   val commandProperty = new ObjectProperty[Command]()
+  val stateProperty = new ObjectProperty[State]()
   val eventProperty = new ObjectProperty[Event]()
-  Brewery.register(commandProperty, eventProperty)
+  Brewery.register(commandProperty, stateProperty, eventProperty)
 
   val brewButton = new Button {
     text = "Brew"
@@ -45,19 +47,28 @@ object MetaSimulator extends JFXApp {
     wrappingWidth = 600
   }
 
+  val stateLabel = new Label {
+    text = "States:"
+  }
+
+  val stateList = new ListView[String] {
+    prefHeight = 275
+    items = ObservableBuffer[String]()
+  }
+
   val eventLabel = new Label {
     text = "Events:"
   }
 
   val eventList = new ListView[String] {
-    prefHeight = 560
+    prefHeight = 275
     items = ObservableBuffer[String]()
   }
 
   val contentPane = new VBox {
     spacing = 6
     padding = Insets(6)
-    children = List(recipeLabel, recipeText, commandLabel, commandText, eventLabel, eventList)
+    children = List(recipeLabel, recipeText, commandLabel, commandText, stateLabel, stateList, eventLabel, eventList)
   }
 
   val appPane = new VBox {
@@ -82,6 +93,7 @@ object MetaSimulator extends JFXApp {
     brewButton.disable = true
     recipeText.text = recipe.toString
     commandText.text = ""
+    stateList.items.get().clear()
     eventList.items.get().clear()
     Brewery.brew(recipe)
   }
@@ -90,8 +102,12 @@ object MetaSimulator extends JFXApp {
     commandText.text = s"Command: ${newCommand.getClass.getSimpleName}, Batch: ${newCommand.batch}, Executed: ${newCommand.executed}"
   }
 
+  stateProperty.onChange { (_, _, newState) =>
+    stateList.items.get().add(s"State: ${newState.getClass.getSimpleName}, Batch: ${newState.batch}, Started: ${newState.started}")
+  }
+
   eventProperty.onChange { (_, _, newEvent) =>
-    eventList.items.get().add(s"Event: ${newEvent.getClass.getSimpleName}, Batch: ${newEvent.batch}, Executed: ${newEvent.occurred}")
+    eventList.items.get().add(s"Event: ${newEvent.getClass.getSimpleName}, Batch: ${newEvent.batch}, Occurred: ${newEvent.occurred}")
     newEvent match {
       case Brewed(batch) => brewButton.disable = false
       case _ =>

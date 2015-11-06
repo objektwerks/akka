@@ -2,7 +2,8 @@ package actor
 
 import akka.actor.{Actor, ActorRef}
 import command.Brew
-import event.{Mashed, Mashing}
+import event.Mashed
+import state.Mashing
 
 class Masher(boiler: ActorRef) extends Actor {
   val publisher = context.system.eventStream

@@ -3,6 +3,7 @@ package app
 import command.{Brew, Command}
 import domain.IPA
 import event.{Brewed, Event}
+import state.State
 import system.Brewery
 
 import scalafx.Includes._
@@ -16,8 +17,9 @@ import scalafx.scene.layout.VBox
 
 object AnimatedSimulator extends JFXApp {
   val commandProperty = new ObjectProperty[Command]()
+  val stateProperty = new ObjectProperty[State]()
   val eventProperty = new ObjectProperty[Event]()
-  Brewery.register(commandProperty, eventProperty)
+  Brewery.register(commandProperty, stateProperty, eventProperty)
 
   val brewButton = new Button {
     text = "Brew"
@@ -59,6 +61,9 @@ object AnimatedSimulator extends JFXApp {
     newCommand match {
       case Brew(batch, recipe) =>
     }
+  }
+
+  stateProperty.onChange { (_, _, newState) =>
   }
 
   eventProperty.onChange { (_, _, newEvent) =>

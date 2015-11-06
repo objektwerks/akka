@@ -1,6 +1,6 @@
 package system
 
-import akka.actor.{ActorLogging, Actor}
+import akka.actor.{Actor, ActorLogging}
 import akka.cluster.ClusterEvent._
 import akka.cluster.{Cluster, MemberStatus}
 

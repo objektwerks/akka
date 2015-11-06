@@ -2,7 +2,8 @@ package actor
 
 import akka.actor.{Actor, ActorRef}
 import command.Brew
-import event.{Brewed, Conditioned, Conditioning}
+import event.{Brewed, Conditioned}
+import state.Conditioning
 
 class Conditioner(bottler: ActorRef, kegger: ActorRef, casker: ActorRef) extends Actor {
   val publisher = context.system.eventStream

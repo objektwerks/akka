@@ -2,7 +2,8 @@ package actor
 
 import akka.actor.{Actor, ActorRef}
 import command.Brew
-import event.{Cooled, Cooling}
+import event.Cooled
+import state.Cooling
 
 class Cooler(fermenter: ActorRef) extends Actor {
   val publisher = context.system.eventStream

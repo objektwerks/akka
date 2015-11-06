@@ -2,10 +2,11 @@ package actor
 
 import java.util.concurrent.atomic.AtomicInteger
 
-import akka.actor.{ActorRef, Actor}
+import akka.actor.{Actor, ActorRef}
 import command.{Brew, Command}
 import domain.Recipe
-import event.{Brewing, Event}
+import event.Event
+import state.{Brewing, State}
 import system.Brewery
 
 class Brewer(masher: ActorRef) extends Actor {
@@ -19,6 +20,7 @@ class Brewer(masher: ActorRef) extends Actor {
       publisher.publish(Brewing(brew.batch))
       masher ! brew
     case command: Command => Brewery.command(command)
+    case state: State => Brewery.state(state)
     case event: Event => Brewery.event(event)
   }
 }
