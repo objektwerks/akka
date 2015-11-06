@@ -52,7 +52,7 @@ object MetaSimulator extends JFXApp {
   }
 
   val stateList = new ListView[String] {
-    prefHeight = 275
+    prefHeight = 280
     items = ObservableBuffer[String]()
   }
 
@@ -61,7 +61,7 @@ object MetaSimulator extends JFXApp {
   }
 
   val eventList = new ListView[String] {
-    prefHeight = 275
+    prefHeight = 280
     items = ObservableBuffer[String]()
   }
 
@@ -99,15 +99,15 @@ object MetaSimulator extends JFXApp {
   }
 
   commandProperty.onChange { (_, _, newCommand) =>
-    commandText.text = s"Command: ${newCommand.getClass.getSimpleName}, Batch: ${newCommand.batch}, Executed: ${newCommand.executed}"
+    commandText.text = s"${newCommand.getClass.getSimpleName}, Batch: ${newCommand.batch}, Executed: ${newCommand.executed}"
   }
 
   stateProperty.onChange { (_, _, newState) =>
-    stateList.items.get().add(s"State: ${newState.getClass.getSimpleName}, Batch: ${newState.batch}, Started: ${newState.started}")
+    stateList.items.get().add(s"${newState.getClass.getSimpleName}, Batch: ${newState.batch}, Started: ${newState.started}")
   }
 
   eventProperty.onChange { (_, _, newEvent) =>
-    eventList.items.get().add(s"Event: ${newEvent.getClass.getSimpleName}, Batch: ${newEvent.batch}, Occurred: ${newEvent.occurred}")
+    eventList.items.get().add(s"${newEvent.getClass.getSimpleName}, Batch: ${newEvent.batch}, Occurred: ${newEvent.occurred}")
     newEvent match {
       case Brewed(batch) => brewButton.disable = false
       case _ =>
