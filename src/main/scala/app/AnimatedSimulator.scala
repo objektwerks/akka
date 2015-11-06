@@ -57,13 +57,13 @@ object AnimatedSimulator extends JFXApp {
 
   commandProperty.onChange { (_, _, newCommand) =>
     newCommand match {
-      case Brew(batch, recipe) => brewButton.disable = false
+      case Brew(batch, recipe) =>
     }
   }
 
   eventProperty.onChange { (_, _, newEvent) =>
     newEvent match {
-      case Brewed(_) => brewButton.disable = false
+      case Brewed(batch) => brewButton.disable = false
       case _ =>
     }
   }

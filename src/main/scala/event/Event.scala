@@ -3,7 +3,7 @@ package event
 import java.time.LocalTime
 
 sealed trait Event {
-  def completed: LocalTime = LocalTime.now()
+  def occurred: LocalTime = LocalTime.now()
   def batch: Int
 }
 

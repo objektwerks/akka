@@ -1,6 +1,6 @@
 package app
 
-import command.{Brew, Command}
+import command.Command
 import domain.IPA
 import event.{Brewed, Event}
 import system.Brewery
@@ -91,9 +91,9 @@ object MetaSimulator extends JFXApp {
   }
 
   eventProperty.onChange { (_, _, newEvent) =>
-    eventList.items.get().add(s"Event: ${newEvent.getClass.getSimpleName}, Batch: ${newEvent.batch}, Executed: ${newEvent.completed}")
+    eventList.items.get().add(s"Event: ${newEvent.getClass.getSimpleName}, Batch: ${newEvent.batch}, Executed: ${newEvent.occurred}")
     newEvent match {
-      case Brewed(_) => brewButton.disable = false
+      case Brewed(batch) => brewButton.disable = false
       case _ =>
     }
   }
