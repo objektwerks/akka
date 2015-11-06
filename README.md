@@ -41,6 +41,8 @@ Simulation
 * (s) = state
 * (e) = event
 
+>1 command, 8 states and 9 events.
+
 Test
 ----
 1. sbt clean test
