@@ -28,7 +28,7 @@ sealed trait Recipe {
   def yeast: Yeast
   def water: Water
   def fermentations: List[Fermentation]
-  def steps: Map[Phase, Step]
+  def stepsByPhase: Map[Phase, List[Step]]
 }
 
 case class IPA(name: String = "Dogfish Head 60' IPA",
@@ -48,4 +48,4 @@ case class IPA(name: String = "Dogfish Head 60' IPA",
                yeast: Yeast = Yeast("English Ale", "1 oz"),
                water: Water = Water("Spring", "5 g", "6 g", "60 m", "5 g"),
                fermentations: List[Fermentation] = List(Fermentation("primary", 10, 63), Fermentation("secondary", 10, 63)),
-               steps: Map[Phase, Step] = Map[Phase, Step]()) extends Recipe
+               stepsByPhase: Map[Phase, List[Step]] = Map[Phase, List[Step]]()) extends Recipe
