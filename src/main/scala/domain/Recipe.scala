@@ -46,8 +46,8 @@ case class IPA(name: String = "Dogfish Head 60' IPA",
                yeast: Yeast = Yeast("English Ale", "1 oz"),
                water: Water = Water("Spring", "5 g", "6 g", "60 m", "5 g"),
                fermentations: List[Fermentation] = List(Fermentation("primary", 10, 63), Fermentation("secondary", 10, 63)),
-               stepsByPhase: Map[Phase.Value, List[Step]] = Map(Phase.Masher -> List(Step("Do A.")),
-                                                                Phase.Boiler -> List(Step("Do B.")),
-                                                                Phase.Cooler -> List(Step("Do C.")),
-                                                                Phase.Fermenter -> List(Step("Do D.")),
-                                                                Phase.Conditioner -> List(Step("Do E.")))) extends Recipe
+               stepsByPhase: Map[Phase.Value, List[Step]] = Map(Phase.Masher -> List(Step("Mash.")),
+                                                                Phase.Boiler -> List(Step("Boil.")),
+                                                                Phase.Cooler -> List(Step("Cool.")),
+                                                                Phase.Fermenter -> List(Step("Ferment.")),
+                                                                Phase.Conditioner -> List(Step("Condition.")))) extends Recipe
