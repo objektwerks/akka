@@ -6,7 +6,6 @@ case class Hop(kind: String, amount: String)
 case class Yeast(kind: String, amount: String)
 case class Water(kind: String, amount: String, boilSize: String, boilTime: String, batchSize: String)
 case class Fermentation(kind: String, days: Int, degrees: Int)
-case class Step(step: String)
 object Phase extends Enumeration {
   type Phase = Value
   val Masher, Boiler, Cooler, Fermenter, Conditioner = Value
@@ -26,7 +25,7 @@ sealed trait Recipe {
   def yeast: Yeast
   def water: Water
   def fermentations: List[Fermentation]
-  def stepsByPhase: Map[Phase.Value, List[Step]]
+  def instructions: Map[Phase.Value, List[String]]
 }
 
 case class IPA(name: String = "Dogfish Head 60' IPA",
@@ -46,8 +45,8 @@ case class IPA(name: String = "Dogfish Head 60' IPA",
                yeast: Yeast = Yeast("English Ale", "1 oz"),
                water: Water = Water("Spring", "5 g", "6 g", "60 m", "5 g"),
                fermentations: List[Fermentation] = List(Fermentation("primary", 10, 63), Fermentation("secondary", 10, 63)),
-               stepsByPhase: Map[Phase.Value, List[Step]] = Map(Phase.Masher -> List(Step("Mash.")),
-                                                                Phase.Boiler -> List(Step("Boil.")),
-                                                                Phase.Cooler -> List(Step("Cool.")),
-                                                                Phase.Fermenter -> List(Step("Ferment.")),
-                                                                Phase.Conditioner -> List(Step("Condition.")))) extends Recipe
+               instructions: Map[Phase.Value, List[String]] = Map(Phase.Masher -> List("Mash."),
+                                                                Phase.Boiler -> List("Boil."),
+                                                                Phase.Cooler -> List("Cool."),
+                                                                Phase.Fermenter -> List("Ferment."),
+                                                                Phase.Conditioner -> List("Condition."))) extends Recipe
