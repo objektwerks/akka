@@ -1,7 +1,5 @@
 package domain
 
-import domain.Phase.Phase
-
 case class Ingrediant(kind: String, amount: String)
 case class Malt(kind: String, amount: String)
 case class Hop(kind: String, amount: String)
@@ -28,7 +26,7 @@ sealed trait Recipe {
   def yeast: Yeast
   def water: Water
   def fermentations: List[Fermentation]
-  def stepsByPhase: Map[Phase, List[Step]]
+  def stepsByPhase: Map[Phase.Value, List[Step]]
 }
 
 case class IPA(name: String = "Dogfish Head 60' IPA",
@@ -48,4 +46,8 @@ case class IPA(name: String = "Dogfish Head 60' IPA",
                yeast: Yeast = Yeast("English Ale", "1 oz"),
                water: Water = Water("Spring", "5 g", "6 g", "60 m", "5 g"),
                fermentations: List[Fermentation] = List(Fermentation("primary", 10, 63), Fermentation("secondary", 10, 63)),
-               stepsByPhase: Map[Phase, List[Step]] = Map[Phase, List[Step]]()) extends Recipe
+               stepsByPhase: Map[Phase.Value, List[Step]] = Map(Phase.Masher -> List(Step("Do A.")),
+                                                                Phase.Boiler -> List(Step("Do B.")),
+                                                                Phase.Cooler -> List(Step("Do C.")),
+                                                                Phase.Fermenter -> List(Step("Do D.")),
+                                                                Phase.Conditioner -> List(Step("Do E.")))) extends Recipe
