@@ -46,7 +46,7 @@ case class IPA(name: String = "Dogfish Head 60' IPA",
                water: Water = Water("Spring", "5 g", "6 g", "60 m", "5 g"),
                fermentations: List[Fermentation] = List(Fermentation("primary", 10, 63), Fermentation("secondary", 10, 63)),
                instructions: Map[Phase.Value, List[String]] = Map(Phase.Masher -> List("Mash."),
-                                                                Phase.Boiler -> List("Boil."),
-                                                                Phase.Cooler -> List("Cool."),
-                                                                Phase.Fermenter -> List("Ferment."),
-                                                                Phase.Conditioner -> List("Condition."))) extends Recipe
+                                                                  Phase.Boiler -> List("Boil."),
+                                                                  Phase.Cooler -> List("Cool."),
+                                                                  Phase.Fermenter -> List("Ferment."),
+                                                                  Phase.Conditioner -> List("Condition."))) extends Recipe
