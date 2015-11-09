@@ -7,7 +7,6 @@ final case class Hop(kind: String, amount: Double, as: Measurement.Value)
 final case class Yeast(kind: String, amount: Double, as: Measurement.Value)
 final case class Water(gallons: Double, boilSizeInGallons: Double, boilTimeInMinutes: Int, batchSizeInGallons: Double)
 final case class Fermentation(days: Int, degrees: Int)
-object Phase extends Enumeration { val Masher, Boiler, Cooler, Fermenter, Conditioner = Value }
 object Measurement extends Enumeration { val lb, oz, tsp = Value }
 
 sealed trait Recipe {
@@ -31,7 +30,6 @@ sealed trait Recipe {
   def condition: List[String]
 }
 
-import Phase._
 import Measurement._
 
 final case class IPA(name: String = "Dogfish Head 60' IPA",
