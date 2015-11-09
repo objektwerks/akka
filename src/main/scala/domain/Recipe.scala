@@ -24,11 +24,11 @@ sealed trait Recipe {
   def water: Water
   def primary: Fermentation
   def secondary: Fermentation
-  def mashing: List[String]
-  def boiling: List[String]
-  def cooling: List[String]
-  def fermenting: List[String]
-  def conditioning: List[String]
+  def mash: List[String]
+  def boil: List[String]
+  def cool: List[String]
+  def ferment: List[String]
+  def condition: List[String]
 }
 
 import Phase._
@@ -52,8 +52,8 @@ final case class IPA(name: String = "Dogfish Head 60' IPA",
                      water: Water = Water(gallons = 5.0, boilSizeInGallons = 6.0, boilTimeInMinutes = 60, batchSizeInGallons = 5.0),
                      primary: Fermentation = Fermentation(days = 10, degrees = 63),
                      secondary: Fermentation = Fermentation(days = 10, degrees = 63),
-                     mashing: List[String] = List(),
-                     boiling: List[String] = List(),
-                     cooling: List[String] = List(),
-                     fermenting: List[String] = List(),
-                     conditioning: List[String] = List()) extends Recipe
+                     mash: List[String] = List(),
+                     boil: List[String] = List(),
+                     cool: List[String] = List(),
+                     ferment: List[String] = List(),
+                     condition: List[String] = List()) extends Recipe
