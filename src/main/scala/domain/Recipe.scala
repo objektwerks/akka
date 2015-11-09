@@ -1,5 +1,6 @@
 package domain
 
+final case class Gravity(original: Double, finished: Double)
 final case class Ingrediant(kind: String, amount: Double, as: Measurement.Value)
 final case class Malt(kind: String, amount: Double, as: Measurement.Value)
 final case class Hop(kind: String, amount: Double, as: Measurement.Value)
@@ -18,9 +19,8 @@ sealed trait Recipe {
   def style: String
   def ibu: Int
   def abv: Double
-  def originalGravity: Double
-  def finalGravity: Double
   def color: Double
+  def gravity: Gravity
   def ingrediants: List[Ingrediant]
   def malts: List[Malt]
   def hops: List[Hop]
@@ -38,9 +38,8 @@ final case class IPA(name: String = "Dogfish Head 60' IPA",
                      style: String = "IPA",
                      ibu: Int = 60,
                      abv: Double = 5.8,
-                     originalGravity: Double = 1.070,
-                     finalGravity: Double = 1.018,
                      color: Double = 4.8,
+                     gravity: Gravity = Gravity(original = 1.070, finished = 1.018),
                      ingrediants: List[Ingrediant] = List(Ingrediant("Irish Moss", 1.0, tsp),
                                                           Ingrediant("Corn Sugar", 4.0, oz)),
                      malts: List[Malt] = List(Malt("2 Row Pale", 13.0, lb),
