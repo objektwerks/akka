@@ -1,10 +1,10 @@
 package domain
 
-final case class Ingrediant(kind: String, amount: Double, measurement: Measurement.Value)
-final case class Malt(kind: String, amount: Double, measurement: Measurement.Value)
-final case class Hop(kind: String, oz: Double)
-final case class Yeast(kind: String, oz: Double)
-final case class Water(gallons: Double, boilSizeInGallons: Double, boildTimeInMinutes: Int, batchSizeInGallons: Double)
+final case class Ingrediant(kind: String, amount: Double, as: Measurement.Value)
+final case class Malt(kind: String, amount: Double, as: Measurement.Value)
+final case class Hop(kind: String, amount: Double, as: Measurement.Value)
+final case class Yeast(kind: String, amount: Double, as: Measurement.Value)
+final case class Water(gallons: Double, boilSizeInGallons: Double, boilTimeInMinutes: Int, batchSizeInGallons: Double)
 final case class Fermentation(days: Int, degrees: Int)
 object Phase extends Enumeration {
   type Phase = Value
@@ -47,15 +47,15 @@ final case class IPA(name: String = "Dogfish Head 60' IPA",
                                                           Ingrediant("Corn Sugar", 4.0, oz)),
                      malts: List[Malt] = List(Malt("2 Row Pale", 13.0, lb),
                                               Malt("Thomas Fawcett Amber Malt", 6.0, oz)),
-                     hops: List[Hop] = List(Hop("Simcoe", 0.5),
-                                            Hop("Amarillo", 1.0),
-                                            Hop("Palisade", 0.5),
-                                            Hop("Glacier", 0.5),
-                                            Hop("Warrior", 0.75)),
-                     yeast: Yeast = Yeast("English Ale", 1.0),
-                     water: Water = Water(5.0, 6.0, 60, 5.0),
-                     primary: Fermentation = Fermentation(10, 63),
-                     secondary: Fermentation = Fermentation(10, 63),
+                     hops: List[Hop] = List(Hop("Simcoe", 0.5, oz),
+                                            Hop("Amarillo", 1.0, oz),
+                                            Hop("Palisade", 0.5, oz),
+                                            Hop("Glacier", 0.5, oz),
+                                            Hop("Warrior", 0.75, oz)),
+                     yeast: Yeast = Yeast("English Ale", 1.0, oz),
+                     water: Water = Water(gallons = 5.0, boilSizeInGallons = 6.0, boilTimeInMinutes = 60, batchSizeInGallons = 5.0),
+                     primary: Fermentation = Fermentation(days = 10, degrees = 63),
+                     secondary: Fermentation = Fermentation(days = 10, degrees = 63),
                      instructions: Map[Phase.Value, List[String]] = Map(Masher -> List("Mash."),
                                                                     Boiler -> List("Boil."),
                                                                     Cooler -> List("Cool."),
