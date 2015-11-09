@@ -1,7 +1,7 @@
 package domain
 
 final case class Gravity(original: Double, specific: Double, finished: Double)
-final case class Ingrediant(kind: String, amount: Double, as: Measurement.Value)
+final case class Adjunct(kind: String, amount: Double, as: Measurement.Value)
 final case class Malt(kind: String, amount: Double, as: Measurement.Value)
 final case class Hop(kind: String, amount: Double, as: Measurement.Value)
 final case class Yeast(kind: String, amount: Double, as: Measurement.Value)
@@ -17,14 +17,18 @@ sealed trait Recipe {
   def color: Double
   def gravity: Gravity
   def abv: Option[Double] = if (gravity.original > 0 && gravity.finished > 0) Some(gravity.original / gravity.finished) else None
-  def ingrediants: List[Ingrediant]
+  def adjuncts: List[Adjunct]
   def malts: List[Malt]
   def hops: List[Hop]
   def yeast: Yeast
   def water: Water
   def primary: Fermentation
   def secondary: Fermentation
-  def instructions: Map[Phase.Value, List[String]]
+  def mashing: List[String]
+  def boiling: List[String]
+  def cooling: List[String]
+  def fermenting: List[String]
+  def conditioning: List[String]
 }
 
 import Phase._
@@ -35,8 +39,8 @@ final case class IPA(name: String = "Dogfish Head 60' IPA",
                      ibu: Int = 60,
                      color: Double = 4.8,
                      gravity: Gravity = Gravity(original = 1.070, specific = 1.00, finished = 1.018),
-                     ingrediants: List[Ingrediant] = List(Ingrediant("Irish Moss", 1.0, tsp),
-                                                          Ingrediant("Corn Sugar", 4.0, oz)),
+                     adjuncts: List[Adjunct] = List(Adjunct("Irish Moss", 1.0, tsp),
+                                                    Adjunct("Corn Sugar", 4.0, oz)),
                      malts: List[Malt] = List(Malt("2 Row Pale", 13.0, lb),
                                               Malt("Thomas Fawcett Amber Malt", 6.0, oz)),
                      hops: List[Hop] = List(Hop("Simcoe", 0.5, oz),
@@ -48,8 +52,8 @@ final case class IPA(name: String = "Dogfish Head 60' IPA",
                      water: Water = Water(gallons = 5.0, boilSizeInGallons = 6.0, boilTimeInMinutes = 60, batchSizeInGallons = 5.0),
                      primary: Fermentation = Fermentation(days = 10, degrees = 63),
                      secondary: Fermentation = Fermentation(days = 10, degrees = 63),
-                     instructions: Map[Phase.Value, List[String]] = Map(Masher -> List("Mash."),
-                                                                        Boiler -> List("Boil."),
-                                                                        Cooler -> List("Cool."),
-                                                                        Fermenter -> List("Ferment."),
-                                                                        Conditioner -> List("Condition."))) extends Recipe
+                     mashing: List[String] = List(),
+                     boiling: List[String] = List(),
+                     cooling: List[String] = List(),
+                     fermenting: List[String] = List(),
+                     conditioning: List[String] = List()) extends Recipe
