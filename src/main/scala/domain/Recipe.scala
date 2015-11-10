@@ -23,11 +23,14 @@ sealed trait Recipe {
   def water: Water
   def primary: Fermentation
   def secondary: Fermentation
-  def mash: List[String]
-  def boil: List[String]
-  def cool: List[String]
-  def ferment: List[String]
-  def condition: List[String]
+  def mash: String
+  def boil: String
+  def cool: String
+  def ferment: String
+  def condition: String
+  def bottle: String
+  def keg: String
+  def cask: String
 }
 
 import Measurement._
@@ -51,9 +54,11 @@ final case class IPA(name: String = "Dogfish Head 60' IPA",
                      water: Water = Water(gallons = 5.0, boilSizeInGallons = 6.0, boilTimeInMinutes = 60, batchSizeInGallons = 5.0),
                      primary: Fermentation = Fermentation(days = 10, degrees = 63),
                      secondary: Fermentation = Fermentation(days = 10, degrees = 63),
-                     mash: List[String] = List("Add malt to water at 150 degrees for 60 minutes."),
-                     boil: List[String] = List("Add hops to water and boil 60 minutes."),
-                     cool: List[String] = List("All wort to cool."),
-                     ferment: List[String] = List("Add yeast and ferment for 10 days."),
-                     condition: List[String] = List("Add adjuncts and ferment for 10 days.",
-                                                    "Bottle, keg and cask beer.")) extends Recipe
+                     mash: String = "Add malt to water at 150 degrees for 60 minutes.",
+                     boil: String = "Add hops to water and boil 60 minutes.",
+                     cool: String = "All wort to cool.",
+                     ferment: String = "Add yeast and ferment for 10 days.",
+                     condition: String = "Add adjuncts and ferment for 10 days.",
+                     bottle: String = "Bottle beer.",
+                     keg: String = "Keg beer.",
+                     cask: String = "Cask beer.") extends Recipe
