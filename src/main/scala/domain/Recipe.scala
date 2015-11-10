@@ -51,8 +51,8 @@ final case class IPA(name: String = "Dogfish Head 60' IPA",
                      water: Water = Water(gallons = 5.0, boilSizeInGallons = 6.0, boilTimeInMinutes = 60, batchSizeInGallons = 5.0),
                      primary: Fermentation = Fermentation(days = 10, degrees = 63),
                      secondary: Fermentation = Fermentation(days = 10, degrees = 63),
-                     mash: List[String] = List(),
-                     boil: List[String] = List(),
-                     cool: List[String] = List(),
-                     ferment: List[String] = List(),
-                     condition: List[String] = List()) extends Recipe
+                     mash: List[String] = List("Add malt to water at 150 degrees for 60 minutes."),
+                     boil: List[String] = List("Add hops to water and boil 60 minutes."),
+                     cool: List[String] = List("All wort to cool."),
+                     ferment: List[String] = List("Add yeast and ferment for 10 days."),
+                     condition: List[String] = List("Add sugar and ferment for 10 days.", "Bottle, keg and cask beer.")) extends Recipe
