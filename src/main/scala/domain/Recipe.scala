@@ -15,7 +15,7 @@ sealed trait Recipe {
   def ibu: Int
   def color: Double
   def gravity: Gravity
-  def abv: Option[Double] = if (gravity.original > 0 && gravity.finished > 0) Some(gravity.original / gravity.finished) else None
+  def abv: Option[Double]
   def adjuncts: List[Adjunct]
   def malts: List[Malt]
   def hops: List[Hop]
@@ -54,4 +54,6 @@ final case class IPA(name: String = "Dogfish Head 60' IPA",
                      boil: List[String] = List(),
                      cool: List[String] = List(),
                      ferment: List[String] = List(),
-                     condition: List[String] = List()) extends Recipe
+                     condition: List[String] = List()) extends Recipe {
+  override def abv: Option[Double] = if (gravity.original > 0 && gravity.finished > 0) Some(gravity.original / gravity.finished) else Some(5.8)
+}
