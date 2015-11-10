@@ -59,6 +59,6 @@ final case class IPA(name: String = "Dogfish Head 60' IPA",
                      cool: String = "All wort to cool.",
                      ferment: String = "Add yeast and ferment for 10 days.",
                      condition: String = "Add adjuncts and ferment for 10 days.",
-                     bottle: String = "Bottle beer.",
+                     bottle: String = "Bottle 48-54 12 oz bottles of beer.",
                      keg: String = "Keg beer.",
                      cask: String = "Cask beer.") extends Recipe
