@@ -55,4 +55,5 @@ final case class IPA(name: String = "Dogfish Head 60' IPA",
                      boil: List[String] = List("Add hops to water and boil 60 minutes."),
                      cool: List[String] = List("All wort to cool."),
                      ferment: List[String] = List("Add yeast and ferment for 10 days."),
-                     condition: List[String] = List("Add sugar and ferment for 10 days.", "Bottle, keg and cask beer.")) extends Recipe
+                     condition: List[String] = List("Add adjuncts and ferment for 10 days.",
+                                                    "Bottle, keg and cask beer.")) extends Recipe
