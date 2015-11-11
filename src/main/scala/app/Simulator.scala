@@ -17,7 +17,7 @@ import scalafx.scene.control._
 import scalafx.scene.layout.VBox
 import scalafx.scene.text.Text
 
-object MetaSimulator extends JFXApp {
+object Simulator extends JFXApp {
   val commandProperty = new ObjectProperty[Command]()
   val stateProperty = new ObjectProperty[State]()
   val eventProperty = new ObjectProperty[Event]()
