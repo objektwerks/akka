@@ -103,6 +103,8 @@ object Simulator extends JFXApp {
   def listRecipe(recipe: Recipe): Unit = {
     val list = recipeList.items.get()
     list.add(s"Name: ${recipe.name} Style: ${recipe.style}")
+    list.add(s"IBU: ${recipe.ibu} Color: ${recipe.color} ABV: ${recipe.abv}")
+    list.add(s"Gravity { original: ${recipe.gravity.original} specific: ${recipe.gravity.specific} final: ${recipe.gravity.finished} }")
   }
 
   commandProperty.onChange { (_, _, newCommand) =>
