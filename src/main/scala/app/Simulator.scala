@@ -1,7 +1,7 @@
 package app
 
 import command.Command
-import domain.IPA
+import domain.{Recipe, IPA}
 import event.{Brewed, Event}
 import state.State
 import system.Brewery
@@ -35,8 +35,9 @@ object Simulator extends JFXApp {
     text = "Receipe:"
   }
 
-  val recipeText = new Text {
-    wrappingWidth = 600
+  val recipeList =  new ListView[String] {
+    prefHeight = 260
+    items = ObservableBuffer[String]()
   }
 
   val commandLabel = new Label {
@@ -68,7 +69,7 @@ object Simulator extends JFXApp {
   val contentPane = new VBox {
     spacing = 6
     padding = Insets(6)
-    children = List(recipeLabel, recipeText, commandLabel, commandText, stateLabel, stateList, eventLabel, eventList)
+    children = List(recipeLabel, recipeList, commandLabel, commandText, stateLabel, stateList, eventLabel, eventList)
   }
 
   val appPane = new VBox {
@@ -91,11 +92,17 @@ object Simulator extends JFXApp {
   brewButton.onAction = { ae: ActionEvent =>
     val recipe = IPA()
     brewButton.disable = true
-    recipeText.text = recipe.toString
+    recipeList.items.get().clear()
     commandText.text = ""
     stateList.items.get().clear()
     eventList.items.get().clear()
+    listRecipe(recipe)
     Brewery.brew(recipe)
+  }
+
+  def listRecipe(recipe: Recipe): Unit = {
+    val list = recipeList.items.get()
+    list.add(s"Name: ${recipe.name} Style: ${recipe.style}")
   }
 
   commandProperty.onChange { (_, _, newCommand) =>
