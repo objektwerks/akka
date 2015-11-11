@@ -36,7 +36,7 @@ object Simulator extends JFXApp {
   }
 
   val recipeList =  new ListView[String] {
-    prefHeight = 260
+    prefHeight = 230
     items = ObservableBuffer[String]()
   }
 
@@ -53,7 +53,7 @@ object Simulator extends JFXApp {
   }
 
   val stateList = new ListView[String] {
-    prefHeight = 260
+    prefHeight = 240
     items = ObservableBuffer[String]()
   }
 
@@ -62,7 +62,7 @@ object Simulator extends JFXApp {
   }
 
   val eventList = new ListView[String] {
-    prefHeight = 280
+    prefHeight = 260
     items = ObservableBuffer[String]()
   }
 
@@ -100,13 +100,6 @@ object Simulator extends JFXApp {
     Brewery.brew(recipe)
   }
 
-  def listRecipe(recipe: Recipe): Unit = {
-    val list = recipeList.items.get()
-    list.add(s"Name: ${recipe.name} Style: ${recipe.style}")
-    list.add(s"IBU: ${recipe.ibu} Color: ${recipe.color} ABV: ${recipe.abv}")
-    list.add(s"Gravity { original: ${recipe.gravity.original} specific: ${recipe.gravity.specific} final: ${recipe.gravity.finished} }")
-  }
-
   commandProperty.onChange { (_, _, newCommand) =>
     commandText.text = s"${newCommand.getClass.getSimpleName}, Batch: ${newCommand.batch}, Executed: ${newCommand.executed}"
   }
@@ -121,5 +114,27 @@ object Simulator extends JFXApp {
       case Brewed(batch) => brewButton.disable = false
       case _ =>
     }
+  }
+
+  def listRecipe(recipe: Recipe): Unit = {
+    val list = recipeList.items.get()
+    list.add(s"Name: ${recipe.name} Style: ${recipe.style}")
+    list.add(s"IBU: ${recipe.ibu} Color: ${recipe.color} ABV: ${recipe.abv}")
+    list.add(s"Gravity( original: ${recipe.gravity.original} specific: ${recipe.gravity.specific} final: ${recipe.gravity.finished})")
+    recipe.adjuncts.foreach { i => list.add(i.toString) }
+    recipe.malts.foreach { i => list.add(i.toString) }
+    recipe.hops.foreach { i => list.add(i.toString) }
+    list.add(s"Yeast( kind: ${recipe.yeast.kind} amount: ${recipe.yeast.amount}${recipe.yeast.as})")
+    list.add(s"Water( gallons: ${recipe.water.gallons}g boil size: ${recipe.water.boilSizeInGallons}g boil time: ${recipe.water.boilTimeInMinutes}m batch size: ${recipe.water.batchSizeInGallons}g)")
+    list.add(s"Primary Fermentation ( days: ${recipe.primary.days} degrees: ${recipe.primary.degrees})")
+    list.add(s"Secondary Fermentation ( days: ${recipe.primary.days} degrees: ${recipe.primary.degrees})")
+    list.add(s"Mash: ${recipe.mash}")
+    list.add(s"Boil: ${recipe.boil}")
+    list.add(s"Cool: ${recipe.cool}")
+    list.add(s"Ferment: ${recipe.ferment}")
+    list.add(s"Condition: ${recipe.condition}")
+    list.add(s"Bottle: ${recipe.bottle}")
+    list.add(s"Keg: ${recipe.keg}")
+    list.add(s"Cask: ${recipe.cask}")
   }
 }
