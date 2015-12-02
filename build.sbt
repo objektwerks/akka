@@ -1,13 +1,9 @@
 name := "objektwerks.akka"
-
 version := "0.1"
-
 scalaVersion := "2.11.7"
-
 ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
-
 libraryDependencies ++= {
-  val akkaVersion = "2.4.0"
+  val akkaVersion = "2.4.1"
   Seq(
     "com.typesafe.akka" % "akka-actor_2.11" % akkaVersion,
     "com.typesafe.akka" % "akka-persistence_2.11" % akkaVersion,
@@ -23,9 +19,7 @@ libraryDependencies ++= {
     "org.scalatest" % "scalatest_2.11" % "2.2.5" % "test"
   )
 }
-
 unmanagedJars in Compile += Attributed.blank(file(System.getenv("JAVA_HOME") + "/jre/lib/ext/jfxrt.jar"))
-
 scalacOptions ++= Seq(
   "-language:postfixOps",
   "-language:implicitConversions",
@@ -37,9 +31,6 @@ scalacOptions ++= Seq(
   "-Xlint",
   "-Xfatal-warnings"
 )
-
 javaOptions += "-server -Xss1m -Xmx2g"
-
 fork in test := true
-
 run in Compile <<= Defaults.runTask(fullClasspath in (Compile, run), mainClass in (Compile, run), runner in (Compile, run))
