@@ -51,8 +51,7 @@ class BehaviorTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("race") {
-    race
-    race
+    race()
   }
 
   private def race(): Unit = {
