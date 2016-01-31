@@ -41,7 +41,7 @@ Simulation
 * (s) = state
 * (e) = event
 
->1 command, 8 states and 9 events.
+>1 message, 1 command, 8 states and 9 events.
 
 Test
 ----
