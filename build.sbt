@@ -12,6 +12,7 @@ libraryDependencies ++= {
     "com.typesafe.akka" % "akka-cluster_2.11" % akkaVersion,
     "com.typesafe.akka" % "akka-cluster-metrics_2.11" % akkaVersion,
     "com.typesafe.akka" %% "akka-cluster-tools" % akkaVersion,
+    "com.typesafe.akka" % "akka-http-experimental_2.11" % akkaVersion,
     "org.iq80.leveldb" % "leveldb" % "0.7",
     "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
     "org.scalafx" % "scalafx_2.11" % "8.0.60-R9",
