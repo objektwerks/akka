@@ -22,4 +22,10 @@ class StreamTest extends FunSuite {
     val result = source.runFold(0)(_ + _)
     result map { r => assert(r == 10) }
   }
+
+  test("runReduce") {
+    val source: Source[Int, NotUsed] = Source(1 to 10)
+    val result = source.runReduce(_ + _)
+    result map { r => assert(r == 10) }
+  }
 }
