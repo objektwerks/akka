@@ -9,8 +9,8 @@ class StreamTest extends FunSuite {
   implicit val system: ActorSystem = ActorSystem.create("stream", Conf.config)
   implicit val materializer = ActorMaterializer()
 
-  test("source > int") {
+  test("source") {
     val source: Source[Int, NotUsed] = Source(1 to 10)
-    source.runForeach(i => assert(i > 0 && i < 11))(materializer)
+    source.runForeach(i => assert(i > 0 && i < 11))
   }
 }
