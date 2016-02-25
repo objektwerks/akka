@@ -32,5 +32,6 @@ class StreamTest extends FunSuite with BeforeAndAfterAll{
 
   test("run with") {
     source.runWith(Sink.fold(0)(_ + _)) map { r => assert(r == 10) }
+    source.runWith(Sink.foreach { i => assert(i > 0 && i < 11) })
   }
 }
