@@ -5,12 +5,12 @@ import akka.stream.ActorMaterializer
 import akka.stream.scaladsl._
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
-import scala.concurrent.{Future, Await, ExecutionContext}
 import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
 
 class StreamTest extends FunSuite with BeforeAndAfterAll {
-  implicit val ec = ExecutionContext.global
   implicit val system: ActorSystem = ActorSystem.create("stream", Conf.config)
+  implicit val ec = system.dispatcher
   implicit val materializer = ActorMaterializer()
   val source: Source[Int, NotUsed] = Source(1 to 10)
   val sink: Sink[Int, Future[Int]] = Sink.fold[Int, Int](0)(_ + _)
