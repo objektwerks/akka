@@ -17,7 +17,6 @@ libraryDependencies ++= {
     "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
     "org.scalafx" % "scalafx_2.11" % "8.0.60-R9",
     "ch.qos.logback" % "logback-classic" % "1.1.3",
-    "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.4", // Fixes SBT bug! 0.13.10 should fix it!
     "com.typesafe.akka" % "akka-testkit_2.11" % akkaVersion % "test",
     "org.scalatest" % "scalatest_2.11" % "2.2.5" % "test"
   )
