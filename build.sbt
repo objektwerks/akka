@@ -34,6 +34,6 @@ scalacOptions ++= Seq(
   "-Xlint",
   "-Xfatal-warnings"
 )
-javaOptions += "-server -Xss1m -Xmx2g"
+javaOptions += "-Xss1m -Xmx2g"
 fork in test := true
 run in Compile <<= Defaults.runTask(fullClasspath in (Compile, run), mainClass in (Compile, run), runner in (Compile, run))
