@@ -18,8 +18,11 @@ class HttpTest extends FunSuite with BeforeAndAfterAll {
   implicit val materializer = ActorMaterializer()
   val route = path("now") { get { complete(LocalDateTime.now.toString) } }
   val server = Http().bindAndHandle(route, "localhost", 0)
-  server onFailure {
-    case e: Exception => println(e.getMessage)
+
+  override protected def beforeAll(): Unit = {
+    server onFailure {
+      case e: Exception => println(e.getMessage)
+    }
   }
 
   override protected def afterAll(): Unit = {
