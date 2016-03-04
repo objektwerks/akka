@@ -5,12 +5,9 @@ import java.time.LocalDateTime
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives._
-
 import akka.stream.ActorMaterializer
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
-import scala.concurrent.Await
-import scala.concurrent.duration._
 import scala.io.Source
 
 class HttpTest extends FunSuite with BeforeAndAfterAll {
@@ -21,8 +18,7 @@ class HttpTest extends FunSuite with BeforeAndAfterAll {
   val server = Http().bindAndHandle(route, "localhost", 7979)
 
   override protected def afterAll(): Unit = {
-    server map { s => s.unbind() }
-    Await.result(system.terminate(), 1 second)
+    server.flatMap(_.unbind()).onComplete(_ => system.terminate())
   }
 
   test("now") {
