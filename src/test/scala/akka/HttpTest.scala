@@ -17,6 +17,12 @@ class HttpTest extends FunSuite with BeforeAndAfterAll {
   val route = path("now") { get { complete(LocalDateTime.now.toString) } }
   val server = Http().bindAndHandle(route, "localhost", 7979)
 
+  override protected def beforeAll(): Unit = {
+    server onFailure {
+      case e: Exception => println(e.getMessage)
+    }
+  }
+
   override protected def afterAll(): Unit = {
     server.flatMap(_.unbind()).onComplete(_ => system.terminate())
   }
