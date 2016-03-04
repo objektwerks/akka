@@ -17,7 +17,7 @@ class HttpTest extends FunSuite with BeforeAndAfterAll {
   implicit val ec = system.dispatcher
   implicit val materializer = ActorMaterializer()
   val route = path("now") { get { complete(LocalDateTime.now.toString) } }
-  val server = Http().bindAndHandle(route, "localhost", 9999)
+  val server = Http().bindAndHandle(route, "localhost", 0)
   server onFailure {
     case e: Exception => println(e.getMessage)
   }
@@ -30,7 +30,11 @@ class HttpTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("now") {
-    val dateTimeAsString = Source.fromURL("http://localhost:9999/now").mkString
-    LocalDateTime.parse(dateTimeAsString)
+    server map { binding =>
+      val address = binding.localAddress
+      println(address.toString)
+      val dateTimeAsString = Source.fromURL(s"${address.toString}/now").mkString
+      LocalDateTime.parse(dateTimeAsString)
+    }
   }
 }
