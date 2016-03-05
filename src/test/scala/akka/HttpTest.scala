@@ -21,24 +21,20 @@ class HttpTest extends FunSuite with BeforeAndAfterAll {
 
   override protected def beforeAll(): Unit = {
     server onFailure {
-      case e: Exception => println(e.getMessage)
+      case e: Exception => throw e
     }
   }
 
   override protected def afterAll(): Unit = {
     server map { binding =>
       binding.unbind()
-      println("akka http server unbinding...")
       Await.result(system.terminate, 3 seconds)
-      println("akka http server unbound!")
     }
   }
 
   test("now") {
     server map { binding =>
-      val address = binding.localAddress
-      println(address.toString)
-      val dateTimeAsString = Source.fromURL(s"${address.toString}/now").mkString
+      val dateTimeAsString = Source.fromURL(s"${binding.localAddress.toString}/now").mkString
       LocalDateTime.parse(dateTimeAsString)
     }
   }
