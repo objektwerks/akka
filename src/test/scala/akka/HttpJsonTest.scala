@@ -5,12 +5,10 @@ import java.time.LocalTime
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.http.scaladsl.server.Directives._
-import akka.stream.ActorMaterializer
-import org.scalatest.FunSuite
+import akka.http.scaladsl.marshalling.ToResponseMarshallable
+import akka.http.scaladsl.testkit.ScalatestRouteTest
+import org.scalatest._
 import spray.json.DefaultJsonProtocol
-
-import scala.io.Source
 
 case class Now(time: String = LocalTime.now.toString)
 
@@ -19,40 +17,39 @@ trait NowProtocols extends DefaultJsonProtocol with SprayJsonSupport {
 }
 
 trait NowService extends NowProtocols {
-  implicit val system: ActorSystem = ActorSystem.create("now", Conf.config)
-  implicit val ec = system.dispatcher
-  implicit val materializer = ActorMaterializer()
+  import akka.http.scaladsl.server.Directives._
   val route = path("now") {
-    import akka.http.scaladsl.marshalling._
     get {
-      complete {
-        println("get...")
-        ToResponseMarshallable[Now](Now())
-      }
-    }
-  }
-  val server = Http().bindAndHandle(route, "localhost", 0)
-  server onFailure {
-    case e: Exception => println(e); terminate()
-  }
-
-  def terminate(): Unit = {
-    server map { binding =>
-      binding.unbind.onComplete {
-        case _ => system.terminate
-      }
+      complete(ToResponseMarshallable[Now](Now()))
     }
   }
 }
 
-class HttpJsonTest extends FunSuite with NowService {
-  test("now") {
+class HttpJsonTest extends WordSpec with Matchers with ScalatestRouteTest with BeforeAndAfterAll with NowService {
+  val actorRefFactory = ActorSystem.create("now", Conf.config)
+  val server = Http().bindAndHandle(route, "localhost", 0)
+
+  override protected def beforeAll(): Unit = {
     server map { binding =>
-      println(s"now: ${binding.localAddress.toString}/now")
-      val time = Source.fromURL(s"${binding.localAddress.toString}/now").mkString
-      println(time)
-      // LocalTime.parse(time)
-      terminate()
+      val address = binding.localAddress.toString + "/now"
+      println(s"now service address: $address")
+    }
+  }
+
+  override protected def afterAll(): Unit = {
+    server map { binding =>
+      binding.unbind.onComplete {
+        case _ => println("now service terminating..."); system.terminate
+      }
+    }
+  }
+
+  "NowService" should {
+    "respond with current time" in {
+      Get("/now") ~> route ~> check {
+        println(s"now service time: ${responseAs[Now].time}")
+        responseAs[Now].time.nonEmpty shouldBe true
+      }
     }
   }
 }
