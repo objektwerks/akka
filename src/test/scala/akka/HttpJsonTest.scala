@@ -15,7 +15,7 @@ import scala.io.Source
 case class Now(time: String = LocalTime.now.toString)
 
 trait NowProtocols extends DefaultJsonProtocol with SprayJsonSupport {
-  implicit val messageFormat = jsonFormat1(Now.apply)
+  implicit val messageFormat = jsonFormat1(Now)
 }
 
 trait NowService extends NowProtocols {
@@ -27,7 +27,7 @@ trait NowService extends NowProtocols {
     get {
       complete {
         println("get...")
-        ToResponseMarshallable(Now())
+        ToResponseMarshallable[Now](Now())
       }
     }
   }
