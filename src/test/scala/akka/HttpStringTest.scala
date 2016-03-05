@@ -10,7 +10,7 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 import scala.io.Source
 
-class HttpTest extends FunSuite with BeforeAndAfterAll {
+class HttpStringTest extends FunSuite with BeforeAndAfterAll {
   implicit val system: ActorSystem = ActorSystem.create("http", Conf.config)
   implicit val ec = system.dispatcher
   implicit val materializer = ActorMaterializer()
