@@ -8,8 +8,6 @@ import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
-import scala.concurrent.Await
-import scala.concurrent.duration._
 import scala.io.Source
 
 class HttpTest extends FunSuite with BeforeAndAfterAll {
@@ -27,8 +25,9 @@ class HttpTest extends FunSuite with BeforeAndAfterAll {
 
   override protected def afterAll(): Unit = {
     server map { binding =>
-      binding.unbind()
-      Await.result(system.terminate, 3 seconds)
+      binding.unbind.onComplete {
+        case _ => system.terminate
+      }
     }
   }
 
