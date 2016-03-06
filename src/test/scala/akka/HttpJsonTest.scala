@@ -37,14 +37,14 @@ class HttpJsonTest extends WordSpec with Matchers with ScalatestRouteTest with B
   override protected def beforeAll(): Unit = {
     server map { binding =>
       val address = binding.localAddress.toString + "/now"
-      println(s"now service address: $address")
+      println(s"now service: $address")
     }
   }
 
   override protected def afterAll(): Unit = {
     server map { binding =>
       binding.unbind.onComplete {
-        case _ => println("now service terminating..."); system.terminate
+        case _ => system.terminate
       }
     }
   }
@@ -52,13 +52,11 @@ class HttpJsonTest extends WordSpec with Matchers with ScalatestRouteTest with B
   "NowService" should {
     "respond with current time" in {
       Get("/now") ~> route ~> check {
-        println(s"get ~> now service: ${responseAs[Now].time}")
         status shouldBe OK
         contentType shouldBe `application/json`
         responseAs[Now].time.nonEmpty shouldBe true
       }
       Post("/now") ~> route ~> check {
-        println(s"post ~> now service: ${responseAs[Now].time}")
         status shouldBe OK
         contentType shouldBe `application/json`
         responseAs[Now].time.nonEmpty shouldBe true
