@@ -51,7 +51,7 @@ class HttpJsonTest extends WordSpec with Matchers with ScalatestRouteTest with B
   }
 
   "NowService" should {
-    "respond with current time" in {
+    "handle get and post." in {
       Get("/now") ~> routes ~> check {
         responseAs[Now].time.nonEmpty shouldBe true
       }
