@@ -15,13 +15,11 @@ import spray.json.DefaultJsonProtocol
 
 case class Now(time: String = LocalTime.now.toString)
 
-trait NowProtocols extends DefaultJsonProtocol with SprayJsonSupport {
-  implicit val messageFormat = jsonFormat1(Now)
-}
-
-trait NowService extends NowProtocols {
+trait NowService extends DefaultJsonProtocol with SprayJsonSupport {
   import akka.http.scaladsl.server.Directives._
-  val route = path("now") {
+  implicit val nowFormat = jsonFormat1(Now)
+
+  val routes = path("now") {
     get {
       complete(ToResponseMarshallable[Now](Now()))
     } ~
@@ -36,7 +34,7 @@ trait NowService extends NowProtocols {
 
 class HttpJsonTest extends WordSpec with Matchers with ScalatestRouteTest with BeforeAndAfterAll with NowService {
   val actorRefFactory = ActorSystem.create("now", Conf.config)
-  val server = Http().bindAndHandle(route, "localhost", 0)
+  val server = Http().bindAndHandle(routes, "localhost", 0)
 
   override protected def beforeAll(): Unit = {
     server map { binding =>
@@ -55,12 +53,10 @@ class HttpJsonTest extends WordSpec with Matchers with ScalatestRouteTest with B
 
   "NowService" should {
     "respond with current time" in {
-      Get("/now") ~> route ~> check {
-        status shouldBe OK
-        contentType shouldBe `application/json`
+      Get("/now") ~> routes ~> check {
         responseAs[Now].time.nonEmpty shouldBe true
       }
-      Post("/now", Now()) ~> route ~> check {
+      Post("/now", Now()) ~> routes ~> check {
         status shouldBe OK
       }
     }
