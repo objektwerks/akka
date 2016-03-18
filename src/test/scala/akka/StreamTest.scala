@@ -13,7 +13,8 @@ class StreamTest extends FunSuite with BeforeAndAfterAll {
   implicit val system: ActorSystem = ActorSystem.create("stream", Conf.config)
   implicit val ec = system.dispatcher
   val decider: Decider = Supervision.resumingDecider
-  implicit val materializer = ActorMaterializer(ActorMaterializerSettings(system).withSupervisionStrategy(decider))
+  val settings = ActorMaterializerSettings(system).withSupervisionStrategy(decider)
+  implicit val materializer = ActorMaterializer(settings)
   val source: Source[Int, NotUsed] = Source(1 to 10)
   val sink: Sink[Int, Future[Int]] = Sink.fold[Int, Int](0)(_ + _)
   val flow: Flow[Int, Int, NotUsed] = Flow.fromSinkAndSource(sink, source)
