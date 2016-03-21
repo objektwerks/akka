@@ -1,9 +1,9 @@
 package akka
 
-import com.typesafe.config.{Config, ConfigFactory}
-import org.slf4j.{Logger, LoggerFactory}
+import com.typesafe.config.ConfigFactory
+import org.slf4j.LoggerFactory
 
 object Conf {
-  val config: Config = ConfigFactory.load("test.conf")
-  val log: Logger = LoggerFactory.getLogger(this.getClass)
+  val config = ConfigFactory.load("test.conf")
+  val log = LoggerFactory.getLogger(this.getClass)
 }
