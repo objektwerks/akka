@@ -12,6 +12,8 @@ import akka.http.scaladsl.testkit.ScalatestRouteTest
 import org.scalatest._
 import spray.json.DefaultJsonProtocol
 
+import scala.util.{Failure, Success}
+
 case class Now(time: String = LocalTime.now.toString)
 
 trait NowService extends DefaultJsonProtocol with SprayJsonSupport {
@@ -35,9 +37,9 @@ class HttpJsonTest extends WordSpec with Matchers with ScalatestRouteTest with B
   val server = Http().bindAndHandle(routes, "localhost", 0)
 
   override protected def beforeAll(): Unit = {
-    server map { binding =>
-      val address = binding.localAddress.toString + "/now"
-      println(s"now service: $address")
+    server onComplete {
+      case Success(binding) => println(s"now service: ${binding.localAddress.toString}/now")
+      case Failure(failure) => println(s"now service bind failed: ${failure.getMessage}")
     }
   }
 
