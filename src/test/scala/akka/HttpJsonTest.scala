@@ -24,8 +24,7 @@ trait NowService extends DefaultJsonProtocol with SprayJsonSupport {
     } ~
     post {
       entity(as[Now]) { now =>
-        require(now.time.nonEmpty)
-        complete(StatusCodes.OK)
+        if (now.time.isEmpty) complete(StatusCodes.UnprocessableEntity) else complete(StatusCodes.OK)
       }
     }
   }
