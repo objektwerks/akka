@@ -6,7 +6,6 @@ import event.{Brewed, Event}
 import state.State
 import system.Brewery
 
-import scala.concurrent.Await
 import scalafx.Includes._
 import scalafx.application.JFXApp
 import scalafx.beans.property.ObjectProperty

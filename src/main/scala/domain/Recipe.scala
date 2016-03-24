@@ -33,7 +33,7 @@ sealed trait Recipe {
   def cask: String
 }
 
-import Measurement._
+import domain.Measurement._
 
 final case class IPA(name: String = "Dogfish Head 60' IPA",
                      style: String = "IPA",
