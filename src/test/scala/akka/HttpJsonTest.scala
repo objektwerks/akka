@@ -12,6 +12,8 @@ import akka.http.scaladsl.testkit.ScalatestRouteTest
 import org.scalatest._
 import spray.json.DefaultJsonProtocol
 
+import scala.concurrent.Await
+import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 
 case class Now(time: String = LocalTime.now.toString)
@@ -46,7 +48,7 @@ class HttpJsonTest extends WordSpec with Matchers with ScalatestRouteTest with B
   override protected def afterAll(): Unit = {
     server map { binding =>
       binding.unbind.onComplete {
-        case _ => system.terminate
+        case _ => Await.result(system.terminate(), 1 second)
       }
     }
   }

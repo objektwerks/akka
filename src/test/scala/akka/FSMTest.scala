@@ -34,7 +34,7 @@ class FSMTest extends FunSuite with BeforeAndAfterAll {
   val pump: ActorRef = system.actorOf(Props[Pump], name = "pump")
 
   override protected def afterAll(): Unit = {
-    Await.result(system.terminate(), 3 seconds)
+    Await.result(system.terminate(), 1 second)
   }
 
   test("fsm") {
