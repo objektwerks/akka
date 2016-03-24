@@ -9,7 +9,6 @@ import com.typesafe.config.ConfigFactory
 import command.Command
 import domain.Recipe
 import event.Event
-import org.slf4j.LoggerFactory
 import state.State
 
 import scala.concurrent.duration._
@@ -19,7 +18,6 @@ import scalafx.beans.property.ObjectProperty
 object Brewery {
   implicit val ec = ExecutionContext.Implicits.global
   implicit val timeout = new Timeout(10, TimeUnit.SECONDS)
-  val log = LoggerFactory.getLogger(this.getClass)
   var commandPropertyListener: Option[ObjectProperty[Command]] = None
   var statePropertyListener: Option[ObjectProperty[State]] = None
   var eventPropertyListener: Option[ObjectProperty[Event]] = None
@@ -37,7 +35,7 @@ object Brewery {
   system.eventStream.subscribe(brewer, classOf[State])
   system.eventStream.subscribe(brewer, classOf[Event])
   system.actorOf(Props[Listener], name = "listener")
-  log.info("Brewery initialized!")
+  system.log.info("Brewery initialized!")
 
   def register(commandProperty: ObjectProperty[Command],
                stateProperty: ObjectProperty[State],
@@ -65,6 +63,6 @@ object Brewery {
 
   def shutdown(): Unit = {
     Await.result(system.terminate(), 3 seconds)
-    log.info("Brewery shutdown!")
+    system.log.info("Brewery shutdown!")
   }
 }
