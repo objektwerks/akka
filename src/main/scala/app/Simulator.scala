@@ -1,11 +1,12 @@
 package app
 
 import command.Command
-import domain.{Recipe, IPA}
+import domain.{IPA, Recipe}
 import event.{Brewed, Event}
 import state.State
 import system.Brewery
 
+import scala.concurrent.Await
 import scalafx.Includes._
 import scalafx.application.JFXApp
 import scalafx.beans.property.ObjectProperty
@@ -22,6 +23,7 @@ object Simulator extends JFXApp {
   val stateProperty = new ObjectProperty[State]()
   val eventProperty = new ObjectProperty[Event]()
   Brewery.register(commandProperty, stateProperty, eventProperty)
+  sys.addShutdownHook(Brewery.terminate())
 
   val brewButton = new Button {
     text = "Brew"
@@ -85,7 +87,7 @@ object Simulator extends JFXApp {
       root = appPane
     }
     onCloseRequest = handle {
-      Brewery.shutdown()
+      Brewery.terminate()
     }
   }
 

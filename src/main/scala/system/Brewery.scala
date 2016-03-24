@@ -61,8 +61,8 @@ object Brewery {
     eventPropertyListener foreach { _.value = event }
   }
 
-  def shutdown(): Unit = {
+  def terminate(): Unit = {
+    system.log.info("Brewery terminating...")
     Await.result(system.terminate(), 3 seconds)
-    system.log.info("Brewery shutdown!")
   }
 }
