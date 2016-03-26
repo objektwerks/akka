@@ -1,7 +1,6 @@
 package akka
 
 import java.time.LocalTime
-import java.util.concurrent.TimeUnit
 
 import akka.actor._
 import akka.pattern._
@@ -34,7 +33,7 @@ class Time extends Actor {
 }
 
 class RouterTest extends FunSuite with BeforeAndAfterAll {
-  implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
+  implicit val timeout = Timeout(1 second)
   val system: ActorSystem = ActorSystem.create("router", Conf.config)
   val clock: ActorRef = system.actorOf(Props[Clock], name = "clock")
 

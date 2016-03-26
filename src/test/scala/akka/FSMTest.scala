@@ -1,7 +1,5 @@
 package akka
 
-import java.util.concurrent.TimeUnit
-
 import akka.actor._
 import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
@@ -29,7 +27,7 @@ class Pump extends Actor with FSM[State, Data] {
 }
 
 class FSMTest extends FunSuite with BeforeAndAfterAll {
-  implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
+  implicit val timeout = Timeout(1 second)
   val system: ActorSystem = ActorSystem.create("fsm", Conf.config)
   val pump: ActorRef = system.actorOf(Props[Pump], name = "pump")
 

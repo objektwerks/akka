@@ -1,7 +1,5 @@
 package system
 
-import java.util.concurrent.TimeUnit
-
 import actor._
 import akka.actor._
 import akka.util.Timeout
@@ -17,7 +15,7 @@ import scalafx.beans.property.ObjectProperty
 
 object Brewery {
   implicit val ec = ExecutionContext.Implicits.global
-  implicit val timeout = new Timeout(10, TimeUnit.SECONDS)
+  implicit val timeout = Timeout(10 seconds)
   var commandPropertyListener: Option[ObjectProperty[Command]] = None
   var statePropertyListener: Option[ObjectProperty[State]] = None
   var eventPropertyListener: Option[ObjectProperty[Event]] = None

@@ -1,7 +1,5 @@
 package akka
 
-import java.util.concurrent.TimeUnit
-
 import akka.actor.SupervisorStrategy.{Restart, Stop}
 import akka.actor._
 import akka.util.Timeout
@@ -24,8 +22,8 @@ class StandInCornerException(cause: String) extends Exception(cause)
 
 class Nanny extends Actor with ActorLogging {
   log.info(s"Nanny created: $self")
-  private implicit val timeout = new Timeout(3, TimeUnit.SECONDS)
-  private val child: ActorRef = context.actorOf(Props[Child], name = "child")
+  implicit val timeout = Timeout(3 seconds)
+  val child: ActorRef = context.actorOf(Props[Child], name = "child")
 
   override def supervisorStrategy: SupervisorStrategy =
     OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
@@ -61,8 +59,8 @@ class Child extends Actor with ActorLogging {
 class Watcher extends Actor with ActorLogging {
   import context.dispatcher
 
-  private implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
-  private val futureChild = context.system.actorSelection("/user/nanny/*").resolveOne()
+  implicit val timeout = Timeout(1 second)
+  val futureChild = context.system.actorSelection("/user/nanny/*").resolveOne()
   futureChild onSuccess { case child => context watch child }
 
   def receive = {
@@ -71,9 +69,9 @@ class Watcher extends Actor with ActorLogging {
 }
 
 class SupervisorStrategyTest extends FunSuite with BeforeAndAfterAll {
-  private implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
-  private val system: ActorSystem = ActorSystem.create("supervisor", Conf.config)
-  private val nanny: ActorRef = system.actorOf(Props[Nanny], name = "nanny")
+  implicit val timeout = Timeout(1 second)
+  val system: ActorSystem = ActorSystem.create("supervisor", Conf.config)
+  val nanny: ActorRef = system.actorOf(Props[Nanny], name = "nanny")
   system.actorOf(Props[Time], name = "watcher")
 
   override protected def afterAll(): Unit = {

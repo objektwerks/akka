@@ -1,7 +1,6 @@
 package akka
 
 import java.time.LocalDateTime
-import java.util.concurrent.TimeUnit
 
 import akka.actor.{ActorLogging, ActorRef, ActorSystem, Props}
 import akka.pattern._
@@ -55,7 +54,7 @@ class Computer extends PersistentActor with ActorLogging {
 
 class PersistenceTest extends FunSuite with BeforeAndAfterAll {
   implicit val ec = ExecutionContext.global
-  implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
+  implicit val timeout = Timeout(1 second)
   val system: ActorSystem = ActorSystem.create("persistence", Conf.config)
   val computer: ActorRef = system.actorOf(Props[Computer], name = "computer")
 
