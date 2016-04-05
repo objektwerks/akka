@@ -49,10 +49,6 @@ class BehaviorTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("race") {
-    race()
-  }
-
-  private def race(): Unit = {
     triathlete ! Ready
     triathlete ! Swim
     triathlete ! Bike
