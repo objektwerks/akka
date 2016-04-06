@@ -2,8 +2,8 @@ Akka
 ----
 >This project contains an Akka cluster visual simulation and feature tests.
 
-Simulation
-----------
+BrewMeister
+-----------
 >The Akka cluster visual simulation models a brewing process as follows:
 
 1. app --- recipe(m) ---> brewery
