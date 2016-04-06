@@ -62,20 +62,15 @@ Master - Worker
 >Client
 * client - multiple rest clients
 
->Actor
-* service - single rest service actor, with multiple manager routees
-* manager - multiple manager actors, with multiple worker routees
-* worker - multiple worker actors
-
->Scenario
-1. client * --- post job ---> 1 service
-2. service 1 --- job ---> 1 manager
-3. worker * --- request job ---> * manager
-4. worker * --- job result ---> 1 manager
-5. manager 1 --- job result ---> 1 service
-6. service 1 --- job result ---> 1 client
-
->Deployment
-1. client
-2. service, manager
-3. worker
+>Actors
+* rest
+    * publish to request topic
+    * subscribe to response topic
+* manager
+    * subscribe to request topic
+    * publish to job topic
+    * subscribe to result topic
+    * publish to response topic
+* worker
+    * subscribe to job topic
+    * publish to result topic
