@@ -1,6 +1,6 @@
 Akka
 ----
->This project contains an Akka cluster visual simulation and feature tests.
+>This project contains a (1) beer brewing simulation; and (2)feature tests.
 
 BrewMeister
 -----------
