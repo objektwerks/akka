@@ -10,7 +10,7 @@ Words
 * client - *
 
 >Trees
-* user / rest / master
+* user / rest / * master
 * user / worker
 
 >Messages
@@ -19,7 +19,7 @@ Words
 * master
     * rest ! response
 * worker
-    * master ? job
+    * master ? work
     * master ! result
 
 >Watchers
