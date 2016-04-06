@@ -1,10 +1,10 @@
-package simulator
+package brewery
 
 import akka.actor._
 import akka.util.Timeout
 import cluster.Listener
 import com.typesafe.config.ConfigFactory
-import simulator.actor._
+import brewery.actor._
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}

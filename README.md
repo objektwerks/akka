@@ -1,10 +1,10 @@
 Akka
 ----
->This project contains a (1) beer brewing simulator; and (2)feature tests.
+>This project contains a (1) beer brewery simulator; and (2)feature tests.
 
-BrewMeister
------------
->Akka cluster visual simulation that models a brewing process:
+Brewery
+-------
+>Akka cluster visual simulation that models a beer brewing process:
 
 1. app --- recipe(m) ---> brewery
 2. brewery --- recipe(m) ---> brewer

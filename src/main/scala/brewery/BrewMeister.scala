@@ -1,4 +1,4 @@
-package simulator
+package brewery
 
 import scalafx.Includes._
 import scalafx.application.JFXApp

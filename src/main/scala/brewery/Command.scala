@@ -1,4 +1,4 @@
-package simulator
+package brewery
 
 import java.time.LocalTime
 
