@@ -55,10 +55,8 @@ Output
 ------
 1. target/output
 
-Sprinkler System
-----------------
+Master - Worker
+---------------
+>An Akka system master-worker architecture.
 
-Controller 1 --- controls ---> 1..4 Scheduler 1 --- schedules ---> 1 Timer 1 --- opens / closes ---> 1 Valve 1 --- activates / deactivates ---> 1 Zone
-
-1. Schedular, also referred to as Program ( A, B, C, D ... )
-2. Zone, also referred to as Station
+1. clients * --- post job ---> 1 rest service
