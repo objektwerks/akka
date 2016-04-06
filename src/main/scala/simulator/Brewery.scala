@@ -2,6 +2,7 @@ package simulator
 
 import akka.actor._
 import akka.util.Timeout
+import cluster.Listener
 import com.typesafe.config.ConfigFactory
 import simulator.actor._
 
