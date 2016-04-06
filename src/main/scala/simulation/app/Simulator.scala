@@ -1,10 +1,10 @@
-package app
+package simulation.app
 
-import command.Command
-import domain.{IPA, Recipe}
-import event.{Brewed, Event}
-import state.State
-import system.Brewery
+import simulation.command.Command
+import simulation.domain.{IPA, Recipe}
+import simulation.event.{Brewed, Event}
+import simulation.state.State
+import simulation.system.Brewery
 
 import scalafx.Includes._
 import scalafx.application.JFXApp

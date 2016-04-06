@@ -53,19 +53,19 @@ class TellAskTest extends FunSuite with BeforeAndAfterAll {
     Await.result(system.terminate(), 1 second)
   }
 
-  test("system ! master") {
+  test("simulation.system ! master") {
     master ! Message(Tell, "System", "tell ! message")
   }
 
-  test("system ! master ! worker") {
+  test("simulation.system ! master ! worker") {
     master ! Message(TellWorker, "System", "tell ! message")
   }
 
-  test("system ? master") {
+  test("simulation.system ? master") {
     assert(Await.result(master ? Message(Ask, "System", "ask ? message"), 1 second).asInstanceOf[String].nonEmpty)
   }
 
-  test("system ? master ? worker") {
+  test("simulation.system ? master ? worker") {
     assert(Await.result(master ? Message(AskWorker, "System", "ask ? message"), 1 second).asInstanceOf[String].nonEmpty)
   }
 }

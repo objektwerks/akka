@@ -25,7 +25,7 @@ class TestKitTest extends TestKit(ActorSystem("testkit", Conf.config))
     Await.result(system.terminate(), 1 second)
   }
 
-  "Ping actor" should {
+  "Ping simulation.actor" should {
     "reply with an identical message" in {
       within(2 seconds) {
         ping ! "ping"

@@ -1,9 +1,9 @@
-package actor
+package simulation.actor
 
 import akka.actor.{Actor, ActorRef}
-import command.Brew
-import event.Fermented
-import state.Fermenting
+import simulation.command.Brew
+import simulation.event.Fermented
+import simulation.state.Fermenting
 
 class Fermenter(conditioner: ActorRef) extends Actor {
   val publisher = context.system.eventStream

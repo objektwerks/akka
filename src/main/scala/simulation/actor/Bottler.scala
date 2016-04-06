@@ -1,9 +1,9 @@
-package actor
+package simulation.actor
 
 import akka.actor.Actor
-import command.Brew
-import event.Bottled
-import state.Bottling
+import simulation.command.Brew
+import simulation.event.Bottled
+import simulation.state.Bottling
 
 class Bottler extends Actor {
   val publisher = context.system.eventStream

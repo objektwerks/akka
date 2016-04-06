@@ -64,7 +64,7 @@ class Watcher extends Actor with ActorLogging {
   futureChild onSuccess { case child => context watch child }
 
   def receive = {
-    case Terminated(child) => log.info(s"Watcher terminated event: ${child.path.name} TERMINATED!")
+    case Terminated(child) => log.info(s"Watcher terminated simulation.event: ${child.path.name} TERMINATED!")
   }
 }
 

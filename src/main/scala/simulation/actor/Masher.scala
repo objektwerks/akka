@@ -1,9 +1,9 @@
-package actor
+package simulation.actor
 
 import akka.actor.{Actor, ActorRef}
-import command.Brew
-import event.Mashed
-import state.Mashing
+import simulation.command.Brew
+import simulation.event.Mashed
+import simulation.state.Mashing
 
 class Masher(boiler: ActorRef) extends Actor {
   val publisher = context.system.eventStream

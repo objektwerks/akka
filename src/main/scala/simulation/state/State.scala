@@ -1,4 +1,4 @@
-package state
+package simulation.state
 
 import java.time.LocalTime
 

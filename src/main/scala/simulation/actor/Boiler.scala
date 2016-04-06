@@ -1,9 +1,9 @@
-package actor
+package simulation.actor
 
 import akka.actor.{Actor, ActorRef}
-import command.Brew
-import event.Boiled
-import state.Boiling
+import simulation.command.Brew
+import simulation.event.Boiled
+import simulation.state.Boiling
 
 class Boiler(cooler: ActorRef) extends Actor {
   val publisher = context.system.eventStream

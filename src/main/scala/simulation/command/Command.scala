@@ -1,8 +1,8 @@
-package command
+package simulation.command
 
 import java.time.LocalTime
 
-import domain.Recipe
+import simulation.domain.Recipe
 
 sealed trait Command {
   def executed: LocalTime = LocalTime.now()
