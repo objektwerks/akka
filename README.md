@@ -1,10 +1,26 @@
 Akka
 ----
->This project contains a (1) beer brewery simulator; and (2)feature tests.
+>This project contains a (1) word count simulator; (2) brewery simulator; and (3)feature tests.
+
+Words
+-----
+>Akka cluster master-worker architecture that counts words.
+
+>Client
+* client - multiple rest clients
+
+>Actors
+* rest
+    * master ! request
+* master
+    * rest ! response
+* worker
+    * master ? job
+    * master ! result
 
 Brewery
 -------
->Akka cluster visual simulation that models a beer brewing process:
+>Akka cluster that visually simulates a beer brewing process:
 
 1. app --- recipe(m) ---> brewery
 2. brewery --- recipe(m) ---> brewer
@@ -54,23 +70,3 @@ Run
 Output
 ------
 1. target/output
-
-Master - Worker
----------------
->Akka cluster master-worker architecture.
-
->Client
-* client - multiple rest clients
-
->Actors
-* rest
-    * publish to request topic
-    * subscribe to response topic
-* manager
-    * subscribe to request topic
-    * publish to job topic
-    * subscribe to result topic
-    * publish to response topic
-* worker
-    * subscribe to job topic
-    * publish to result topic
