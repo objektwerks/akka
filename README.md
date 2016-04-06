@@ -7,9 +7,13 @@ Words
 >Akka cluster master-worker architecture that counts words.
 
 >Client
-* client - multiple rest clients
+* client - *
 
->Actors
+>Trees
+* user / rest / master
+* user / worker
+
+>Messages
 * rest
     * master ! request
 * master
@@ -18,7 +22,10 @@ Words
     * master ? job
     * master ! result
 
->Deployment
+>Watchers
+* master @ worker
+
+>Cluster
 * cluster - 1
     * node n - 1 rest, * master
     * node n - 1 worker
