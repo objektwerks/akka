@@ -11,7 +11,7 @@ import scalafx.scene.control._
 import scalafx.scene.layout.VBox
 import scalafx.scene.text.Text
 
-object Simulator extends JFXApp {
+object BrewMeister extends JFXApp {
   val commandProperty = new ObjectProperty[Command]()
   val stateProperty = new ObjectProperty[State]()
   val eventProperty = new ObjectProperty[Event]()
