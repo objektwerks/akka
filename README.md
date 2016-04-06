@@ -59,10 +59,10 @@ Master - Worker
 ---------------
 >Akka cluster master-worker architecture.
 
->Clients
+>Client
 * client - multiple rest clients
 
->Akka Cluster
+>Actor
 * service - single rest service actor, with multiple manager routees
 * manager - multiple manager actors, with multiple worker routees
 * worker - multiple worker actors
@@ -74,3 +74,8 @@ Master - Worker
 4. worker * --- job result ---> 1 manager
 5. manager 1 --- job result ---> 1 service
 6. service 1 --- job result ---> 1 client
+
+>Deployment
+1. client
+2. service, manager
+3. worker
