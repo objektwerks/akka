@@ -3,11 +3,7 @@ package simulation.actor
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.{Actor, ActorRef}
-import simulation.command.{Brew, Command}
-import simulation.domain.Recipe
-import simulation.event.Event
-import simulation.state.State
-import simulation.system.Brewery
+import simulation._
 
 class Brewer(masher: ActorRef) extends Actor {
   val batchNumber = new AtomicInteger()

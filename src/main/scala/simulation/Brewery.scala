@@ -1,13 +1,9 @@
-package simulation.system
+package simulation
 
-import simulation.actor._
 import akka.actor._
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
-import simulation.command.Command
-import simulation.domain.Recipe
-import simulation.event.Event
-import simulation.state.State
+import simulation.actor._
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}

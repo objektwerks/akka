@@ -1,4 +1,4 @@
-package simulation.system
+package simulation
 
 import akka.actor.{Actor, ActorLogging}
 import akka.cluster.ClusterEvent._

@@ -1,9 +1,7 @@
 package simulation.actor
 
 import akka.actor.Actor
-import simulation.command.Brew
-import simulation.event.Kegged
-import simulation.state.Kegging
+import simulation.{Brew, Kegged, Kegging}
 
 class Kegger extends Actor {
   val publisher = context.system.eventStream
