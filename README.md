@@ -18,6 +18,11 @@ Words
     * master ? job
     * master ! result
 
+>Deployment
+* cluster - 1
+    * node n - 1 rest, * master
+    * node n - 1 worker
+
 Brewery
 -------
 >Akka cluster that visually simulates a beer brewing process:
