@@ -1,4 +1,4 @@
-package simulation
+package simulator
 
 import scalafx.Includes._
 import scalafx.application.JFXApp

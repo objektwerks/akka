@@ -1,7 +1,7 @@
-package simulation.actor
+package simulator.actor
 
 import akka.actor.{Actor, ActorRef}
-import simulation.{Brew, Cooled, Cooling}
+import simulator.{Brew, Cooled, Cooling}
 
 class Cooler(fermenter: ActorRef) extends Actor {
   val publisher = context.system.eventStream

@@ -1,4 +1,4 @@
-package simulation
+package simulator
 
 final case class Gravity(original: Double, specific: Double, finished: Double)
 final case class Adjunct(kind: String, amount: Double, as: Measurement.Value)

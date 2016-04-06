@@ -1,7 +1,7 @@
-package simulation.actor
+package simulator.actor
 
 import akka.actor.Actor
-import simulation.{Brew, Casked, Casking}
+import simulator.{Brew, Casked, Casking}
 
 class Casker extends Actor {
   val publisher = context.system.eventStream
