@@ -57,6 +57,20 @@ Output
 
 Master - Worker
 ---------------
->An Akka system master-worker architecture.
+>Akka cluster master-worker architecture.
 
-1. clients * --- post job ---> 1 rest service
+>Clients
+* client - multiple rest clients
+
+>Akka Cluster
+* service - single rest service actor, with multiple manager routees
+* manager - multiple manager actors, with multiple worker routees
+* worker - multiple worker actors
+
+>Scenario
+1. client * --- post job ---> 1 service
+2. service 1 --- job ---> 1 manager
+3. worker * --- request job ---> * manager
+4. worker * --- job result ---> 1 manager
+5. manager 1 --- job result ---> 1 service
+6. service 1 --- job result ---> 1 client
