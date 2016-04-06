@@ -27,8 +27,9 @@ Words
 
 >Cluster
 * cluster - 1
-    * node n - 1 rest, * master
-    * node n - 1 worker
+    * seed nodes - 2
+    * nodes - 2 : 1 rest, * master
+    * nodes - 2 : 1 worker
 
 Brewery
 -------
