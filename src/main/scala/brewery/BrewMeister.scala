@@ -1,5 +1,7 @@
 package brewery
 
+import cluster.SeedNode
+
 import scalafx.Includes._
 import scalafx.application.JFXApp
 import scalafx.beans.property.ObjectProperty
@@ -12,6 +14,8 @@ import scalafx.scene.layout.VBox
 import scalafx.scene.text.Text
 
 object BrewMeister extends JFXApp {
+  val seedNode2551 = new SeedNode(2551, "brewery")
+  val seedNode2552 = new SeedNode(2552, "brewery")
   val commandProperty = new ObjectProperty[Command]()
   val stateProperty = new ObjectProperty[State]()
   val eventProperty = new ObjectProperty[Event]()
