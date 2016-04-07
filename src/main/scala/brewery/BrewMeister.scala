@@ -16,6 +16,9 @@ import scalafx.scene.text.Text
 object BrewMeister extends JFXApp {
   val seedNode2551 = new SeedNode(2551, "brewery")
   val seedNode2552 = new SeedNode(2552, "brewery")
+  sys.addShutdownHook(seedNode2551.terminate())
+  sys.addShutdownHook(seedNode2552.terminate())
+
   val commandProperty = new ObjectProperty[Command]()
   val stateProperty = new ObjectProperty[State]()
   val eventProperty = new ObjectProperty[Event]()
@@ -82,9 +85,6 @@ object BrewMeister extends JFXApp {
     title = "Brew Meister"
     scene = new Scene {
       root = appPane
-    }
-    onCloseRequest = handle {
-      Brewery.terminate()
     }
   }
 

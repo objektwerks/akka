@@ -4,6 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 
+import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class SeedNode(port: Int, role: String) {
@@ -14,4 +15,10 @@ class SeedNode(port: Int, role: String) {
   val system = ActorSystem.create("brewery", conf)
   system.actorOf(Props[Listener], name = "listener")
   system.log.info(s"Seed Node initialized on port: $port for role: $role!")
+
+  def terminate(): Unit = {
+    implicit val ec = system.dispatcher
+    system.log.info(s"Seed Node  on port: $port for role: $role terminating...")
+    Await.result(system.terminate(), 3 seconds)
+  }
 }
