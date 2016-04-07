@@ -3,7 +3,6 @@ package brewery
 import akka.actor._
 import akka.util.Timeout
 import brewery.actor._
-import cluster.Listener
 import com.typesafe.config.ConfigFactory
 
 import scala.concurrent.duration._
@@ -16,19 +15,18 @@ object Brewery {
   var statePropertyListener: Option[ObjectProperty[State]] = None
   var eventPropertyListener: Option[ObjectProperty[Event]] = None
   val system = ActorSystem.create("brewery", ConfigFactory.load("brewery-akka.conf"))
-  val bottler: ActorRef = system.actorOf(Props[Bottler], name = "bottler")
-  val kegger: ActorRef = system.actorOf(Props[Kegger], name = "kegger")
-  val casker: ActorRef = system.actorOf(Props[Casker], name = "casker")
-  val conditioner: ActorRef = system.actorOf(Props(new Conditioner(bottler, kegger, casker)), name = "conditioner")
-  val fermenter: ActorRef = system.actorOf(Props(new Fermenter(conditioner)), name = "fermenter")
-  val cooler: ActorRef = system.actorOf(Props(new Cooler(fermenter)), name = "cooler")
-  val boiler: ActorRef = system.actorOf(Props(new Boiler(cooler)), name = "boiler")
-  val masher: ActorRef = system.actorOf(Props(new Masher(boiler)), name = "masher")
-  val brewer: ActorRef = system.actorOf(Props(new Brewer(masher)), name = "brewer")
+  val bottler = system.actorOf(Props[Bottler], name = "bottler")
+  val kegger = system.actorOf(Props[Kegger], name = "kegger")
+  val casker = system.actorOf(Props[Casker], name = "casker")
+  val conditioner = system.actorOf(Props(new Conditioner(bottler, kegger, casker)), name = "conditioner")
+  val fermenter = system.actorOf(Props(new Fermenter(conditioner)), name = "fermenter")
+  val cooler = system.actorOf(Props(new Cooler(fermenter)), name = "cooler")
+  val boiler = system.actorOf(Props(new Boiler(cooler)), name = "boiler")
+  val masher = system.actorOf(Props(new Masher(boiler)), name = "masher")
+  val brewer = system.actorOf(Props(new Brewer(masher)), name = "brewer")
   system.eventStream.subscribe(brewer, classOf[Command])
   system.eventStream.subscribe(brewer, classOf[State])
   system.eventStream.subscribe(brewer, classOf[Event])
-  system.actorOf(Props[Listener], name = "listener")
   system.log.info("Brewery initialized!")
 
   def register(commandProperty: ObjectProperty[Command],

@@ -1,6 +1,6 @@
 package cluster
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.ActorSystem
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 
@@ -13,7 +13,6 @@ class SeedNode(port: Int, role: String) {
     withFallback(ConfigFactory.parseString(s"akka.cluster.roles = [$role]")).
     withFallback(ConfigFactory.load("seed-node-akka.conf"))
   val system = ActorSystem.create("brewery", conf)
-  system.actorOf(Props[Listener], name = "listener")
   system.log.info(s"Seed Node initialized on port: $port for role: $role!")
 
   def terminate(): Unit = {
