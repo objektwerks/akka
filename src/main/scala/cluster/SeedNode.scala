@@ -17,7 +17,7 @@ class SeedNode(port: Int, role: String) {
 
   def terminate(): Unit = {
     implicit val ec = system.dispatcher
-    system.log.info(s"Seed Node  on port: $port for role: $role terminating...")
+    system.log.info(s"Seed Node on port: $port for role: $role terminating...")
     Await.result(system.terminate(), 3 seconds)
   }
 }
