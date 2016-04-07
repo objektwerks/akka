@@ -12,7 +12,6 @@ class Listener extends Actor with ActorLogging {
 
   override def postStop(): Unit = {
     Cluster(context.system).unsubscribe(self)
-    super.postStop()
   }
 
   override def receive: Receive = {

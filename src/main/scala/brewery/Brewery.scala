@@ -11,7 +11,6 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 import scalafx.beans.property.ObjectProperty
 
 object Brewery {
-  implicit val ec = ExecutionContext.Implicits.global
   implicit val timeout = Timeout(10 seconds)
   var commandPropertyListener: Option[ObjectProperty[Command]] = None
   var statePropertyListener: Option[ObjectProperty[State]] = None
@@ -41,6 +40,7 @@ object Brewery {
   }
 
   def brew(recipe: Recipe): Unit = {
+    implicit val ec = system.dispatcher
     Future { brewer ! recipe }
   }
 
@@ -57,6 +57,7 @@ object Brewery {
   }
 
   def terminate(): Unit = {
+    implicit val ec = system.dispatcher
     system.log.info("Brewery terminating...")
     Await.result(system.terminate(), 3 seconds)
   }
