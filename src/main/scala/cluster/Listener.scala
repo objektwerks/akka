@@ -22,6 +22,6 @@ class Listener extends Actor with ActorLogging {
       else log.info(s"*** Member Removed | Unreachable: $member")
     case UnreachableMember(member) => log.info(s"*** Member Unreachable: $member")
     case ReachableMember(member) => log.info(s"*** Member Reachable: $member")
-    case state: CurrentClusterState => log.info(s"*** Current Cluster State: ${state.toString}")
+    case state: CurrentClusterState => log.info(s"*** Current Cluster State: $state")
   }
 }
