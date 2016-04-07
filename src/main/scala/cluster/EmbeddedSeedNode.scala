@@ -7,7 +7,7 @@ import com.typesafe.config.ConfigFactory
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-class SeedNode(port: Int, role: String) {
+class EmbeddedSeedNode(port: Int, role: String) {
   implicit val timeout = Timeout(10 seconds)
   val conf = ConfigFactory.parseString(s"akka.remote.netty.tcp.port = $port").
     withFallback(ConfigFactory.parseString(s"akka.cluster.roles = [$role]")).
