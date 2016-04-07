@@ -15,13 +15,13 @@ class Listener extends Actor with ActorLogging {
   }
 
   override def receive: Receive = {
-    case MemberUp(member) => log.info(s"$member UP.")
-    case MemberExited(member) => log.info(s"$member EXITED.")
+    case MemberUp(member) => log.info(s"*** Member Up Event: $member")
+    case MemberExited(member) => log.info(s"*** Member Exited: $member")
     case MemberRemoved(member, previousState) =>
-      if(previousState == MemberStatus.Exiting) log.info(s"$member previously gracefully EXITED, REMOVED.")
-      else log.info(s"$member previously downed after UNREACHABLE, REMOVED.")
-    case UnreachableMember(member) => log.info(s"$member UNREACHABLE")
-    case ReachableMember(member) => log.info(s"$member REACHABLE")
-    case state: CurrentClusterState => log.info(s"CURRENT CLUSTER STATE: $state")
+      if(previousState == MemberStatus.Exiting) log.info(s"*** Member Removed: $member")
+      else log.info(s"*** Member Removed | Unreachable: $member")
+    case UnreachableMember(member) => log.info(s"*** Member Unreachable: $member")
+    case ReachableMember(member) => log.info(s"*** Member Reachable: $member")
+    case state: CurrentClusterState => log.info(s"*** Current Cluster State: ${state.toString}")
   }
 }
