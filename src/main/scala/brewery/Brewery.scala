@@ -2,12 +2,12 @@ package brewery
 
 import akka.actor._
 import akka.util.Timeout
+import brewery.actor._
 import cluster.Listener
 import com.typesafe.config.ConfigFactory
-import brewery.actor._
 
 import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{Await, Future}
 import scalafx.beans.property.ObjectProperty
 
 object Brewery {
