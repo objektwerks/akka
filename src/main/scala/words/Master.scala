@@ -14,6 +14,6 @@ class Master extends Actor with ActorLogging {
   }
 
   def receive = {
-    case words: Words => router.route(words, sender())
+    case words: Words => sender ! router.route(words, sender())
   }
 }

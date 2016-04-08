@@ -8,6 +8,6 @@ class Worker extends Actor with ActorLogging {
   }
 
   def toWordCount(words: Array[String]): Map[String, Int] = {
-    words.groupBy((word: String) => word).mapValues(_.length)
+    words.groupBy((word: String) => word.toLowerCase).mapValues(_.length)
   }
 }
