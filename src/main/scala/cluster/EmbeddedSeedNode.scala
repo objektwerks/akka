@@ -13,11 +13,11 @@ class EmbeddedSeedNode(conf: String, port: Int, actorSystemName: String) {
   val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port = $port").withFallback(ConfigFactory.load(conf))
 
   val system = ActorSystem.create(actorSystemName, config)
-  system.log.info(s"Embedded Seed Node initialized with conf: $conf on port: $port for system: $actorSystemName!")
+  system.log.info(s"Embedded Seed Node initialized with $conf for system: $actorSystemName on port: $port!")
 
   def terminate(): Unit = {
     implicit val ec = system.dispatcher
-    system.log.info(s"Embedded Seed Node terminated with conf: $conf on port: $port for system: $actorSystemName.")
+    system.log.info(s"Embedded Seed Node terminated on port: $port for system: $actorSystemName.")
     Await.result(system.terminate(), 3 seconds)
   }
 }

@@ -23,11 +23,11 @@ abstract class Node extends App {
   val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port = $port").withFallback(ConfigFactory.load(conf))
 
   val system = ActorSystem.create(actorSystemName, config)
-  system.log.info(s"Node initialized with conf: $config on port: $port for system: $actorSystemName!")
+  system.log.info(s"Node initialized with $conf for system: $actorSystemName on port: $port!")
 
   sys.addShutdownHook {
     implicit val ec = system.dispatcher
-    system.log.info(s"Node with conf: $config on port: $port for system: $actorSystemName terminating...")
+    system.log.info(s"Node terminated on port: $port for system: $actorSystemName.")
     Await.result(system.terminate(), 3 seconds)
   }
 }
