@@ -2,7 +2,12 @@ package words
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Terminated}
 
+import scala.io.Source
+
 class Master extends Actor with ActorLogging {
+  val words = Source.fromInputStream(getClass.getResourceAsStream("/license.mit")).mkString.split("\\P{L}+")
+  val (left, right) = words.splitAt(words.size / 2)
+
   var workers = IndexedSeq.empty[ActorRef]
   var counter = 0
 
