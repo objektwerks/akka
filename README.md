@@ -86,8 +86,9 @@ Run Main
 --------
 1. sbt "runMain cluster.SeedNode words-seed-node.conf 2151 words"
 2. sbt "runMain cluster.SeedNode words-seed-node.conf 2152 words"
-3. sbt "runMain words.MasterNode master.conf 2153 words"
-4. sbt "runMain words.WorderNode worker.conf 2154 words"
+3. sbt "runMain words.WorkerNode worker.conf 0 words"
+4. sbt "runMain words.WorkerNode worker.conf 0 words"
+5. sbt "runMain words.MasterNode master.conf 0 words"
 
 Output
 ------
