@@ -1,19 +1,33 @@
 package words
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{Actor, ActorLogging, ActorRef}
+import akka.cluster.Cluster
+import akka.cluster.ClusterEvent.MemberUp
 import akka.util.Timeout
 
 import scala.concurrent.duration._
+import scala.util.Random
 
 class Worker extends Actor with ActorLogging {
+  val cluster = Cluster(context.system)
+  val masters = IndexedSeq.empty[ActorRef]
+  val random = new Random
+
+  override def preStart(): Unit = cluster.subscribe(self, classOf[MemberUp])
+
+  override def postStop(): Unit = cluster.unsubscribe(self)
+
   implicit val ec = context.system.dispatcher
   context.system.scheduler.schedule(3 seconds, 3 seconds) {
     implicit val timeout = Timeout(3 seconds)
-    // Need actor ref to Master.
+    if (masters.nonEmpty) {
+      masters(random.nextInt(masters.length))
+    }
   }
 
   def receive = {
     case countWords: CountWords => sender ! WordsCounted(toWordCount(countWords.words))
+    case MemberUp(master) => masters :+ master
   }
 
   def toWordCount(words: Array[String]): Map[String, Int] = {
