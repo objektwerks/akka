@@ -1,23 +1,20 @@
 package words
 
-import akka.actor.{Actor, ActorLogging, Props}
-import akka.cluster.routing.{ClusterRouterPool, ClusterRouterPoolSettings}
-import akka.routing.BroadcastPool
-import akka.util.Timeout
-
-import scala.concurrent.duration._
+import akka.actor.{Actor, ActorLogging, ActorRef, Terminated}
 
 class Master extends Actor with ActorLogging {
-  implicit val timeout = Timeout(10 seconds)
-  val broadcastPool = BroadcastPool(4)
-  val clusterRouterPoolSettings = ClusterRouterPoolSettings(
-    totalInstances = 4, maxInstancesPerNode = 2, allowLocalRoutees = false, useRole = Some("worker")
-  )
-  val clusterRouterPool = ClusterRouterPool(broadcastPool, clusterRouterPoolSettings)
-  val router = context.actorOf(clusterRouterPool.props(Props[Worker]), name = "worker-router")
+  var workers = IndexedSeq.empty[ActorRef]
+  var counter = 0
 
   def receive = {
-    case countWords: CountWords => router ! countWords
+    case countWords: CountWords if workers.isEmpty => log.error("No workers available!")
+    case countWords: CountWords =>
+      counter += 1
+      workers(counter % workers.size) forward countWords
     case wordsCounted: WordsCounted => context.system.log.info(wordsCounted.toString)
+    case WorkerRegistration if !workers.contains(sender()) =>
+      context watch sender
+      workers = workers :+ sender
+    case Terminated(worker) => workers = workers.filterNot(_ == worker)
   }
 }
