@@ -4,6 +4,10 @@ import akka.actor.{Actor, ActorLogging}
 
 class Worker extends Actor with ActorLogging {
   def receive = {
-    case words: String => log.info(words)
+    case words: Words => sender ! WordCounts(toWordCount(words.array))
+  }
+
+  def toWordCount(words: Array[String]): Map[String, Int] = {
+    words.groupBy((word: String) => word).mapValues(_.length)
   }
 }
