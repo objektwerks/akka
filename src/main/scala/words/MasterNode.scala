@@ -17,7 +17,7 @@ object MasterNode extends Node {
   implicit val ec = system.dispatcher
   system.scheduler.schedule(3 seconds, 3 seconds) {
     implicit val timeout = Timeout(3 seconds)
-    (master ? Words(left)) onSuccess { case wordCounts: WordCounts => system.log.info(wordCounts.toString) }
-    (master ? Words(right)) onSuccess { case wordCounts: WordCounts => system.log.info(wordCounts.toString) }
+    (master ? CountWords(left)) onSuccess { case wordsCounted: WordsCounted => system.log.info(wordsCounted.toString) }
+    (master ? CountWords(right)) onSuccess { case wordsCounted: WordsCounted => system.log.info(wordsCounted.toString) }
   }
 }
