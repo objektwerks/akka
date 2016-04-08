@@ -13,8 +13,8 @@ class Master extends Actor with ActorLogging {
   val clusterRouterPoolSettings = ClusterRouterPoolSettings(
     totalInstances = 4, maxInstancesPerNode = 2, allowLocalRoutees = false, useRole = Some("worker")
   )
-  val router = context.actorOf(ClusterRouterPool(broadcastPool, clusterRouterPoolSettings).
-    props(Props[Worker]), name = "worker-router")
+  val clusterRouterPool = ClusterRouterPool(broadcastPool, clusterRouterPoolSettings)
+  val router = context.actorOf(clusterRouterPool.props(Props[Worker]), name = "worker-router")
 
   def receive = {
     case countWords: CountWords => router ! countWords
