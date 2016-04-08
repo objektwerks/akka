@@ -11,7 +11,7 @@ class EmbeddedSeedNode(port: Int, role: String) {
   implicit val timeout = Timeout(10 seconds)
   val conf = ConfigFactory.parseString(s"akka.remote.netty.tcp.port = $port").
     withFallback(ConfigFactory.parseString(s"akka.cluster.roles = [$role]")).
-    withFallback(ConfigFactory.load("seed-node-akka.conf"))
+    withFallback(ConfigFactory.load("seed-node.conf"))
   val system = ActorSystem.create(role, conf)
   system.log.info(s"Embedded Seed Node initialized on port: $port for role: $role!")
 
