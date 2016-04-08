@@ -4,7 +4,6 @@ import akka.actor.{Actor, ActorLogging, Props}
 import akka.cluster.routing.{ClusterRouterPool, ClusterRouterPoolSettings}
 import akka.routing.BroadcastPool
 import akka.util.Timeout
-import akka.pattern._
 
 import scala.concurrent.duration._
 
@@ -18,7 +17,7 @@ class Master extends Actor with ActorLogging {
     props(Props[Worker]), name = "worker-router")
 
   def receive = {
-    case countWords: CountWords => router ? countWords
+    case countWords: CountWords => router ! countWords
     case wordsCounted: WordsCounted => context.system.log.info(wordsCounted.toString)
   }
 }
