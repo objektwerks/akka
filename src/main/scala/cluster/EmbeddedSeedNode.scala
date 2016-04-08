@@ -9,7 +9,11 @@ import scala.concurrent.duration._
 
 class EmbeddedSeedNode(port: Int, role: String, conf: String) {
   implicit val timeout = Timeout(10 seconds)
-  val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port = $port").withFallback(ConfigFactory.load(conf))
+
+  val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port = $port").
+    withFallback(ConfigFactory.parseString(s"akka.cluster.roles = [$role]")).
+    withFallback(ConfigFactory.load(conf))
+
   val system = ActorSystem.create(role, config)
   system.log.info(s"Embedded Seed Node initialized with conf: $conf on port: $port for role: $role!")
 
