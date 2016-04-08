@@ -80,6 +80,11 @@ Test
 Run
 ---
 1. sbt clean compile run
+2. select app number
+
+Run Main
+--------
+1. sbt "runMain cluster.SeedNode 2151 brewery seed-node.conf"
 
 Output
 ------
