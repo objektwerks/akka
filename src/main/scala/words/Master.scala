@@ -4,6 +4,7 @@ import akka.actor.{Actor, ActorLogging}
 
 import scala.io.Source
 
+// Make persistent.
 class Master extends Actor with ActorLogging {
   val words = Source.fromInputStream(getClass.getResourceAsStream("/license.mit")).mkString.split("\\P{L}+")
 
