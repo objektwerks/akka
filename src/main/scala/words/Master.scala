@@ -1,12 +1,14 @@
 package words
 
 import akka.actor.ActorLogging
-import akka.persistence.serialization.Snapshot
 import akka.persistence._
+import akka.persistence.serialization.Snapshot
 
 class Master extends PersistentActor with ActorLogging {
-  override def persistenceId = "master-persistence-id"
+  val publisher = context.system.eventStream
   var commands = Commands()
+
+  override def persistenceId = "master-persistence-id"
 
   override def receiveCommand: Receive = {
     case countWords: CountWords => persistAsync(countWords)(commands.add)
@@ -14,7 +16,7 @@ class Master extends PersistentActor with ActorLogging {
     case wordsCounted: WordsCounted =>
       commands.remove(wordsCounted.commandId)
       self ! Snapshot
-      log.info(wordsCounted.toString)
+      publisher.publish(wordsCounted)
     case Snapshot => saveSnapshot(commands)
     case SaveSnapshotSuccess(metadata) => log.info(s"Command snapshot success: $metadata")
     case SaveSnapshotFailure(metadata, reason) => log.error(s"Command snapshot failure: $metadata; $reason")

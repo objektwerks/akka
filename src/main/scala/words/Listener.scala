@@ -1,35 +1,32 @@
 package words
 
-import akka.actor.{Actor, ActorLogging, ActorRef}
-import akka.cluster.Cluster
-import akka.cluster.ClusterEvent.MemberUp
+import akka.actor.{Actor, ActorLogging, Props}
+import akka.routing.{ActorRefRoutee, RoundRobinRoutingLogic, Router}
 import akka.util.Timeout
 
-import scala.concurrent.duration._
 import scala.io.Source
-import scala.util.Random
+import scala.concurrent.duration._
 
 class Listener extends Actor with ActorLogging {
   val words = Source.fromInputStream(getClass.getResourceAsStream("/license.mit")).mkString.split("\\P{L}+")
   val (left, right) = words.splitAt(words.size / 2)
-  val cluster = Cluster(context.system)
-  val masters = IndexedSeq.empty[ActorRef]
-  val random = new Random
-
-  override def preStart(): Unit = cluster.subscribe(self, classOf[MemberUp])
-
-  override def postStop(): Unit = cluster.unsubscribe(self)
+  val router = {
+    val routees = Vector.fill(2) {
+      val master = context.actorOf(Props[Master])
+      context watch master
+      ActorRefRoutee(master)
+    }
+    Router(RoundRobinRoutingLogic(), routees)
+  }
 
   implicit val ec = context.system.dispatcher
   implicit val timeout = Timeout(3 seconds)
   context.system.scheduler.schedule(2 seconds, 2 seconds) {
-    if (masters.nonEmpty) {
-      masters(random.nextInt(masters.length)) ! CountWords(left)
-      masters(random.nextInt(masters.length)) ! CountWords(right)
-    }
+    router.route(CountWords(left), sender)
+    router.route(CountWords(right), sender)
   }
 
-  def receive = {
-    case MemberUp(member) if member.hasRole("master") => masters :+ member
+  override def receive: Receive = {
+    case wordsCounted: WordsCounted => log.info(s"Words Counted: ${wordsCounted.toString}")
   }
 }

@@ -23,7 +23,7 @@ abstract class Node extends App {
   val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port = $port").withFallback(ConfigFactory.load(conf))
 
   val system = ActorSystem.create(actorSystemName, config)
-  system.actorOf(Props[Listener], name = "listener")
+  system.actorOf(Props[ClusterListener], name = "cluster-listener")
   system.log.info(s"Node initialized with $conf for system: $actorSystemName on port: $port!")
 
   sys.addShutdownHook {

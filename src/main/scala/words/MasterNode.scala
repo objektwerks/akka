@@ -1,9 +1,10 @@
 package words
 
 import akka.actor.Props
-import cluster.Node
+import cluster.{ClusterListener, Node}
 
 object MasterNode extends Node {
-  system.actorOf(Props[Master], name = "master")
-  system.actorOf(Props[Listener], name = "listener")
+  val listener = system.actorOf(Props[Listener], name = "listener")
+  system.eventStream.subscribe(listener, classOf[WordsCounted])
+  system.actorOf(Props[ClusterListener], name = "cluster-listener")
 }

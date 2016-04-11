@@ -23,7 +23,7 @@ class Worker extends Actor with ActorLogging {
     if (masters.nonEmpty) masters(random.nextInt(masters.length)) ! ReadyForCommand
   }
 
-  def receive = {
+  override def receive: Receive = {
     case countWords: CountWords => sender ! WordsCounted(countWords.id, toWordCount(countWords.words))
     case MemberUp(member) if member.hasRole("master") => masters :+ member
   }

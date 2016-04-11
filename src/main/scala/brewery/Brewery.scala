@@ -3,7 +3,7 @@ package brewery
 import akka.actor._
 import akka.util.Timeout
 import brewery.actor._
-import cluster.Listener
+import cluster.ClusterListener
 import com.typesafe.config.ConfigFactory
 
 import scala.concurrent.duration._
@@ -25,7 +25,7 @@ object Brewery {
   val boiler = system.actorOf(Props(new Boiler(cooler)), name = "boiler")
   val masher = system.actorOf(Props(new Masher(boiler)), name = "masher")
   val brewer = system.actorOf(Props(new Brewer(masher)), name = "brewer")
-  system.actorOf(Props[Listener], name = "listener")
+  system.actorOf(Props[ClusterListener], name = "cluster-listener")
   system.eventStream.subscribe(brewer, classOf[Command])
   system.eventStream.subscribe(brewer, classOf[State])
   system.eventStream.subscribe(brewer, classOf[Event])
