@@ -42,13 +42,13 @@ class RouterTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("router") {
-    for(i: Int <- 1 to 30) {
-      whatTimeIsIt(i)
+    for(i <- 1 to 30) {
+      whatTimeIsIt()
     }
   }
 
-  def whatTimeIsIt(i: Int): Unit = {
-    val future = ask(clock, s"($i) time is:").mapTo[String]
+  def whatTimeIsIt(): Unit = {
+    val future = ask(clock, s"time is:").mapTo[String]
     assert(Await.result(future, 1 second).nonEmpty)
   }
 }
