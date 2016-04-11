@@ -1,5 +1,7 @@
 package words
 
+import Words._
+
 import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.cluster.Cluster
 import akka.cluster.ClusterEvent.MemberUp
@@ -26,9 +28,5 @@ class Worker extends Actor with ActorLogging {
   override def receive: Receive = {
     case countWords: CountWords => sender ! WordsCounted(countWords.id, toWordCount(countWords.words))
     case MemberUp(member) if member.hasRole("master") => masters :+ member
-  }
-
-  def toWordCount(words: Array[String]): Map[String, Int] = {
-    words.groupBy((word: String) => word.toLowerCase).mapValues(_.length)
   }
 }
