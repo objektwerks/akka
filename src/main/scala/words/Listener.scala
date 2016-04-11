@@ -9,6 +9,8 @@ import akka.util.Timeout
 import scala.concurrent.duration._
 
 class Listener extends Actor with ActorLogging {
+  implicit val ec = context.system.dispatcher
+  implicit val timeout = Timeout(3 seconds)
   val router = {
     val routees = Vector.fill(2) {
       val master = context.actorOf(Props[Master])
@@ -18,8 +20,6 @@ class Listener extends Actor with ActorLogging {
     Router(RoundRobinRoutingLogic(), routees)
   }
 
-  implicit val ec = context.system.dispatcher
-  implicit val timeout = Timeout(3 seconds)
   context.system.scheduler.schedule(2 seconds, 2 seconds) {
     router.route(CountWords(left), sender)
     router.route(CountWords(right), sender)
