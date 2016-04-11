@@ -18,14 +18,14 @@ class Worker extends Actor with ActorLogging {
   override def postStop(): Unit = cluster.unsubscribe(self)
 
   implicit val ec = context.system.dispatcher
-  context.system.scheduler.schedule(3 seconds, 3 seconds) {
+  context.system.scheduler.schedule(4 seconds, 4 seconds) {
     implicit val timeout = Timeout(3 seconds)
     if (masters.nonEmpty) masters(random.nextInt(masters.length)) ! ReadyForWork
   }
 
   def receive = {
     case countWords: CountWords => sender ! WordsCounted(toWordCount(countWords.words))
-    case MemberUp(master) => masters :+ master
+    case MemberUp(member) if member.hasRole("master") => masters :+ member
   }
 
   def toWordCount(words: Array[String]): Map[String, Int] = {

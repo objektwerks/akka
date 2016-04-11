@@ -2,14 +2,13 @@ package words
 
 import akka.actor.{Actor, ActorLogging}
 
-import scala.io.Source
-
 // Make persistent.
 class Master extends Actor with ActorLogging {
-  val words = Source.fromInputStream(getClass.getResourceAsStream("/license.mit")).mkString.split("\\P{L}+")
+  val countWords = Seq.empty[CountWords]
 
   def receive = {
-    case readyForWork: ReadyForWork => sender ! CountWords(words)
+    case workRequest: CountWords => countWords :+ workRequest
+    case readyForWork: ReadyForWork if countWords.nonEmpty => sender ! countWords.head
     case wordsCounted: WordsCounted => context.system.log.info(wordsCounted.toString)
   }
 }
