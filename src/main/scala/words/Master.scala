@@ -25,6 +25,6 @@ class Master extends PersistentActor with ActorLogging {
   override def receiveRecover: Receive = {
     case countWords: CountWords => commands.add(countWords)
     case SnapshotOffer(_, snapshot: Commands) => commands = snapshot
-    case RecoveryCompleted => log.info("Command snapshot recovery completed.")
+    case RecoveryCompleted => log.info("Command recovery completed.")
   }
 }
