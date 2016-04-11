@@ -2,12 +2,14 @@ package words
 
 import akka.actor.{Actor, ActorLogging}
 
+import scala.collection.mutable
+
 class Master extends Actor with ActorLogging {
-  val countWords = Seq.empty[CountWords]
+  val state = mutable.Queue.empty[CountWords]
 
   def receive = {
-    case workRequest: CountWords => countWords :+ workRequest
-    case readyForWork: ReadyForWork if countWords.nonEmpty => sender ! countWords.head
+    case countWords: CountWords => state enqueue countWords
+    case readyForWork: ReadyForWork if state.nonEmpty => sender ! state.dequeue
     case wordsCounted: WordsCounted => context.system.log.info(wordsCounted.toString)
   }
 }
