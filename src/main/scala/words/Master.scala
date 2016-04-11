@@ -18,13 +18,15 @@ class Master extends PersistentActor with ActorLogging {
       self ! Snapshot
       publisher.publish(wordsCounted)
     case Snapshot => saveSnapshot(commands)
-    case SaveSnapshotSuccess(metadata) => log.info(s"Command snapshot success: $metadata")
-    case SaveSnapshotFailure(metadata, reason) => log.error(s"Command snapshot failure: $metadata; $reason")
+    case SaveSnapshotSuccess(metadata) => log.info(s"Save snapshot success: $metadata")
+    case SaveSnapshotFailure(metadata, reason) => log.error(s"Save snapshot failure: $metadata; $reason")
   }
 
   override def receiveRecover: Receive = {
     case countWords: CountWords => commands.add(countWords)
-    case SnapshotOffer(_, snapshot: Commands) => commands = snapshot
-    case RecoveryCompleted => log.info("Command recovery completed.")
+    case SnapshotOffer(metadata, snapshot: Commands) =>
+      commands = snapshot
+      log.info(s"Snapshot Offer accepted: $metadata")
+    case RecoveryCompleted => log.info("Recovery completed.")
   }
 }
