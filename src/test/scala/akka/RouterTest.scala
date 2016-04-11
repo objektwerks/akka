@@ -13,7 +13,7 @@ import scala.concurrent.duration._
 
 class Clock extends Actor {
   var router = {
-    val routees = Vector.fill(3) {
+    val routees = Vector.fill(2) {
       val time = context.actorOf(Props[Time])
       context watch time
       ActorRefRoutee(time)
@@ -22,13 +22,13 @@ class Clock extends Actor {
   }
 
   def receive = {
-    case m: String => router.route(m, sender())
+    case timeIs: String => router.route(timeIs, sender)
   }
 }
 
 class Time extends Actor {
   def receive = {
-    case m: String => sender.tell(s"$m" + LocalTime.now().toString, context.parent)
+    case timeIs: String => sender.tell(s"$timeIs ${LocalTime.now().toString}", context.parent)
   }
 }
 
@@ -42,8 +42,13 @@ class RouterTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("router") {
-    assert(Await.result(clock ? "time a: ", 1 second).asInstanceOf[String].nonEmpty)
-    assert(Await.result(clock ? "time b: ", 1 second).asInstanceOf[String].nonEmpty)
-    assert(Await.result(clock ? "time c: ", 1 second).asInstanceOf[String].nonEmpty)
+    for(i: Int <- 1 to 30) {
+      whatTimeIsIt(i)
+    }
+  }
+
+  def whatTimeIsIt(i: Int): Unit = {
+    val future = ask(clock, s"($i) time is:").mapTo[String]
+    assert(Await.result(future, 1 second).nonEmpty)
   }
 }
