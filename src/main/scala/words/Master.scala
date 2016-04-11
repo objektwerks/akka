@@ -13,6 +13,7 @@ class Master extends PersistentActor with ActorLogging {
     case ReadyForWork if commands.nonEmpty => sender ! commands.head
     case wordsCounted: WordsCounted =>
       commands.remove(wordsCounted.commandId)
+      self ! Snapshot
       log.info(wordsCounted.toString)
     case Snapshot => saveSnapshot(commands)
     case SaveSnapshotSuccess(metadata) => log.info(s"Command snapshot success: $metadata")
