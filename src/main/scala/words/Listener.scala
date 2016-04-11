@@ -21,8 +21,8 @@ class Listener extends Actor with ActorLogging {
   override def postStop(): Unit = cluster.unsubscribe(self)
 
   implicit val ec = context.system.dispatcher
+  implicit val timeout = Timeout(3 seconds)
   context.system.scheduler.schedule(2 seconds, 2 seconds) {
-    implicit val timeout = Timeout(3 seconds)
     if (masters.nonEmpty) {
       masters(random.nextInt(masters.length)) ! CountWords(left)
       masters(random.nextInt(masters.length)) ! CountWords(right)
