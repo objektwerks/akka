@@ -24,7 +24,7 @@ class Worker extends Actor with ActorLogging {
   }
 
   def receive = {
-    case countWords: CountWords => sender ! WordsCounted(toWordCount(countWords.words))
+    case countWords: CountWords => sender ! WordsCounted(countWords.id, toWordCount(countWords.words))
     case MemberUp(member) if member.hasRole("master") => masters :+ member
   }
 

@@ -1,17 +1,21 @@
 package words
 
 import java.time.LocalTime
+import java.util.UUID
 
-// State
-final case class ReadyForWork(at: LocalTime = LocalTime.now)
+case class Id(uuid: String = UUID.randomUUID.toString)
 
-sealed trait Work {
+sealed trait State
+case object ReadyForWork extends State
+
+sealed trait Command {
+  def id: Id = Id()
   def assigned: LocalTime = LocalTime.now
-  def completed: Option[LocalTime]
 }
+final case class CountWords(words: Array[String]) extends Command
 
-// Command
-final case class CountWords(words: Array[String], completed: Option[LocalTime] = Some(LocalTime.now)) extends Work
-
-// Event
-final case class WordsCounted(counts: Map[String, Int], completed: Option[LocalTime] = Some(LocalTime.now)) extends Work
+sealed trait Event {
+  def commandId: Id
+  def completed: LocalTime = LocalTime.now
+}
+final case class WordsCounted(commandId: Id, counts: Map[String, Int]) extends Event
