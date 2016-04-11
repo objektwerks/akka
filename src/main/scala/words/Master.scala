@@ -2,7 +2,6 @@ package words
 
 import akka.actor.{Actor, ActorLogging}
 
-// Make persistent.
 class Master extends Actor with ActorLogging {
   val countWords = Seq.empty[CountWords]
 
