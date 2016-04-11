@@ -10,7 +10,7 @@ class Master extends PersistentActor with ActorLogging {
 
   override def receiveCommand: Receive = {
     case countWords: CountWords => persistAsync(countWords)(commands.add)
-    case ReadyForWork if commands.nonEmpty => sender ! commands.head
+    case ReadyForCommand if commands.nonEmpty => sender ! commands.head
     case wordsCounted: WordsCounted =>
       commands.remove(wordsCounted.commandId)
       self ! Snapshot

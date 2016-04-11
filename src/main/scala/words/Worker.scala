@@ -20,7 +20,7 @@ class Worker extends Actor with ActorLogging {
   implicit val ec = context.system.dispatcher
   context.system.scheduler.schedule(4 seconds, 4 seconds) {
     implicit val timeout = Timeout(3 seconds)
-    if (masters.nonEmpty) masters(random.nextInt(masters.length)) ! ReadyForWork
+    if (masters.nonEmpty) masters(random.nextInt(masters.length)) ! ReadyForCommand
   }
 
   def receive = {
