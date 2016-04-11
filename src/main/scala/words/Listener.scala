@@ -1,10 +1,9 @@
 package words
 
-import Words._
-
 import akka.actor.{Actor, ActorLogging, Props}
 import akka.routing.{ActorRefRoutee, RoundRobinRoutingLogic, Router}
 import akka.util.Timeout
+import words.Words._
 
 import scala.concurrent.duration._
 
