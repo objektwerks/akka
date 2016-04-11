@@ -1,6 +1,6 @@
 package words
 
-import java.time.LocalTime
+import java.time.LocalDateTime
 import java.util.UUID
 
 import scala.collection.mutable
@@ -12,7 +12,7 @@ case object ReadyForCommand extends State
 
 sealed trait Command {
   def id: Id = Id()
-  def assigned: LocalTime = LocalTime.now
+  def assigned: LocalDateTime = LocalDateTime.now
 }
 final case class CountWords(words: Array[String]) extends Command
 
@@ -31,6 +31,6 @@ final case class Commands() {
 
 sealed trait Event {
   def commandId: Id
-  def completed: LocalTime = LocalTime.now
+  def completed: LocalDateTime = LocalDateTime.now
 }
 final case class WordsCounted(commandId: Id, counts: Map[String, Int]) extends Event
