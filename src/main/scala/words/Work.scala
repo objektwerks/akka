@@ -5,7 +5,7 @@ import java.util.UUID
 
 import scala.collection.mutable
 
-case class Id(uuid: String = UUID.randomUUID.toString)
+final case class Id(uuid: String = UUID.randomUUID.toString)
 
 sealed trait State
 case object ReadyForWork extends State
@@ -16,7 +16,9 @@ sealed trait Command {
 }
 final case class CountWords(words: Array[String]) extends Command
 
-case class Commands(commands: mutable.ListMap[Id, Command] = mutable.ListMap.empty[Id, Command]) {
+final case class Commands() {
+  private val commands: mutable.ListMap[Id, Command] = mutable.ListMap.empty[Id, Command]
+
   def nonEmpty: Boolean = commands.nonEmpty
   def head: Command = {
     val (_, command) = commands.head
