@@ -19,12 +19,12 @@ class Listener extends Actor with ActorLogging {
     Router(RoundRobinRoutingLogic(), routees)
   }
 
-  context.system.scheduler.schedule(2 seconds, 2 seconds) {
+  context.system.scheduler.schedule(3 seconds, 1 second) {
     router.route(CountWords(left), sender)
     router.route(CountWords(right), sender)
   }
 
   override def receive: Receive = {
-    case wordsCounted: WordsCounted => log.info(s"Words Counted: ${wordsCounted.toString}")
+    case wordsCounted: WordsCounted => log.info(s"Words counted: ${wordsCounted.toString}")
   }
 }
