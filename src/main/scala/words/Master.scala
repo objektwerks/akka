@@ -26,7 +26,7 @@ class Master extends PersistentActor with ActorLogging {
     case countWords: CountWords => commands.add(countWords)
     case SnapshotOffer(metadata, snapshot: Commands) =>
       commands = snapshot
-      log.info(s"Snapshot Offer accepted: $metadata")
+      log.info(s"Snapshot offer accepted: $metadata")
     case RecoveryCompleted => log.info("Recovery completed.")
   }
 }
