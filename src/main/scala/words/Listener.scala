@@ -5,8 +5,8 @@ import akka.cluster.Cluster
 import akka.cluster.ClusterEvent.MemberUp
 import akka.util.Timeout
 
-import scala.io.Source
 import scala.concurrent.duration._
+import scala.io.Source
 import scala.util.Random
 
 class Listener extends Actor with ActorLogging {
