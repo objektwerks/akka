@@ -3,6 +3,8 @@ package words
 import java.time.LocalTime
 import java.util.UUID
 
+import scala.collection.mutable
+
 case class Id(uuid: String = UUID.randomUUID.toString)
 
 sealed trait State
@@ -13,6 +15,17 @@ sealed trait Command {
   def assigned: LocalTime = LocalTime.now
 }
 final case class CountWords(words: Array[String]) extends Command
+
+case class Commands(commands: mutable.ListMap[Id, Command] = mutable.ListMap.empty[Id, Command]) {
+  def nonEmpty: Boolean = commands.nonEmpty
+  def head: Command = {
+    val (_, command) = commands.head
+    add(command)
+    command
+  }
+  def add(command: Command): Unit = commands += command.id -> command
+  def remove(id: Id): Unit = commands -= id
+}
 
 sealed trait Event {
   def commandId: Id
