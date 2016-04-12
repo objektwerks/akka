@@ -7,13 +7,11 @@ import scala.collection.mutable
 
 final case class Id(uuid: String = UUID.randomUUID.toString)
 
-sealed trait State
-case class ReadyToCountWords(count: Int = 1) extends State
-
 sealed trait Command {
   def id: Id = Id()
   def assigned: LocalDateTime = LocalDateTime.now
 }
+case object RegisterWorker extends Command
 final case class CountWords(words: Array[String]) extends Command
 
 final case class Commands() {
