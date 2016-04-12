@@ -42,6 +42,6 @@ class Master extends PersistentActor with ActorLogging {
   }
 
   private def sendCommand(): Unit = {
-    if (workers.nonEmpty) workers(random.nextInt(workers.length)) ! commands.head
+    if (workers.nonEmpty) workers(random.nextInt(workers.length)) ! commands.headAsCopy
   }
 }

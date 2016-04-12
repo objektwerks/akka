@@ -18,7 +18,7 @@ final case class Commands() {
   private val commands: mutable.ListMap[Id, Command] = mutable.ListMap.empty[Id, Command]
 
   def nonEmpty: Boolean = commands.nonEmpty
-  def head: Command = {
+  def headAsCopy: Command = {
     val (_, command) = commands.head
     add(command)
     command
