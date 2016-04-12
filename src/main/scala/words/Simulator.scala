@@ -21,7 +21,7 @@ class Simulator extends Actor with ActorLogging {
   }
 
   Cluster(context.system).registerOnMemberUp {
-    context.system.scheduler.schedule(3 seconds, 1 second) {
+    context.system.scheduler.schedule(2 seconds, 2 seconds) {
       router.route(CountWords(left), sender)
       router.route(CountWords(right), sender)
     }

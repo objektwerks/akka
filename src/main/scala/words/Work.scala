@@ -23,7 +23,8 @@ final case class Commands() {
 }
 
 sealed trait Event {
-  def commandId: Id
+  def id: Id
+  def assigned: LocalDateTime
   def completed: LocalDateTime = LocalDateTime.now
 }
-final case class WordsCounted(commandId: Id, counts: Map[String, Int]) extends Event
+final case class WordsCounted(id: Id, assigned: LocalDateTime, words: Array[String], counts: Map[String, Int]) extends Event

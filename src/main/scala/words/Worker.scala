@@ -4,7 +4,6 @@ import akka.actor.{Actor, ActorLogging, RootActorPath}
 import akka.cluster.ClusterEvent.{CurrentClusterState, MemberUp}
 import akka.cluster.{Cluster, Member, MemberStatus}
 
-// Make persistent
 class Worker extends Actor with ActorLogging {
   val cluster = Cluster(context.system)
 
@@ -13,7 +12,7 @@ class Worker extends Actor with ActorLogging {
   override def postStop(): Unit = cluster.unsubscribe(self)
 
   override def receive: Receive = {
-    case countWords: CountWords => sender ! WordsCounted(countWords.id, toWordCount(countWords.words))
+    case countWords: CountWords => sender ! WordsCounted(countWords.id, countWords.assigned, countWords.words, toWordCount(countWords.words))
     case state: CurrentClusterState => state.members.filter(_.status == MemberStatus.Up) foreach register
     case MemberUp(member) => register(member)
   }
