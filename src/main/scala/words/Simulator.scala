@@ -8,7 +8,7 @@ import words.Words._
 
 import scala.concurrent.duration._
 
-class Listener extends Actor with ActorLogging {
+class Simulator extends Actor with ActorLogging {
   implicit val ec = context.system.dispatcher
   implicit val timeout = Timeout(3 seconds)
   val router = {

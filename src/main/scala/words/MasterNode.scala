@@ -4,6 +4,6 @@ import akka.actor.Props
 import cluster.Node
 
 object MasterNode extends Node {
-  val listener = system.actorOf(Props[Listener], name = "listener")
-  system.eventStream.subscribe(listener, classOf[WordsCounted])
+  val simulator = system.actorOf(Props[Simulator], name = "simulator")
+  system.eventStream.subscribe(simulator, classOf[WordsCounted])
 }
