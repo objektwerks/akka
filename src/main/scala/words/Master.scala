@@ -46,13 +46,17 @@ class Master extends PersistentActor with ActorLogging {
   private def sendCommand(): Unit = {
     if (workers.nonEmpty) {
       val worker = workers(random.nextInt(workers.length))
-      val reliableProxy = new ReliableProxy(
-        targetPath = worker.path,
-        retryAfter = 500 millis,
-        reconnectAfter = None,
-        maxConnectAttempts = None)
-      val workerProxy = context.system.actorOf(Props(reliableProxy), "worker-proxy")
+      val workerProxy = createWorkerProxy(worker)
       workerProxy ! commands.headAsCopy
     }
+  }
+
+  private def createWorkerProxy(worker: ActorRef): ActorRef = {
+    val reliableProxy = new ReliableProxy(
+      targetPath = worker.path,
+      retryAfter = 500 millis,
+      reconnectAfter = None,
+      maxConnectAttempts = None)
+    context.system.actorOf(Props(reliableProxy), "worker-proxy")
   }
 }
