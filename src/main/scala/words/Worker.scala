@@ -19,15 +19,15 @@ class Worker extends Actor with ActorLogging {
   override def receive: Receive = {
     case countWords: CountWords =>
       sender ! WordsCounted(countWords.id, toWordCount(countWords.words))
-      readyForCommand()
+      readyToCountWords()
     case state: CurrentClusterState =>
       state.members.filter(_.status == MemberStatus.Up).filter(_.hasRole("master")) foreach registerMember
     case MemberUp(member) if member.hasRole("master") =>
       registerMember(member)
-      readyForCommand()
+      readyToCountWords()
     case MemberRemoved(member, previousStatus) if member.hasRole("master") =>
       unregisterMember(member)
-      readyForCommand()
+      readyToCountWords()
   }
 
   private def registerMember(member: Member): Unit = {
@@ -38,10 +38,11 @@ class Worker extends Actor with ActorLogging {
     if (!masters.contains(member)) masters -= member
   }
 
-  private def readyForCommand(): Unit = {
+  private def readyToCountWords(): Unit = {
     if (masters.nonEmpty) {
       val address = masters(random.nextInt(masters.length)).address.toString
-      context.actorSelection(address) ! ReadyForCommand
+      val count = masters.size
+      context.actorSelection(address) ! ReadyToCountWords(count)
     }
   }
 
