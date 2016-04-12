@@ -1,6 +1,7 @@
 package words
 
 import akka.actor.{Actor, ActorLogging, Props}
+import akka.cluster.Cluster
 import akka.routing.{ActorRefRoutee, RoundRobinRoutingLogic, Router}
 import akka.util.Timeout
 import words.Words._
@@ -19,9 +20,11 @@ class Listener extends Actor with ActorLogging {
     Router(RoundRobinRoutingLogic(), routees)
   }
 
-  context.system.scheduler.schedule(3 seconds, 1 second) {
-    router.route(CountWords(left), sender)
-    router.route(CountWords(right), sender)
+  Cluster(context.system).registerOnMemberUp {
+    context.system.scheduler.schedule(3 seconds, 1 second) {
+      router.route(CountWords(left), sender)
+      router.route(CountWords(right), sender)
+    }
   }
 
   override def receive: Receive = {

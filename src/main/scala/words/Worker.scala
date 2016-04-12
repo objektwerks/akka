@@ -12,7 +12,7 @@ class Worker extends Actor with ActorLogging {
   val masters = mutable.ArrayBuffer.empty[Member]
   val random = new Random
 
-  override def preStart(): Unit = cluster.subscribe(self, classOf[MemberUp])
+  override def preStart(): Unit = cluster.subscribe(self, classOf[MemberUp], classOf[MemberRemoved])
 
   override def postStop(): Unit = cluster.unsubscribe(self)
 
