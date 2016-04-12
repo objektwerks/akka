@@ -20,13 +20,12 @@ class Master extends PersistentActor with ActorLogging {
       persistAsync(countWords)(commands.add)
       sendCommand()
     case wordsCounted: WordsCounted =>
-      commands.remove(wordsCounted.commandId)
-      self ! Snapshot
       publisher.publish(wordsCounted)
       sendCommand()
     case RegisterWorker if !workers.contains(sender) =>
       context watch sender
       workers = workers :+ sender
+      sendCommand()
     case Terminated(worker) => workers = workers.filterNot(_ == worker)
     case Snapshot => saveSnapshot(commands)
     case SaveSnapshotSuccess(metadata) => log.info(s"Save snapshot success: $metadata")
@@ -42,8 +41,8 @@ class Master extends PersistentActor with ActorLogging {
   }
 
   private def sendCommand(): Unit = {
-    if (workers.nonEmpty) {
-      workers(random.nextInt(workers.length)) ! commands.headAsCopy
+    if (workers.nonEmpty && commands.nonEmpty) {
+      workers(random.nextInt(workers.length)) ! commands.head
     }
   }
 }

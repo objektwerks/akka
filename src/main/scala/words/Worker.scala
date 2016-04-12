@@ -4,6 +4,7 @@ import akka.actor.{Actor, ActorLogging, RootActorPath}
 import akka.cluster.ClusterEvent.{CurrentClusterState, MemberUp}
 import akka.cluster.{Cluster, Member, MemberStatus}
 
+// Make persistent
 class Worker extends Actor with ActorLogging {
   val cluster = Cluster(context.system)
 
