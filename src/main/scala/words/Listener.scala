@@ -16,6 +16,8 @@ class Listener extends Actor with ActorLogging {
   override def receive: Receive = {
     case countWords: CountWords => router.route(countWords, sender)
     case wordsCounted: WordsCounted => log.info(s"Words counted: ${wordsCounted.toString}")
-    case WorkerUnavailable => log.error("Worker unavailable!")
+    case WorkerUnavailable =>
+      log.error("Worker unavailable!")
+      context.stop(self)
   }
 }
