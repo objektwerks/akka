@@ -1,12 +1,10 @@
 package words
 
-import akka.actor.{ActorLogging, ActorRef, Props, Terminated}
-import akka.contrib.pattern.ReliableProxy
+import akka.actor.{ActorLogging, ActorRef, Terminated}
 import akka.persistence._
 import akka.persistence.serialization.Snapshot
 
 import scala.collection.mutable
-import scala.concurrent.duration._
 import scala.util.Random
 
 class Master extends PersistentActor with ActorLogging {
@@ -45,18 +43,7 @@ class Master extends PersistentActor with ActorLogging {
 
   private def sendCommand(): Unit = {
     if (workers.nonEmpty) {
-      val worker = workers(random.nextInt(workers.length))
-      val workerProxy = createWorkerProxy(worker)
-      workerProxy ! commands.headAsCopy
+      workers(random.nextInt(workers.length)) ! commands.headAsCopy
     }
-  }
-
-  private def createWorkerProxy(worker: ActorRef): ActorRef = {
-    val reliableProxy = new ReliableProxy(
-      targetPath = worker.path,
-      retryAfter = 500 millis,
-      reconnectAfter = None,
-      maxConnectAttempts = None)
-    context.system.actorOf(Props(reliableProxy), "worker-proxy")
   }
 }
