@@ -12,7 +12,7 @@ class Worker extends Actor with ActorLogging {
   override def postStop(): Unit = cluster.unsubscribe(self)
 
   override def receive: Receive = {
-    case countWords: CountWords => sender ! WordsCounted(countWords.id, countWords.assigned, countWords.words, toWordCount(countWords.words))
+    case countWords: CountWords => sender ! WordsCounted(countWords.id, countWords.assigned, countWords.words, count(countWords.words))
     case state: CurrentClusterState => state.members.filter(_.status == MemberStatus.Up) foreach register
     case MemberUp(member) => register(member)
   }
@@ -23,7 +23,7 @@ class Worker extends Actor with ActorLogging {
     }
   }
 
-  private def toWordCount(words: Array[String]): Map[String, Int] = {
+  private def count(words: Array[String]): Map[String, Int] = {
     words.groupBy((word: String) => word.toLowerCase).mapValues(_.length)
   }
 }
