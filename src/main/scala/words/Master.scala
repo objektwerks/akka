@@ -6,14 +6,14 @@ import scala.collection.mutable
 import scala.util.Random
 
 class Master extends Actor with Stash with ActorLogging {
-  val publisher = context.system.eventStream
+  val listener = context.actorSelection("/user/listener")
   val workers = mutable.ArrayBuffer.empty[ActorRef]
   val random = new Random
 
   override def receive: Receive = {
     case countWords: CountWords if workers.isEmpty => sender ! WorkerUnavailable(countWords)
     case countWords: CountWords => workers(random.nextInt(workers.length)) ! countWords
-    case wordsCounted: WordsCounted => publisher.publish(wordsCounted)
+    case wordsCounted: WordsCounted => listener ! wordsCounted
     case RegisterWorker if !workers.contains(sender) =>
       context watch sender
       workers += sender
