@@ -1,21 +1,13 @@
 package words
 
-import akka.actor.{Actor, ActorLogging, Props}
-import akka.routing.{ActorRefRoutee, RoundRobinRoutingLogic, Router}
+import akka.actor.{Actor, ActorLogging}
 
 class Listener extends Actor with ActorLogging {
-  val router = {
-    val routees = Vector.fill(2) {
-      val master = context.actorOf(Props[Master])
-      context watch master
-      ActorRefRoutee(master)
-    }
-    Router(RoundRobinRoutingLogic(), routees)
-  }
+  val publisher = context.system.eventStream
 
   override def receive: Receive = {
-    case countWords: CountWords => router.route(countWords, sender)
-    case wordsCounted: WordsCounted => log.info(s"Words counted: ${wordsCounted.toString}")
-    case WorkerUnavailable(countWords) => log.error(s"Worker unavailable to process: $countWords")
+    case countWords: CountWords => publisher.publish(countWords)
+    case wordsCounted: WordsCounted => log.info(s"Words counted: $wordsCounted")
+    case WorkerUnavailable(countWords) => log.error(s"Worker unavailable: $countWords")
   }
 }

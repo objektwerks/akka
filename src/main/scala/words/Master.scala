@@ -7,8 +7,8 @@ import scala.util.Random
 
 class Master extends Actor with Stash with ActorLogging {
   val publisher = context.system.eventStream
-  val random = new Random
   val workers = mutable.ArrayBuffer.empty[ActorRef]
+  val random = new Random
 
   override def receive: Receive = {
     case countWords: CountWords if workers.isEmpty => sender ! WorkerUnavailable(countWords)

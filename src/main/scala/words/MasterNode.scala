@@ -9,6 +9,8 @@ import scala.concurrent.duration._
 
 object MasterNode extends Node {
   val listener = system.actorOf(Props[Listener], name = "listener")
+  val master = system.actorOf(Props[Master], name = "master")
+  system.eventStream.subscribe(master, classOf[CountWords])
   system.eventStream.subscribe(listener, classOf[WordsCounted])
 
   Cluster(system).registerOnMemberUp {
