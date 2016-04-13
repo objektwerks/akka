@@ -20,6 +20,5 @@ class Client extends Actor with ActorLogging {
   override def receive: Receive = {
     case request: Request => listener ! Request
     case response: Response => log.info(s"Response received: $response")
-    case WorkerUnavailable(countWords) => log.error(s"Worker unavailable: $countWords")
   }
 }
