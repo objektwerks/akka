@@ -1,8 +1,11 @@
 package words
 
 import akka.actor.Props
+import akka.cluster.Cluster
 import cluster.Node
 
 object WorkerNode extends Node {
-  system.actorOf(Props[Worker], name = "worker")
+  Cluster(system).registerOnMemberUp {
+    system.actorOf(Props[Worker], name = "worker")
+  }
 }
