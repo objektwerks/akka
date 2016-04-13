@@ -1,10 +1,10 @@
 package words
 
-import akka.actor.{Actor, ActorLogging, RootActorPath, Stash}
+import akka.actor.{Actor, ActorLogging, RootActorPath}
 import akka.cluster.ClusterEvent.{CurrentClusterState, MemberUp}
 import akka.cluster.{Cluster, Member, MemberStatus}
 
-class Worker extends Actor with Stash with ActorLogging {
+class Worker extends Actor with ActorLogging {
   val cluster = Cluster(context.system)
 
   override def preStart(): Unit = cluster.subscribe(self, classOf[MemberUp])

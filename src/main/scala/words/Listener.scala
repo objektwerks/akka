@@ -1,8 +1,8 @@
 package words
 
-import akka.actor.{Actor, ActorLogging, Stash}
+import akka.actor.{Actor, ActorLogging}
 
-class Listener extends Actor with Stash with ActorLogging {
+class Listener extends Actor with ActorLogging {
   val master = context.actorSelection("/user/master")
 
   override def receive: Receive = {

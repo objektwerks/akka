@@ -1,11 +1,11 @@
 package words
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Stash, Terminated}
+import akka.actor.{Actor, ActorLogging, ActorRef, Terminated}
 
 import scala.collection.mutable
 import scala.util.Random
 
-class Master extends Actor with Stash with ActorLogging {
+class Master extends Actor with ActorLogging {
   val listener = context.actorSelection("/user/listener")
   val workers = mutable.ArrayBuffer.empty[ActorRef]
   val random = new Random
