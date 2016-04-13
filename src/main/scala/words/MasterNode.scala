@@ -18,8 +18,7 @@ object MasterNode extends Node {
     implicit val ec = system.dispatcher
     implicit val timeout = Timeout(3 seconds)
     system.scheduler.schedule(3 seconds, 3 seconds) {
-      listener ! CountWords(left)
-      listener ! CountWords(right)
+      listener ! words
     }
   }
 }
