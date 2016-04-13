@@ -12,12 +12,11 @@ object MasterNode extends Node {
   system.actorOf(Props[Master], name = "master")
 
   Cluster(system).registerOnMemberUp {
-    import Words._
     implicit val ec = system.dispatcher
     implicit val timeout = Timeout(3 seconds)
     val listener = system.actorSelection("/user/listener")
     system.scheduler.schedule(3 seconds, 3 seconds) {
-      listener ! words
+      listener ! Request()
     }
   }
 }
