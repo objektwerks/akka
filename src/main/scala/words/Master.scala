@@ -11,7 +11,7 @@ class Master extends Actor with Stash with ActorLogging {
   val workers = mutable.ArrayBuffer.empty[ActorRef]
 
   override def receive: Receive = {
-    case countWords: CountWords if workers.isEmpty => sender ! WorkerUnavailable
+    case countWords: CountWords if workers.isEmpty => sender ! WorkerUnavailable(countWords)
     case countWords: CountWords => workers(random.nextInt(workers.length)) ! countWords
     case wordsCounted: WordsCounted => publisher.publish(wordsCounted)
     case RegisterWorker if !workers.contains(sender) =>

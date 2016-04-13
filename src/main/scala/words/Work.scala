@@ -8,7 +8,7 @@ import scala.collection.mutable
 final case class Id(uuid: String = UUID.randomUUID.toString)
 
 sealed trait State
-case object WorkerUnavailable extends State
+final case class WorkerUnavailable(countWords: CountWords) extends State
 
 sealed trait Command {
   def id: Id = Id()
