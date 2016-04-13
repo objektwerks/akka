@@ -6,7 +6,7 @@ import scala.collection.mutable
 import scala.util.Random
 
 class Master extends Actor with ActorLogging {
-  val listener = context.actorSelection("/user/listener")
+  val listener = context.parent
   val workers = mutable.ArrayBuffer.empty[ActorRef]
   val random = new Random
 
