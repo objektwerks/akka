@@ -31,3 +31,8 @@ sealed trait Event {
   def completed: LocalDateTime = LocalDateTime.now
 }
 final case class WordsCounted(id: Id, assigned: LocalDateTime, words: Array[String], counts: Map[String, Int]) extends Event
+object WordsCounted {
+  def apply(countWords: CountWords, counts: Map[String, Int]): WordsCounted = {
+    WordsCounted(countWords.id, countWords.assigned, countWords.words, counts)
+  }
+}
