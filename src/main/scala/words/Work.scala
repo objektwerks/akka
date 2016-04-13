@@ -6,6 +6,11 @@ import java.util.UUID
 final case class Request(uuid: String = UUID.randomUUID.toString, words: Array[String] = Words.words)
 
 final case class Response(uuid: String, assigned: LocalDateTime, completed: LocalDateTime, words: Array[String], counts: Map[String, Int])
+object Response {
+  def apply(wordsCounted: WordsCounted): Response = {
+    Response(wordsCounted.uuid, wordsCounted.assigned, wordsCounted.completed, wordsCounted.words, wordsCounted.counts)
+  }
+}
 
 case object RegisterWorker
 
