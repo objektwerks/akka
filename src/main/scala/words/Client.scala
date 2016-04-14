@@ -10,7 +10,7 @@ class Client extends Actor with ActorLogging {
   implicit val timeout = Timeout(3 seconds)
   val listener = context.actorSelection("/user/listener")
 
-  context.system.scheduler.schedule(3 seconds, 1 second) {
+  context.system.scheduler.schedule(3 seconds, 3 seconds) {
     self ! Request()
   }
 
