@@ -1,6 +1,6 @@
 package words
 
-import akka.actor.{Actor, ActorLogging, Props, SupervisorStrategy}
+import akka.actor.{Actor, ActorLogging, Props}
 
 class Listener extends Actor with ActorLogging {
   val client = context.actorSelection("/user/client")
