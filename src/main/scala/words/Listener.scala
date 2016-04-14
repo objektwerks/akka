@@ -9,7 +9,7 @@ class Listener extends Actor with ActorLogging {
   override def supervisorStrategy: SupervisorStrategy = SupervisorStrategy.stoppingStrategy
 
   override def receive: Receive = {
-    case request: Request => request.words.foreach { words => master ! CountWords(request.uuid, words) }
+    case request: Request => request.words foreach { words => master ! CountWords(request.uuid, words) }
     case wordsCounted: WordsCounted => client ! Response(wordsCounted)
     case WorkerUnavailable(countWords) => log.error(s"Worker unavailable: $countWords")
   }
