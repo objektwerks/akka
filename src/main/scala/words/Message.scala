@@ -15,6 +15,8 @@ object Response {
   }
 }
 
+final case class Fault(cause: String)
+
 final case class ListOfCountWords(list: List[CountWords])
 
 sealed trait Command {

@@ -14,6 +14,6 @@ class Listener extends Actor with ActorLogging {
       master ! listOfCountWords
       context.watch(master)
     case wordsCounted: WordsCounted => client ! Response(wordsCounted)
-    case Terminated(master) => log.error(s"Master terminate: $master")
+    case Terminated(master) => client ! Fault(s"Master: ${master.path.name} failed!")
   }
 }
