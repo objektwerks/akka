@@ -5,8 +5,6 @@ import akka.actor.{Actor, ActorLogging, Props, SupervisorStrategy}
 class Listener extends Actor with ActorLogging {
   val client = context.actorSelection("/user/client")
 
-  override def supervisorStrategy: SupervisorStrategy = SupervisorStrategy.stoppingStrategy
-
   override def receive: Receive = {
     case request: Request =>
       val master = context.actorOf(Props[Master], name = s"master-${request.uuid}")
