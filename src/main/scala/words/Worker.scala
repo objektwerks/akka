@@ -23,7 +23,7 @@ class Worker extends Actor with ActorLogging {
     }
   }
 
-  private def count(words: Array[String]): Map[String, Int] = {
+  private def count(words: List[String]): Map[String, Int] = {
     words.groupBy((word: String) => word.toLowerCase).mapValues(_.length)
   }
 }

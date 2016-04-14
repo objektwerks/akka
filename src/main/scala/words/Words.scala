@@ -3,6 +3,6 @@ package words
 import scala.io.Source
 
 object Words {
-  val words = Source.fromInputStream(getClass.getResourceAsStream("/license.mit")).mkString.split("\\P{L}+")
-  val (left, right) = words.splitAt(words.size / 2)
+  val list = Source.fromInputStream(getClass.getResourceAsStream("/license.mit")).mkString.split("\\P{L}+").toList
+  val words = list.sliding(8).toList
 }

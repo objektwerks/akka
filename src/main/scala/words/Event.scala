@@ -8,7 +8,7 @@ sealed trait Event {
   def completed: LocalDateTime = LocalDateTime.now
 }
 
-final case class WordsCounted(uuid: String, assigned: LocalDateTime, words: Array[String], counts: Map[String, Int]) extends Event
+final case class WordsCounted(uuid: String, assigned: LocalDateTime, words: List[String], counts: Map[String, Int]) extends Event
 
 object WordsCounted {
   def apply(countWords: CountWords, counts: Map[String, Int]): WordsCounted = {

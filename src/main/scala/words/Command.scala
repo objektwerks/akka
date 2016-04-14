@@ -7,4 +7,4 @@ sealed trait Command {
   def assigned: LocalDateTime = LocalDateTime.now
 }
 
-final case class CountWords(uuid: String, words: Array[String]) extends Command
+final case class CountWords(uuid: String, words: List[String]) extends Command
