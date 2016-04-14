@@ -5,8 +5,6 @@ import java.util.UUID
 
 final case class Request(uuid: String = UUID.randomUUID.toString, words: List[List[String]] = Words.words)
 
-final case class ListOfCountWords(list: List[CountWords])
-
 final case class Response(uuid: String, assigned: LocalDateTime, completed: LocalDateTime, words: List[String], counts: Map[String, Int])
 
 object Response {
@@ -14,6 +12,8 @@ object Response {
     Response(wordsCounted.uuid, wordsCounted.assigned, wordsCounted.completed, wordsCounted.words, wordsCounted.counts)
   }
 }
+
+final case class ListOfCountWords(list: List[CountWords])
 
 sealed trait Command {
   def uuid: String
