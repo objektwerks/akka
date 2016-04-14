@@ -41,7 +41,7 @@ object WordsCounted {
     WordsCounted(countWords.uuid, countWords.assigned, countWords.words, counts)
   }
 
-  def merge(listOfWordsCounted: List[WordsCounted]): Map[String, Int] = {
+  def merge(listOfWordsCounted: ArrayBuffer[WordsCounted]): Map[String, Int] = {
     listOfWordsCounted.groupBy(_.counts.head._1).map { case (k, v) => k -> v.map(_.counts.head._2).sum }
   }
 }

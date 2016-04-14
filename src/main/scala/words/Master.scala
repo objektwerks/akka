@@ -24,6 +24,6 @@ class Master extends Actor with ActorLogging {
     case wordsCounted: WordsCounted =>
       listOfWordsCounted += wordsCounted
       numberOfCountWords = numberOfCountWords - 1
-      if (numberOfCountWords == 0) listener ! WordsCounted.merge(listOfWordsCounted.toList)
+      if (numberOfCountWords == 0) listener ! WordsCounted.merge(listOfWordsCounted)
   }
 }
