@@ -1,10 +1,11 @@
 package words
 
-import akka.actor.{Actor, ActorLogging, Props, SupervisorStrategy}
+import akka.actor.{Actor, ActorLogging, Props, ReceiveTimeout, SupervisorStrategy}
 import akka.cluster.routing.{ClusterRouterPool, ClusterRouterPoolSettings}
 import akka.routing.BroadcastPool
 
 import scala.collection.mutable
+import scala.concurrent.duration._
 
 class Master extends Actor with ActorLogging {
   val listener = context.parent
@@ -21,9 +22,11 @@ class Master extends Actor with ActorLogging {
     case listOfCountWords: ListOfCountWords =>
       numberOfCountWords = listOfCountWords.list.length
       listOfCountWords.list foreach { countWords => router ! countWords }
+      context.setReceiveTimeout(30 seconds)
     case wordsCounted: WordsCounted =>
       listOfWordsCounted += wordsCounted
       numberOfCountWords = numberOfCountWords - 1
       if (numberOfCountWords == 0) listener ! WordsCounted.merge(listOfWordsCounted)
+    case ReceiveTimeout => listener ! Fault(s"Master: ${self.path.name} failed!")
   }
 }
