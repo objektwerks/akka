@@ -25,6 +25,6 @@ class Master extends Actor with ActorLogging {
       numberOfCountWords = numberOfCountWords - 1
       if (numberOfCountWords == 0) listener ! WordsCounted.merge(listOfWordsCounted)
     case ReceiveTimeout => listener ! Fault(s"Master: ${self.path.name} timed out!")
-    case _ => listener ! Fault(s"Master: ${self.path.name} failed for unknown reason!")
+    case _ => listener ! Fault(s"Master: ${self.path.name} from ${sender.path.name} failed for unknown reason!")
   }
 }
