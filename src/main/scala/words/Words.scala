@@ -8,6 +8,6 @@ object Words {
     .mkString
     .split("\\P{L}+")
     .toList
-    .sliding(8)
+    .sliding(21)
     .toList
 }
