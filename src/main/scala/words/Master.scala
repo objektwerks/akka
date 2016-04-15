@@ -1,6 +1,6 @@
 package words
 
-import java.util.UUID
+import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.{Actor, ActorLogging, Props, ReceiveTimeout, SupervisorStrategy}
 import akka.cluster.routing.{ClusterRouterPool, ClusterRouterPoolSettings}
@@ -9,11 +9,16 @@ import akka.routing.RoundRobinPool
 import scala.collection.mutable
 import scala.concurrent.duration._
 
+object Master {
+  private val routerNmumber = new AtomicInteger()
+  def nextRouterNumber: Int = routerNmumber.incrementAndGet()
+}
+
 class Master extends Actor with ActorLogging {
   val listener = context.parent
   val settings = ClusterRouterPoolSettings(totalInstances = 4, maxInstancesPerNode = 2, allowLocalRoutees = false, useRole = Some("worker"))
   val pool = RoundRobinPool(nrOfInstances = 4, supervisorStrategy = SupervisorStrategy.stoppingStrategy)
-  val router = context.actorOf(ClusterRouterPool(pool, settings).props(Props[Worker]), name = s"router-${UUID.randomUUID.toString}")
+  val router = context.actorOf(ClusterRouterPool(pool, settings).props(Props[Worker]), name = s"router-${Master.nextRouterNumber}")
   val listOfWordsCounted = mutable.ArrayBuffer.empty[WordsCounted]
   var numberOfCountWords = 0
   log.info(s"Master [${self.path.name}] created by Listener.")
