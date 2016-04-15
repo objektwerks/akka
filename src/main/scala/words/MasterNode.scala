@@ -22,9 +22,6 @@ object MasterNode extends Node {
   Cluster(system).registerOnMemberUp {
     implicit val ec = system.dispatcher
     implicit val timeout = Timeout(60 seconds)
-    system.scheduler.schedule(30 seconds, 9 seconds) {
-      system.log.info("MasterNode sent simulated request to Client.")
-      listener ! Request()
-    }
+    system.scheduler.schedule(30 seconds, 9 seconds, listener, Request())
   }
 }
