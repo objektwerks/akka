@@ -9,19 +9,19 @@ import scala.concurrent.duration._
 
 class Master extends Actor with ActorLogging {
   val listener = context.parent
-  val settings = ClusterRouterPoolSettings(totalInstances = 2, maxInstancesPerNode = 1, allowLocalRoutees = false, useRole = Some("worker"))
-  val pool = RoundRobinPool(nrOfInstances = 2, supervisorStrategy = SupervisorStrategy.stoppingStrategy)
+  val settings = ClusterRouterPoolSettings(totalInstances = 4, maxInstancesPerNode = 2, allowLocalRoutees = false, useRole = Some("worker"))
+  val pool = RoundRobinPool(nrOfInstances = 4, supervisorStrategy = SupervisorStrategy.stoppingStrategy)
   val router = context.actorOf(ClusterRouterPool(pool, settings).props(Props[Worker]), name = "worker-router")
   val listOfWordsCounted = mutable.ArrayBuffer.empty[WordsCounted]
   var numberOfCountWords = 0
+  log.info(s"Master [${self.path.name}] created by Listener.")
 
   override def receive: Receive = {
     case listOfCountWords: ListOfCountWords =>
-      log.info("Master received list of count words.")
+      log.info("Master received list of count words, and routed it to workers.")
       numberOfCountWords = listOfCountWords.list.length
       listOfCountWords.list foreach { countWords => router ! countWords }
-      log.info("Master routed list of count words to workers.")
-      context.setReceiveTimeout(30 seconds)
+      context.setReceiveTimeout(60 seconds)
     case wordsCounted: WordsCounted =>
       log.info("Master received words counted.")
       listOfWordsCounted += wordsCounted

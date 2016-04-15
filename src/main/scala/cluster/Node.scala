@@ -11,24 +11,24 @@ abstract class Node extends App {
   implicit val timeout = Timeout(10 seconds)
 
   if (args.length < 3) {
-    println("Please, provide a (1) port; (2) role; and (3) conf file name.")
+    println("Please, provide a (1) conf; (2) port; and (3) role.")
     System.exit(-1)
   }
 
   val conf = args(0)
   val port = args(1).toInt
   val actorSystemName = args(2)
-  println(s"Loading conf: $conf on port: $port for system: $actorSystemName.")
+  println(s"Loading conf: $conf on port: $port for $actorSystemName.")
 
   val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port = $port").withFallback(ConfigFactory.load(conf))
 
   val system = ActorSystem.create(actorSystemName, config)
   system.actorOf(Props[ClusterListener], name = "cluster-listener")
-  system.log.info(s"Node initialized with $conf for system: $actorSystemName on port: $port!")
+  system.log.info(s"Node initialized with $conf on port: $port for $actorSystemName!")
 
   sys.addShutdownHook {
     implicit val ec = system.dispatcher
-    system.log.info(s"Node terminated on port: $port for system: $actorSystemName.")
+    system.log.info(s"Node terminated with $conf on port: $port for $actorSystemName.")
     Await.result(system.terminate(), 3 seconds)
   }
 }
