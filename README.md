@@ -61,11 +61,11 @@ Run
 
 Run Main
 --------
-1. sbt "runMain cluster.SeedNode words-seed-node.conf 2151 seed"
-2. sbt "runMain cluster.SeedNode words-seed-node.conf 2152 seed"
-3. sbt "runMain words.WorkerNode worker.conf 2153 worker"
-4. sbt "runMain words.WorkerNode worker.conf 2154 worker"
-5. sbt "runMain words.MasterNode master.conf 2155 master"
+1. sbt "runMain cluster.SeedNode words-seed-node.conf 2151 words"
+2. sbt "runMain cluster.SeedNode words-seed-node.conf 2152 words"
+3. sbt "runMain words.WorkerNode worker.conf 2153 words"
+4. sbt "runMain words.WorkerNode worker.conf 2154 words"
+5. sbt "runMain words.MasterNode master.conf 2155 words"
 
 Output
 ------

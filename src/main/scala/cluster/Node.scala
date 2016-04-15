@@ -17,18 +17,18 @@ abstract class Node extends App {
 
   val conf = args(0)
   val port = args(1).toInt
-  val actorSystemName = args(2)
-  println(s"Loading conf: $conf on port: $port for $actorSystemName.")
+  val actorSystem = args(2)
+  println(s"Loading conf: $conf on port: $port for $actorSystem.")
 
   val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port = $port").withFallback(ConfigFactory.load(conf))
 
-  val system = ActorSystem.create(actorSystemName, config)
+  val system = ActorSystem.create(actorSystem, config)
   system.actorOf(Props[ClusterListener], name = "cluster-listener")
-  system.log.info(s"Node initialized with $conf on port: $port for $actorSystemName!")
+  system.log.info(s"Node initialized with $conf on port: $port for $actorSystem!")
 
   sys.addShutdownHook {
     implicit val ec = system.dispatcher
-    system.log.info(s"Node terminated with $conf on port: $port for $actorSystemName.")
+    system.log.info(s"Node terminated with $conf on port: $port for $actorSystem.")
     Await.result(system.terminate(), 3 seconds)
   }
 }

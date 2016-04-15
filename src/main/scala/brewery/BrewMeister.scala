@@ -14,8 +14,8 @@ import scalafx.scene.layout.VBox
 import scalafx.scene.text.Text
 
 object BrewMeister extends JFXApp {
-  val seedNode2551 = new EmbeddedSeedNode(conf = "brewery-seed-node.conf", port = 2551, actorSystemName = "brewery")
-  val seedNode2552 = new EmbeddedSeedNode(conf = "brewery-seed-node.conf", port = 2552, actorSystemName = "brewery")
+  val seedNode2551 = new EmbeddedSeedNode(conf = "brewery-seed-node.conf", port = 2551, actorSystem = "brewery")
+  val seedNode2552 = new EmbeddedSeedNode(conf = "brewery-seed-node.conf", port = 2552, actorSystem = "brewery")
   sys.addShutdownHook(seedNode2551.terminate())
   sys.addShutdownHook(seedNode2552.terminate())
 
