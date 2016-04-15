@@ -26,7 +26,7 @@ sealed trait Command {
 
 final case class CountWords(uuid: String, words: List[String]) extends Command {
   def count: Map[String, Int] = {
-    words.groupBy((word: String) => word.toLowerCase).mapValues(_.length)
+    words.groupBy((word: String) => word.toLowerCase).mapValues(_.length).map(identity)
   }
 }
 
