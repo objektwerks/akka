@@ -8,7 +8,7 @@ class Listener extends Actor with ActorLogging {
   override def receive: Receive = {
     case request: Request =>
       log.info(s"Listener received request from Client.")
-      val master = context.actorOf(Props[Master], name = s"master-${request.uuid}")
+      val master = context.system.actorOf(Props[Master], name = s"master-${request.uuid}")
       log.info(s"Listener created Master [${master.path.name}].")
       val listOfCountWords = ListOfCountWords(request.words map { words => CountWords(request.uuid, words) })
       master ! listOfCountWords
