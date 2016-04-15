@@ -17,6 +17,5 @@ class ClusterListener extends Actor with ActorLogging {
 
   override def receive: Receive = {
     case event: ClusterDomainEvent => log.info(s"$event")
-    case state: CurrentClusterState => log.info(s"$state")
   }
 }
