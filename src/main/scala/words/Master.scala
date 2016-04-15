@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import akka.actor.{Actor, ActorLogging, Props, ReceiveTimeout, SupervisorStrategy}
 import akka.cluster.routing.{ClusterRouterPool, ClusterRouterPoolSettings}
 import akka.routing.RoundRobinPool
+import akka.util.Timeout
 
 import scala.collection.mutable
 import scala.concurrent.duration._
@@ -15,6 +16,8 @@ object Master {
 }
 
 class Master extends Actor with ActorLogging {
+  implicit val ec = context.dispatcher
+  implicit val timeout = Timeout(30 seconds)
   val listener = context.parent
   val settings = ClusterRouterPoolSettings(totalInstances = 4, maxInstancesPerNode = 2, allowLocalRoutees = false, useRole = Some("worker"))
   val pool = RoundRobinPool(nrOfInstances = 4, supervisorStrategy = SupervisorStrategy.stoppingStrategy)
@@ -27,8 +30,8 @@ class Master extends Actor with ActorLogging {
     case listOfCountWords: ListOfCountWords =>
       log.info("Master received list of count words, and routed it to workers.")
       numberOfCountWords = listOfCountWords.list.length
-      listOfCountWords.list foreach { countWords => router ! countWords }
-      context.setReceiveTimeout(60 seconds)
+      listOfCountWords.list foreach { countWords => context.system.scheduler.schedule(10 millis, 500 millis, router, countWords) }
+      context.setReceiveTimeout(30 seconds)
     case wordsCounted: WordsCounted =>
       log.info("Master received words counted.")
       listOfWordsCounted += wordsCounted
