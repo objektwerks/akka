@@ -12,11 +12,12 @@ class Client extends Actor with ActorLogging {
 
   context.system.scheduler.schedule(3 seconds, 3 seconds) {
     self ! Request()
+    log.info("Client sent request.")
   }
 
   override def receive: Receive = {
     case request: Request => listener ! Request
-    case response: Response => log.info(s"Response received: $response")
-    case fault: Fault => log.error(s"Fault received: $fault")
+    case response: Response => log.info(s"Client received response: $response")
+    case fault: Fault => log.error(s"Client received fault: $fault")
   }
 }

@@ -17,14 +17,24 @@ class Master extends Actor with ActorLogging {
 
   override def receive: Receive = {
     case listOfCountWords: ListOfCountWords =>
+      log.info("Master received list of count words.")
       numberOfCountWords = listOfCountWords.list.length
       listOfCountWords.list foreach { countWords => router ! countWords }
+      log.info("Master routed list of count words to workers.")
       context.setReceiveTimeout(30 seconds)
     case wordsCounted: WordsCounted =>
+      log.info("Master received words counted.")
       listOfWordsCounted += wordsCounted
       numberOfCountWords = numberOfCountWords - 1
-      if (numberOfCountWords == 0) listener ! WordsCounted.merge(listOfWordsCounted)
-    case ReceiveTimeout => listener ! Fault(s"Master: ${self.path.name} timed out!")
-    case _ => listener ! Fault(s"Master: ${self.path.name} from ${sender.path.name} failed for unknown reason!")
+      if (numberOfCountWords == 0) {
+        listener ! WordsCounted.merge(listOfWordsCounted)
+        log.info("Master merged listed of words counted, and sent to Listener.")
+      }
+    case ReceiveTimeout =>
+      log.error("Master received timeout, sent fault to Listener.")
+      listener ! Fault(s"Master: ${self.path.name} timed out!")
+    case _ =>
+      log.error("Master received unknown message, sent as fault to Listener.")
+      listener ! Fault(s"Master: ${self.path.name} from ${sender.path.name} failed for unknown reason!")
   }
 }
