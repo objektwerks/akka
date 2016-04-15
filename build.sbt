@@ -17,7 +17,6 @@ libraryDependencies ++= {
     "com.typesafe.akka" % "akka-http-spray-json-experimental_2.11" % akkaVersion,
     "org.iq80.leveldb" % "leveldb" % "0.7",
     "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
-    "io.kamon" % "sigar-loader" % "1.6.6-rev002",
     "org.scalafx" % "scalafx_2.11" % "8.0.60-R9",
     "ch.qos.logback" % "logback-classic" % "1.1.3",
     "com.typesafe.akka" % "akka-testkit_2.11" % akkaVersion % "test",
