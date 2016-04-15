@@ -4,33 +4,10 @@ Akka
 
 Words
 -----
->Akka cluster master-worker architecture that counts words.
-
->Client
-* client <--- request / response ( id | failure ) ---> rest
-* rest --- response ( id + result ) ---> client
-
->Trees
-* user / rest / * master
-* user / worker
-
->Messages
-* rest
-    * master ! request
-* master
-    * rest ! response
-* worker
-    * master ? work
-    * master ! result
-
->Watchers
-* master @ worker
-
->Cluster
-* cluster - 1
-    * seed nodes - 2
-    * master nodes - 2 : 1 rest, * master
-    * worker nodes - 2 : 1 worker
+>Akka cluster master-worker distributed app that counts words. Cluster topology:
+* seed nodes - 2
+* master nodes - 1
+* worker nodes - 2
 
 Brewery
 -------
