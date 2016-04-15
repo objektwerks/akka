@@ -5,13 +5,13 @@ import java.util.UUID
 
 import scala.collection.mutable.ArrayBuffer
 
-final case class Request(uuid: String = UUID.randomUUID.toString, words: List[List[String]] = Words.words)
+final case class Request(uuid: String = UUID.randomUUID.toString, words: List[List[String]])
 
-final case class Response(uuid: String, assigned: LocalDateTime, completed: LocalDateTime, words: List[String], counts: Map[String, Int])
+final case class Response(uuid: String, assigned: LocalDateTime, completed: LocalDateTime, counts: Map[String, Int])
 
 object Response {
   def apply(wordsCounted: WordsCounted): Response = {
-    Response(wordsCounted.uuid, wordsCounted.assigned, wordsCounted.completed, wordsCounted.words, wordsCounted.counts)
+    Response(wordsCounted.uuid, wordsCounted.assigned, wordsCounted.completed, wordsCounted.counts)
   }
 }
 
@@ -36,11 +36,11 @@ sealed trait Event {
   def completed: LocalDateTime = LocalDateTime.now
 }
 
-final case class WordsCounted(uuid: String, assigned: LocalDateTime, words: List[String], counts: Map[String, Int]) extends Event
+final case class WordsCounted(uuid: String, assigned: LocalDateTime, counts: Map[String, Int]) extends Event
 
 object WordsCounted {
   def apply(countWords: CountWords, counts: Map[String, Int]): WordsCounted = {
-    WordsCounted(countWords.uuid, countWords.assigned, countWords.words, counts)
+    WordsCounted(countWords.uuid, countWords.assigned, counts)
   }
 
   def merge(listOfWordsCounted: ArrayBuffer[WordsCounted]): Map[String, Int] = {
