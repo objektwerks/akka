@@ -2,9 +2,7 @@ package words
 
 import java.util.concurrent.atomic.AtomicInteger
 
-import akka.actor.{Actor, ActorLogging, Props, ReceiveTimeout, SupervisorStrategy}
-import akka.cluster.routing.{ClusterRouterPool, ClusterRouterPoolSettings}
-import akka.routing.RoundRobinPool
+import akka.actor.{Actor, ActorLogging, ReceiveTimeout}
 import akka.util.Timeout
 
 import scala.collection.mutable
@@ -19,14 +17,12 @@ object Master {
   def newRouterName: String = s"router-${routerNmumber.incrementAndGet()}"
 }
 
-class Master extends Actor with ActorLogging {
+class Master extends Actor with WorkerRouter with ActorLogging {
   implicit val ec = context.dispatcher
   implicit val timeout = Timeout(30 seconds)
   val listener = context.parent
   val name = self.path.name
-  val settings = ClusterRouterPoolSettings(totalInstances = 4, maxInstancesPerNode = 2, allowLocalRoutees = false, useRole = Some("worker"))
-  val pool = RoundRobinPool(nrOfInstances = 4, supervisorStrategy = SupervisorStrategy.stoppingStrategy)
-  val router = context.actorOf(ClusterRouterPool(pool, settings).props(Props[Worker]), name = Master.newRouterName)
+  val router = createRouter
   val listOfWordsCounted = mutable.ArrayBuffer.empty[WordsCounted]
   var numberOfCountWords = 0
 
