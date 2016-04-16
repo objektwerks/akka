@@ -7,7 +7,7 @@ import scala.concurrent.duration._
 
 class Client(listener: ActorRef) extends Actor with ActorLogging {
   implicit val ec = context.system.dispatcher
-  implicit val timeout = Timeout(60 seconds)
+  implicit val timeout = Timeout(30 seconds)
   context.system.scheduler.scheduleOnce(30 seconds, listener, Request(words = Words.words))
 
   override def receive: Receive = {

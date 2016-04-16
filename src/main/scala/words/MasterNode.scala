@@ -12,8 +12,6 @@ object MasterNode extends Node {
 
   Cluster(system).registerOnMemberUp {
     val listener = system.actorOf(Props[Listener], name = "listener")
-    val client = system.actorOf(Props(new Client(listener)), name = "client")
-    system.eventStream.subscribe(client, classOf[Response])
-    system.eventStream.subscribe(client, classOf[Fault])
+    system.actorOf(Props(new Client(listener)), name = "client")
   }
 }

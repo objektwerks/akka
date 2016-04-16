@@ -11,40 +11,36 @@ import scala.collection.mutable
 import scala.concurrent.duration._
 
 object Master {
+  private val masterNumber = new AtomicInteger()
   private val routerNmumber = new AtomicInteger()
-  def nextRouterNumber: Int = routerNmumber.incrementAndGet()
+
+  def nextMasterName: String = s"master-${masterNumber.incrementAndGet()}"
+
+  def nextRouterName: String = s"router-${routerNmumber.incrementAndGet()}"
 }
 
 class Master extends Actor with ActorLogging {
   implicit val ec = context.dispatcher
   implicit val timeout = Timeout(30 seconds)
   val listener = context.parent
+  val name = self.path.name
   val settings = ClusterRouterPoolSettings(totalInstances = 4, maxInstancesPerNode = 2, allowLocalRoutees = false, useRole = Some("worker"))
   val pool = RoundRobinPool(nrOfInstances = 4, supervisorStrategy = SupervisorStrategy.stoppingStrategy)
-  val router = context.actorOf(ClusterRouterPool(pool, settings).props(Props[Worker]), name = s"router-${Master.nextRouterNumber}")
+  val router = context.actorOf(ClusterRouterPool(pool, settings).props(Props[Worker]), name = Master.nextRouterName)
   val listOfWordsCounted = mutable.ArrayBuffer.empty[WordsCounted]
   var numberOfCountWords = 0
-  log.info(s"Master [${self.path.name}] created by Listener.")
 
   override def receive: Receive = {
     case listOfCountWords: ListOfCountWords =>
-      log.info("Master received list of count words, and routed it to workers.")
+      log.info(s"Master [$name] received list of count words, and routed it to workers.")
       numberOfCountWords = listOfCountWords.list.length
       listOfCountWords.list foreach { countWords => context.system.scheduler.scheduleOnce(10 millis, router, countWords) }
       context.setReceiveTimeout(30 seconds)
     case wordsCounted: WordsCounted =>
-      log.info("Master received words counted.")
       listOfWordsCounted += wordsCounted
       numberOfCountWords = numberOfCountWords - 1
-      if (numberOfCountWords == 0) {
-        listener ! WordsCounted.merge(listOfWordsCounted)
-        log.info("Master merged listed of words counted, and sent to Listener.")
-      }
-    case ReceiveTimeout =>
-      log.error("Master received timeout, sent fault to Listener.")
-      listener ! Fault(s"Master: ${self.path.name} timed out!")
-    case _ =>
-      log.error("Master received unknown message, sent as fault to Listener.")
-      listener ! Fault(s"Master: ${self.path.name} from ${sender.path.name} failed for unknown reason!")
+      if (numberOfCountWords == 0) listener ! WordsCounted.merge(listOfWordsCounted)
+    case ReceiveTimeout => listener ! Fault(s"Master [$name] timed out!")
+    case _ => listener ! Fault(s"Master [$name] from ${sender.path.name} failed for unknown reason!")
   }
 }
