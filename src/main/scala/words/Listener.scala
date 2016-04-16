@@ -3,7 +3,7 @@ package words
 import akka.actor.{Actor, ActorLogging, Props, Terminated}
 
 class Listener extends Actor with ActorLogging {
-  val client = context.parent
+  val simulator = context.parent
 
   override def receive: Receive = {
     case request: Request =>
@@ -11,13 +11,13 @@ class Listener extends Actor with ActorLogging {
       context.watch(master)
       master ! ListOfCountWords(request.words map { words => CountWords(request.uuid, words) })
     case wordsCounted: WordsCounted =>
-      client ! Response(wordsCounted)
+      simulator ! Response(wordsCounted)
       context.stop(sender)
     case fault: Fault =>
-      client ! fault
+      simulator ! fault
       context.stop(sender)
     case Terminated(master) =>
-      client ! Fault(s"Master [${master.path.name}] has been terminated!")
+      simulator ! Fault(s"Master [${master.path.name}] has been terminated!")
       context.stop(sender)
   }
 }
