@@ -1,11 +1,12 @@
 package words
 
-import akka.actor.{Actor, ActorLogging, ActorRef}
+import akka.actor.{Actor, ActorLogging, Props}
 import akka.util.Timeout
 
 import scala.concurrent.duration._
 
-class Client(listener: ActorRef) extends Actor with ActorLogging {
+class Client extends Actor with ActorLogging {
+  val listener = context.actorOf(Props[Listener], name = "listener")
   implicit val ec = context.system.dispatcher
   implicit val timeout = Timeout(30 seconds)
   context.system.scheduler.scheduleOnce(30 seconds, listener, Request(words = Words.words))

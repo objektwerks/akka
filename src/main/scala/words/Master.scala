@@ -14,9 +14,9 @@ object Master {
   private val masterNumber = new AtomicInteger()
   private val routerNmumber = new AtomicInteger()
 
-  def nextMasterName: String = s"master-${masterNumber.incrementAndGet()}"
+  def newMasterName: String = s"master-${masterNumber.incrementAndGet()}"
 
-  def nextRouterName: String = s"router-${routerNmumber.incrementAndGet()}"
+  def newRouterName: String = s"router-${routerNmumber.incrementAndGet()}"
 }
 
 class Master extends Actor with ActorLogging {
@@ -26,7 +26,7 @@ class Master extends Actor with ActorLogging {
   val name = self.path.name
   val settings = ClusterRouterPoolSettings(totalInstances = 4, maxInstancesPerNode = 2, allowLocalRoutees = false, useRole = Some("worker"))
   val pool = RoundRobinPool(nrOfInstances = 4, supervisorStrategy = SupervisorStrategy.stoppingStrategy)
-  val router = context.actorOf(ClusterRouterPool(pool, settings).props(Props[Worker]), name = Master.nextRouterName)
+  val router = context.actorOf(ClusterRouterPool(pool, settings).props(Props[Worker]), name = Master.newRouterName)
   val listOfWordsCounted = mutable.ArrayBuffer.empty[WordsCounted]
   var numberOfCountWords = 0
 

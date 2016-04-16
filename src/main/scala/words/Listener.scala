@@ -3,11 +3,11 @@ package words
 import akka.actor.{Actor, ActorLogging, Props, Terminated}
 
 class Listener extends Actor with ActorLogging {
-  val client = context.actorSelection("/user/client")
+  val client = context.parent
 
   override def receive: Receive = {
     case request: Request =>
-      val master = context.actorOf(Props[Master], name = Master.nextMasterName)
+      val master = context.actorOf(Props[Master], name = Master.newMasterName)
       context.watch(master)
       master ! ListOfCountWords(request.words map { words => CountWords(request.uuid, words) })
     case wordsCounted: WordsCounted =>
