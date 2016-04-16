@@ -30,7 +30,7 @@ class Master extends Actor with ActorLogging {
     case listOfCountWords: ListOfCountWords =>
       log.info("Master received list of count words, and routed it to workers.")
       numberOfCountWords = listOfCountWords.list.length
-      listOfCountWords.list foreach { countWords => context.system.scheduler.schedule(10 millis, 500 millis, router, countWords) }
+      listOfCountWords.list foreach { countWords => context.system.scheduler.scheduleOnce(10 millis, router, countWords) }
       context.setReceiveTimeout(30 seconds)
     case wordsCounted: WordsCounted =>
       log.info("Master received words counted.")

@@ -22,6 +22,6 @@ object MasterNode extends Node {
 
     implicit val ec = system.dispatcher
     implicit val timeout = Timeout(60 seconds)
-    system.scheduler.schedule(30 seconds, 9 seconds, listener, Request(words = Words.words))
+    system.scheduler.scheduleOnce(30 seconds, listener, Request(words = Words.words))
   }
 }
