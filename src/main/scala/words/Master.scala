@@ -28,12 +28,9 @@ class Master(listener: ActorRef) extends Actor with WorkerRouter with ActorLoggi
       requiredNumberOfWordCounts = listOfCountWords.size
       listOfCountWords.list foreach { countWords => context.system.scheduler.scheduleOnce(100 millis, router, countWords) }
     case wordsCounted: WordsCounted =>
-      log.info(s"\nMaster words counted: \n${wordsCounted.wordCounts}")
       bufferOfWordCounts += wordsCounted.wordCounts
       if (bufferOfWordCounts.size == requiredNumberOfWordCounts) {
-        log.info(s"\nMaster buffer of words counts: \n$bufferOfWordCounts")
         val wordCounts = WordsCounted.merge(bufferOfWordCounts)
-        log.info(s"\nMaster merged map of word counts: \n$wordCounts")
         listener ! WordsCounted(wordsCounted.uuid, wordsCounted.assigned, wordCounts)
       }
   }

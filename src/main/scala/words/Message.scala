@@ -46,6 +46,10 @@ object WordsCounted {
   }
 
   def merge(bufferOfWordCounts: ArrayBuffer[Map[String, Int]]): Map[String, Int] = {
-    bufferOfWordCounts.groupBy(_.head._1).map { case (k, v) => k -> v.map(_.head._2).sum }
+    bufferOfWordCounts.reduceLeft(mergeMaps(_ , _)(_ + _))
+  }
+
+  private def mergeMaps[K, V](m1: Map[K, V], m2: Map[K, V])(f: (V, V) => V): Map[K, V] = {
+    (m1 -- m2.keySet) ++ (m2 -- m1.keySet) ++ (for (k <- m1.keySet & m2.keySet) yield { k -> f(m1(k), m2(k)) })
   }
 }
