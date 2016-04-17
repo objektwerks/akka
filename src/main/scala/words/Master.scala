@@ -20,21 +20,21 @@ class Master(listener: ActorRef) extends Actor with WorkerRouter with ActorLoggi
   implicit val ec = context.dispatcher
   val name = self.path.name
   val router = createRouter
-  val listOfWordsCounted = mutable.ArrayBuffer.empty[WordsCounted]
-  var requiredNumberOfWordsCounted = 0
+  val bufferOfWordCounts = mutable.ArrayBuffer.empty[Map[String, Int]]
+  var requiredNumberOfWordCounts = 0
 
   override def receive: Receive = {
     case listOfCountWords: ListOfCountWords =>
-      requiredNumberOfWordsCounted = listOfCountWords.size
+      requiredNumberOfWordCounts = listOfCountWords.size
       listOfCountWords.list foreach { countWords => context.system.scheduler.scheduleOnce(100 millis, router, countWords) }
     case wordsCounted: WordsCounted =>
-      log.info(s"\nMaster words counted: $wordsCounted")
-      listOfWordsCounted += wordsCounted
-      if (listOfWordsCounted.size == requiredNumberOfWordsCounted) {
-        log.info(s"\nMaster final list of words counts: $listOfWordsCounted")
-        val counts = WordsCounted.merge(listOfWordsCounted)
-        log.info(s"\nMaster merged list of words counted equal counts of $counts")
-        listener ! WordsCounted(wordsCounted.uuid, wordsCounted.assigned, counts)
+      log.info(s"\nMaster words counted: \n${wordsCounted.wordCounts}")
+      bufferOfWordCounts += wordsCounted.wordCounts
+      if (bufferOfWordCounts.size == requiredNumberOfWordCounts) {
+        log.info(s"\nMaster buffer of words counts: \n$bufferOfWordCounts")
+        val wordCounts = WordsCounted.merge(bufferOfWordCounts)
+        log.info(s"\nMaster merged map of word counts: \n$wordCounts")
+        listener ! WordsCounted(wordsCounted.uuid, wordsCounted.assigned, wordCounts)
       }
   }
 }

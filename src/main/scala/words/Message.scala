@@ -11,7 +11,7 @@ final case class Response(uuid: String, assigned: LocalDateTime, completed: Loca
 
 object Response {
   def apply(wordsCounted: WordsCounted): Response = {
-    Response(wordsCounted.uuid, wordsCounted.assigned, wordsCounted.completed, wordsCounted.counts)
+    Response(wordsCounted.uuid, wordsCounted.assigned, wordsCounted.completed, wordsCounted.wordCounts)
   }
 }
 
@@ -38,14 +38,14 @@ sealed trait Event {
   def completed: LocalDateTime = LocalDateTime.now
 }
 
-final case class WordsCounted(uuid: String, assigned: LocalDateTime, counts: Map[String, Int]) extends Event
+final case class WordsCounted(uuid: String, assigned: LocalDateTime, wordCounts: Map[String, Int]) extends Event
 
 object WordsCounted {
   def apply(countWords: CountWords, counts: Map[String, Int]): WordsCounted = {
     WordsCounted(countWords.uuid, countWords.assigned, counts)
   }
 
-  def merge(listOfWordsCounted: ArrayBuffer[WordsCounted]): Map[String, Int] = {
-    listOfWordsCounted.groupBy(_.counts.head._1).map { case (k, v) => k -> v.map(_.counts.head._2).sum }
+  def merge(bufferOfWordCounts: ArrayBuffer[Map[String, Int]]): Map[String, Int] = {
+    bufferOfWordCounts.groupBy(_.head._1).map { case (k, v) => k -> v.map(_.head._2).sum }
   }
 }
