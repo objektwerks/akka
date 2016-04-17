@@ -17,7 +17,9 @@ object Response {
 
 final case class Fault(cause: String)
 
-final case class ListOfCountWords(list: List[CountWords])
+final case class ListOfCountWords(list: List[CountWords]) {
+  def size = list.size
+}
 
 sealed trait Command {
   def uuid: String
