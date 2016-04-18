@@ -59,13 +59,11 @@ Run
 1. sbt clean compile run
 2. select app number
 
-Run Main
---------
-1. sbt "runMain cluster.SeedNode words-seed-node.conf 2151 words"
-2. sbt "runMain cluster.SeedNode words-seed-node.conf 2152 words"
-3. sbt "runMain words.WorkerNode worker.conf 2153 words"
-4. sbt "runMain words.WorkerNode worker.conf 2154 words"
-5. sbt "runMain words.MasterNode master.conf 2155 words"
+Run Main [Words]
+----------------
+1. sbt "runMain words.WorkerNode worker.conf 2153 words"
+2. sbt "runMain words.WorkerNode worker.conf 2154 words"
+3. sbt "runMain words.MasterNode master.conf 2155 words"
 
 Output
 ------
