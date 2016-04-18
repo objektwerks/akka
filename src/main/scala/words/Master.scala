@@ -28,6 +28,5 @@ class Master(coordinator: ActorRef) extends Actor with Router with ActorLogging 
       bufferedWordCounts += wordsCounted.count
       if (bufferedWordCounts.size == requiredWordCounts) coordinator ! WordsCounted(wordsCounted.merge(bufferedWordCounts))
     case ReceiveTimeout => coordinator ! Fault("Master timed out!")
-    case unknown: Any => coordinator ! Fault(s"Master received an unknown message: $unknown")
   }
 }
