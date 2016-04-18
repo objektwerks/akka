@@ -11,6 +11,6 @@ object MasterNode extends Node {
   sys.addShutdownHook(seedNode2552.terminate())
 
   Cluster(system).registerOnMemberUp {
-    system.actorOf(Props[Simulator], name = "simulator")
+    system.actorOf(Props[Listener], name = "listener")
   }
 }
