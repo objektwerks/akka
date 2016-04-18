@@ -4,9 +4,7 @@ import scala.collection.mutable.ArrayBuffer
 
 final case class Request(words: List[List[String]])
 
-final case class Response(count: Map[String, Int])
-
-final case class Fault(cause: String)
+final case class Response(count: Map[String, Int], fault: Option[String] = None)
 
 final case class CountWordsList(list: List[CountWords]) {
   def size = list.size
