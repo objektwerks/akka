@@ -14,7 +14,7 @@ object Master {
   def newRouterName: String = s"router-${routerNmumber.incrementAndGet()}"
 }
 
-class Master(coordinator: ActorRef) extends Actor with Router with ActorLogging {
+class Master(coordinator: ActorRef) extends Actor with ActorLogging with Router {
   implicit val ec = context.dispatcher
   val bufferedWordCounts = mutable.ArrayBuffer[Map[String, Int]]()
   var requiredWordCounts = 0
