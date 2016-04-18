@@ -10,5 +10,8 @@ class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
     case wordsCounted: WordsCounted =>
       listener ! Response(wordsCounted.count)
       context.stop(sender)
+    case Fault(cause) =>
+      listener ! Response(Map[String, Int](), Some(cause))
+      context.stop(sender)
   }
 }
