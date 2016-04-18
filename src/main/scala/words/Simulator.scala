@@ -8,7 +8,7 @@ class Simulator extends Actor with ActorLogging {
 
   override def receive: Receive = {
     case request: Request => coordinator ! CountWordsList(request.words map { words => CountWords(words) })
-    case response: Response => log.info(s"Simulator received response: $response [${response.count.size}]")
+    case response: Response => log.info(s"Simulator received response[${response.count.size}]: $response")
     case fault: Fault => log.error(s"Simulator received fault: $fault")
   }
 }
