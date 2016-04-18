@@ -4,14 +4,11 @@ import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 
 class Listener(simulator: ActorRef) extends Actor with ActorLogging {
   override def receive: Receive = {
-    case request: Request =>
+    case listOfCountWords: ListOfCountWords =>
       val master = context.actorOf(Props(new Master(self)), name = Master.newMasterName)
-      master ! ListOfCountWords(request.words map { words => CountWords(request.uuid, words) })
+      master ! listOfCountWords
     case wordsCounted: WordsCounted =>
-      simulator ! Response(wordsCounted)
-      context.stop(sender)
-    case error: Any =>
-      simulator ! new Fault(s"Master failed: $error")
+      simulator ! Response(wordsCounted.count)
       context.stop(sender)
   }
 }
