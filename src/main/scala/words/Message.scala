@@ -8,7 +8,7 @@ final case class Response(count: Map[String, Int])
 
 final case class Fault(cause: String)
 
-final case class ListOfCountWords(list: List[CountWords]) {
+final case class CountWordsList(list: List[CountWords]) {
   def size = list.size
 }
 

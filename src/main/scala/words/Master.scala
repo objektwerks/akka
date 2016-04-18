@@ -10,22 +10,22 @@ import scala.concurrent.duration._
 object Master {
   private val masterNumber = new AtomicInteger()
   private val routerNmumber = new AtomicInteger()
-  val newMasterName: String = s"master-${masterNumber.incrementAndGet()}"
-  val newRouterName: String = s"router-${routerNmumber.incrementAndGet()}"
+  def newMasterName: String = s"master-${masterNumber.incrementAndGet()}"
+  def newRouterName: String = s"router-${routerNmumber.incrementAndGet()}"
 }
 
-class Master(listener: ActorRef) extends Actor with WorkerRouter with ActorLogging {
+class Master(coordinator: ActorRef) extends Actor with WorkerRouter with ActorLogging {
   implicit val ec = context.dispatcher
   val router = createRouter
-  val bufferOfWordCounts = mutable.ArrayBuffer.empty[Map[String, Int]]
-  var requiredNumberOfWordCounts = 0
+  val bufferedWordCounts = mutable.ArrayBuffer.empty[Map[String, Int]]
+  var requiredWordCounts = 0
 
   override def receive: Receive = {
-    case listOfCountWords: ListOfCountWords =>
-      requiredNumberOfWordCounts = listOfCountWords.size
-      listOfCountWords.list foreach { countWords => context.system.scheduler.scheduleOnce(100 millis, router, countWords) }
+    case countWordsList: CountWordsList =>
+      requiredWordCounts = countWordsList.size
+      countWordsList.list foreach { countWords => context.system.scheduler.scheduleOnce(100 millis, router, countWords) }
     case wordsCounted: WordsCounted =>
-      bufferOfWordCounts += wordsCounted.count
-      if (bufferOfWordCounts.size == requiredNumberOfWordCounts) listener ! WordsCounted(wordsCounted.merge(bufferOfWordCounts))
+      bufferedWordCounts += wordsCounted.count
+      if (bufferedWordCounts.size == requiredWordCounts) coordinator ! WordsCounted(wordsCounted.merge(bufferedWordCounts))
   }
 }
