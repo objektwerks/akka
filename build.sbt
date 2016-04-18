@@ -15,6 +15,7 @@ libraryDependencies ++= {
     "com.typesafe.akka" % "akka-contrib_2.11" % akkaVersion,
     "com.typesafe.akka" % "akka-http-experimental_2.11" % akkaVersion,
     "com.typesafe.akka" % "akka-http-spray-json-experimental_2.11" % akkaVersion,
+    "com.github.romix.akka" % "akka-kryo-serialization_2.11" % "0.4.1",
     "org.iq80.leveldb" % "leveldb" % "0.7",
     "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
     "org.scalafx" % "scalafx_2.11" % "8.0.60-R9",
