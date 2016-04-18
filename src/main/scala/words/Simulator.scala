@@ -4,6 +4,7 @@ import akka.actor.{Actor, ActorLogging, Props}
 
 class Simulator extends Actor with ActorLogging {
   val listener = context.actorOf(Props(new Listener(self)), name = "listener")
+  self ! Request(Words.words)
 
   override def receive: Receive = {
     case request: Request => listener ! ListOfCountWords(request.words map { words => CountWords(words) })
