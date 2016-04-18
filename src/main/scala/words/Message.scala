@@ -16,14 +16,14 @@ final case class CountWords(words: List[String]) {
 
 final case class WordsCounted(count: Map[String, Int]) {
   def merge(bufferOfWordCounts: ArrayBuffer[Map[String, Int]]): Map[String, Int] = {
-    bufferOfWordCounts.reduceLeft(mergeMaps(_, _)(_ + _))
+    bufferOfWordCounts.reduceLeft(merge(_, _)(_ + _))
   }
 
-  private def mergeMaps[K, V](mapOne: Map[K, V], mapTwo: Map[K, V])(func: (V, V) => V): Map[K, V] = {
-    (mapOne -- mapTwo.keySet) ++
-      (mapTwo -- mapOne.keySet) ++
-      (for (k <- mapOne.keySet & mapTwo.keySet) yield {
-        k -> func(mapOne(k), mapTwo(k))
+  private def merge[K, V](firstMap: Map[K, V], secondMap: Map[K, V])(func: (V, V) => V): Map[K, V] = {
+    (firstMap -- secondMap.keySet) ++
+      (secondMap -- firstMap.keySet) ++
+      (for (key <- firstMap.keySet & secondMap.keySet) yield {
+        key -> func(firstMap(key), secondMap(key))
       })
   }
 }
