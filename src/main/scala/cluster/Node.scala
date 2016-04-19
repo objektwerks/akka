@@ -1,6 +1,7 @@
 package cluster
 
 import akka.actor.{ActorSystem, Props}
+import akka.cluster.metrics.ClusterMetricsExtension
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 
@@ -23,6 +24,8 @@ abstract class Node extends App {
   val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port = $port").withFallback(ConfigFactory.load(conf))
 
   val system = ActorSystem.create(actorSystem, config)
+  val clusterListener = system.actorOf(Props[ClusterListener], name = "cluster-listener")
+  ClusterMetricsExtension.get(system).subscribe(clusterListener)
   system.log.info(s"Node initialized with $conf on port: $port for $actorSystem!")
 
   sys.addShutdownHook {

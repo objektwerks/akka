@@ -1,6 +1,7 @@
 package brewery
 
 import akka.actor._
+import akka.cluster.metrics.ClusterMetricsExtension
 import akka.util.Timeout
 import brewery.actor._
 import cluster.ClusterListener
@@ -25,7 +26,8 @@ object Brewery {
   val boiler = system.actorOf(Props(new Boiler(cooler)), name = "boiler")
   val masher = system.actorOf(Props(new Masher(boiler)), name = "masher")
   val brewer = system.actorOf(Props(new Brewer(masher)), name = "brewer")
-  system.actorOf(Props[ClusterListener], name = "cluster-listener")
+  val clusterListener = system.actorOf(Props[ClusterListener], name = "cluster-listener")
+  ClusterMetricsExtension.get(system).subscribe(clusterListener)
   system.eventStream.subscribe(brewer, classOf[Command])
   system.eventStream.subscribe(brewer, classOf[State])
   system.eventStream.subscribe(brewer, classOf[Event])
