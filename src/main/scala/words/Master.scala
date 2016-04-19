@@ -16,18 +16,25 @@ object Master {
 
 class Master(coordinator: ActorRef) extends Actor with Router with ActorLogging {
   implicit val ec = context.dispatcher
+  val receiveTimeout = 30 seconds
   val bufferedWordCounts = mutable.ArrayBuffer[Map[String, Int]]()
   var requiredWordCounts = 0
 
   override def receive: Receive = {
     case countWordsList: CountWordsList =>
-      context.setReceiveTimeout(10 seconds)
+      context.setReceiveTimeout(receiveTimeout)
       requiredWordCounts = countWordsList.size
-      countWordsList.list foreach { countWords => context.system.scheduler.scheduleOnce(100 millis, router, countWords) }
+      countWordsList.list foreach {
+        countWords => context.system.scheduler.scheduleOnce(100 millis, router, countWords)
+      }
     case WordsCounted(count) =>
       bufferedWordCounts += count
-      if (bufferedWordCounts.size == requiredWordCounts) coordinator ! WordsCounted(WordsCounted.merge(bufferedWordCounts))
+      if (bufferedWordCounts.size == requiredWordCounts) {
+        coordinator ! WordsCounted(WordsCounted.merge(bufferedWordCounts))
+      }
     case ReceiveTimeout =>
-      coordinator ! PartialWordsCounted(WordsCounted.merge(bufferedWordCounts), s"Master [${self.path.name}] timed out!")
+      val partialCount = WordsCounted.merge(bufferedWordCounts)
+      val timeout = s"Master [${self.path.name}] timed out after ${receiveTimeout.toSeconds} seconds!"
+      coordinator ! PartialWordsCounted(partialCount, timeout)
   }
 }
