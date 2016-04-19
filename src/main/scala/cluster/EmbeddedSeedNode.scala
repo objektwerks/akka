@@ -1,7 +1,6 @@
 package cluster
 
 import akka.actor.{ActorSystem, Props}
-import akka.cluster.metrics.ClusterMetricsExtension
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 
@@ -14,8 +13,7 @@ class EmbeddedSeedNode(conf: String, port: Int, actorSystem: String) {
   val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port = $port").withFallback(ConfigFactory.load(conf))
 
   val system = ActorSystem.create(actorSystem, config)
-  val clusterListener = system.actorOf(Props[ClusterListener], name = "cluster-listener")
-  ClusterMetricsExtension.get(system).subscribe(clusterListener)
+  system.actorOf(Props[ClusterListener], name = "cluster-listener")
   system.log.info(s"Embedded Seed Node initialized with $conf on port: $port for $actorSystem!")
 
   def terminate(): Unit = {
