@@ -21,12 +21,12 @@ class Master(coordinator: ActorRef) extends Actor with Router with ActorLogging 
 
   override def receive: Receive = {
     case countWordsList: CountWordsList =>
-      context.setReceiveTimeout(30 seconds)
+      context.setReceiveTimeout(10 seconds)
       requiredWordCounts = countWordsList.size
       countWordsList.list foreach { countWords => context.system.scheduler.scheduleOnce(100 millis, router, countWords) }
     case wordsCounted: WordsCounted =>
       bufferedWordCounts += wordsCounted.count
       if (bufferedWordCounts.size == requiredWordCounts) coordinator ! WordsCounted(wordsCounted.merge(bufferedWordCounts))
-    case ReceiveTimeout => coordinator ! Fault("Master timed out!")
+    case ReceiveTimeout => coordinator ! Fault(s"Master [${self.path.name}] timed out!")
   }
 }
