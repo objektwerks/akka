@@ -7,11 +7,11 @@ class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
     case countWordsList: CountWordsList =>
       val master = context.actorOf(Props(new Master(self)), name = Master.newMasterName)
       master ! countWordsList
-    case wordsCounted: WordsCounted =>
-      listener ! Response(wordsCounted.count)
+    case WordsCounted(count) =>
+      listener ! Response(count)
       context.stop(sender)
-    case Fault(cause) =>
-      listener ! Response(Map[String, Int](), Some(cause))
+    case PartialWordsCounted(partialCount, timeout) =>
+      listener ! Response(partialCount, Some(timeout))
       context.stop(sender)
   }
 }

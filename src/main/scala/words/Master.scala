@@ -24,9 +24,10 @@ class Master(coordinator: ActorRef) extends Actor with Router with ActorLogging 
       context.setReceiveTimeout(10 seconds)
       requiredWordCounts = countWordsList.size
       countWordsList.list foreach { countWords => context.system.scheduler.scheduleOnce(100 millis, router, countWords) }
-    case wordsCounted: WordsCounted =>
-      bufferedWordCounts += wordsCounted.count
-      if (bufferedWordCounts.size == requiredWordCounts) coordinator ! WordsCounted(wordsCounted.merge(bufferedWordCounts))
-    case ReceiveTimeout => coordinator ! Fault(s"Master [${self.path.name}] timed out!")
+    case WordsCounted(count) =>
+      bufferedWordCounts += count
+      if (bufferedWordCounts.size == requiredWordCounts) coordinator ! WordsCounted(WordsCounted.merge(bufferedWordCounts))
+    case ReceiveTimeout =>
+      coordinator ! PartialWordsCounted(WordsCounted.merge(bufferedWordCounts), s"Master [${self.path.name}] timed out!")
   }
 }
