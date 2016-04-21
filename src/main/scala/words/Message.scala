@@ -1,6 +1,5 @@
 package words
 
-import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
 final case class Words(list: List[List[String]]) {
@@ -25,8 +24,8 @@ final case class CountWords(words: List[String]) {
 final case class WordsCounted(count: Map[String, Int])
 
 object WordsCounted {
-  def merge(bufferOfWordCounts: ArrayBuffer[Map[String, Int]]): Map[String, Int] = {
-    bufferOfWordCounts.reduceLeft(merge(_, _)(_ + _))
+  def merge(wordCounts: List[Map[String, Int]]): Map[String, Int] = {
+    wordCounts.reduceLeft(merge(_, _)(_ + _))
   }
 
   private def merge[K, V](firstMap: Map[K, V], secondMap: Map[K, V])(func: (V, V) => V): Map[K, V] = {
