@@ -1,19 +1,12 @@
 package words
 
-import scala.io.Source
-
 final case class Words(list: List[List[String]]) {
   def size: Int = list.size
 }
 
-object Words {
-  private val list = Source.fromInputStream(getClass.getResourceAsStream("/license.mit")).mkString.split("\\P{L}+").toList
-  private val words = list.grouped(list.length / 8).toList // list of length 168 / 8 = 21 words per sub list
-
-  def apply(): Words = Words(words)
-}
-
 final case class Request(words: Words)
+
+final case class PartialResonse(part: Int, of: Int, count: Map[String, Int])
 
 final case class Response(count: Map[String, Int], error: Option[String] = None)
 

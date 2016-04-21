@@ -11,6 +11,7 @@ class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
       val collector = new Collector[Map[String, Int]](30 seconds, words.size, IndexedSeq.empty[Map[String, Int]])
       val master = context.actorOf(Props(new Master(self, collector)), name = newMasterName)
       master ! words
+    case CollectorEvent(part, of, data) => listener ! PartialResonse(part, of, data.asInstanceOf[Map[String, Int]])
     case WordsCounted(count) =>
       listener ! Response(count)
       context.stop(sender)

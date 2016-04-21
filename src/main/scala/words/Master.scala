@@ -26,6 +26,8 @@ class Master(coordinator: ActorRef, collector: Collector[Map[String, Int]]) exte
     case WordsCounted(count) =>
       if (collector.add(count).isDone) {
         coordinator ! WordsCounted(WordsCounted.merge(collector.sequence))
+      } else {
+        coordinator ! collector.event
       }
     case ReceiveTimeout =>
       val partialCount = WordsCounted.merge(collector.sequence)
