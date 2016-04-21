@@ -34,7 +34,8 @@ class Master(coordinator: ActorRef) extends Actor with Router with ActorLogging 
       }
     case ReceiveTimeout =>
       val partialCount = WordsCounted.merge(bufferedWordCounts)
-      val timeout = s"Master [${self.path.name}] timed out after ${receiveTimeout.toSeconds} seconds!"
-      coordinator ! PartialWordsCounted(partialCount, timeout)
+      val cause = s""""Master [${self.path.name}] timed out after ${receiveTimeout.toSeconds} seconds,
+                  completing $bufferedWordCounts.size of $requiredWordCounts word counts."""
+      coordinator ! PartialWordsCounted(partialCount, cause)
   }
 }

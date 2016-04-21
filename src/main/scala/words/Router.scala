@@ -3,6 +3,7 @@ package words
 import akka.actor.{Actor, Props, SupervisorStrategy}
 import akka.cluster.routing.{ClusterRouterPool, ClusterRouterPoolSettings}
 import akka.routing.RoundRobinPool
+import words.Master._
 
 trait Router {
   this: Actor =>
@@ -12,5 +13,5 @@ trait Router {
                                                    allowLocalRoutees = false,
                                                    useRole = Some("worker"))
   private val pool = RoundRobinPool(nrOfInstances = 4, supervisorStrategy = SupervisorStrategy.stoppingStrategy)
-  val router = context.actorOf(ClusterRouterPool(pool, settings).props(Props[Worker]), name = Master.newRouterName)
+  val router = context.actorOf(ClusterRouterPool(pool, settings).props(Props[Worker]), name = newRouterName)
 }

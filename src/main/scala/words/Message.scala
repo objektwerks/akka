@@ -30,4 +30,4 @@ object WordsCounted {
   }
 }
 
-final case class PartialWordsCounted(partialCount: Map[String, Int], timeout: String)
+final case class PartialWordsCounted(partialCount: Map[String, Int], cause: String)
