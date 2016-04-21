@@ -8,6 +8,8 @@ class Collector[T](val timeout: FiniteDuration, val collect: Int, val collection
     collection += item
     this
   }
+
   def count: Int = collection.size
+
   def isDone: Boolean = collect == collection.size
 }

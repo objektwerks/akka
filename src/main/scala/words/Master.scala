@@ -9,7 +9,9 @@ import scala.concurrent.duration._
 object Master {
   private val masterNumber = new AtomicInteger()
   private val routerNmumber = new AtomicInteger()
+
   def newMasterName: String = s"master-${masterNumber.incrementAndGet()}"
+
   def newRouterName: String = s"router-${routerNmumber.incrementAndGet()}"
 }
 
@@ -27,8 +29,9 @@ class Master(coordinator: ActorRef, collector: Collector[Map[String, Int]]) exte
       }
     case ReceiveTimeout =>
       val partialCount = WordsCounted.merge(collector.collection)
-      val cause = s""""Master [${self.path.name}] timed out after ${collector.timeout.toSeconds} seconds,
-                  completing ${collector.count} of ${collector.collect} word counts."""
+      val cause =
+        s""""Master [${self.path.name}] timed out after ${collector.timeout.toSeconds} seconds,
+            |completing ${collector.count} of ${collector.collect} word counts.""".stripMargin
       coordinator ! PartialWordsCounted(partialCount, cause)
   }
 }
