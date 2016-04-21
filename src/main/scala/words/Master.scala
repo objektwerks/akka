@@ -21,11 +21,11 @@ class Master(coordinator: ActorRef) extends Actor with Router with ActorLogging 
   var requiredWordCounts = 0
 
   override def receive: Receive = {
-    case countWordsList: CountWordsList =>
+    case words: Words =>
       context.setReceiveTimeout(receiveTimeout)
-      requiredWordCounts = countWordsList.size
-      countWordsList.list foreach {
-        countWords => context.system.scheduler.scheduleOnce(100 millis, router, countWords)
+      requiredWordCounts = words.size
+      words.list foreach {
+        words => context.system.scheduler.scheduleOnce(100 millis, router, CountWords(words))
       }
     case WordsCounted(count) =>
       bufferedWordCounts += count

@@ -1,14 +1,22 @@
 package words
 
 import scala.collection.mutable.ArrayBuffer
+import scala.io.Source
 
-final case class Request(words: List[List[String]])
+final case class Words(list: List[List[String]]) {
+  def size: Int = list.size
+}
+
+object Words {
+  private val list = Source.fromInputStream(getClass.getResourceAsStream("/license.mit")).mkString.split("\\P{L}+").toList
+  private val words = list.grouped(list.length / 8).toList // list of length 168 / 8 = 21 words per sub list
+
+  def apply(): Words = Words(words)
+}
+
+final case class Request(words: Words)
 
 final case class Response(count: Map[String, Int], error: Option[String] = None)
-
-final case class CountWordsList(list: List[CountWords]) {
-  def size = list.size
-}
 
 final case class CountWords(words: List[String]) {
   def count: Map[String, Int] = words.groupBy((word: String) => word.toLowerCase).mapValues(_.length).map(identity)

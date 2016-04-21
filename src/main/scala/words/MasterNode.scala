@@ -12,6 +12,6 @@ object MasterNode extends Node {
 
   Cluster(system).registerOnMemberUp {
     val listener = system.actorOf(Props[Listener], name = "listener")
-    listener ! Request(Words.words)
+    listener ! Request(Words())
   }
 }

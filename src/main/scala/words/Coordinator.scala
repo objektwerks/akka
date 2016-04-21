@@ -5,9 +5,9 @@ import words.Master._
 
 class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
   override def receive: Receive = {
-    case countWordsList: CountWordsList =>
+    case words: Words =>
       val master = context.actorOf(Props(new Master(self)), name = newMasterName)
-      master ! countWordsList
+      master ! words
     case WordsCounted(count) =>
       listener ! Response(count)
       context.stop(sender)
