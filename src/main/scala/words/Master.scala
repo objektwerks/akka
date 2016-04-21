@@ -14,11 +14,10 @@ object Master {
 }
 
 class Master(coordinator: ActorRef, collector: Collector[Map[String, Int]]) extends Actor with Router with ActorLogging {
-  implicit val ec = context.dispatcher
-
   override def receive: Receive = {
     case words: Words =>
       context.setReceiveTimeout(collector.timeout)
+      implicit val ec = context.dispatcher
       words.list foreach {
         words => context.system.scheduler.scheduleOnce(100 millis, router, CountWords(words))
       }
