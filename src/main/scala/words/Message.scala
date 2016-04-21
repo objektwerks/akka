@@ -24,7 +24,7 @@ final case class CountWords(words: List[String]) {
 final case class WordsCounted(count: Map[String, Int])
 
 object WordsCounted {
-  def merge(wordCounts: List[Map[String, Int]]): Map[String, Int] = {
+  def merge(wordCounts: IndexedSeq[Map[String, Int]]): Map[String, Int] = {
     wordCounts.reduceLeft(merge(_, _)(_ + _))
   }
 

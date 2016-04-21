@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
   override def receive: Receive = {
     case words: Words =>
-      val collector = new Collector[Map[String, Int]](30 seconds, words.size, List.empty[Map[String, Int]])
+      val collector = new Collector[Map[String, Int]](30 seconds, words.size, IndexedSeq.empty[Map[String, Int]])
       val master = context.actorOf(Props(new Master(self, collector)), name = newMasterName)
       master ! words
     case WordsCounted(count) =>
