@@ -6,7 +6,7 @@ final case class Words(list: List[List[String]]) {
 
 final case class Request(words: Words)
 
-final case class PartialResonse(part: Int, of: Int, count: Map[String, Int])
+final case class PartialResponse(part: Int, of: Int, count: Map[String, Int])
 
 final case class Response(count: Map[String, Int], error: Option[String] = None)
 

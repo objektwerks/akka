@@ -8,5 +8,6 @@ class Listener extends Actor with ActorLogging {
   override def receive: Receive = {
     case request: Request => coordinator ! request.words
     case response: Response => log.info(s"Listener received response[${response.count.size}]: $response")
+    case response: PartialResponse => log.info(s"Listener received a partial response[${response.count.size}]: $response")
   }
 }
