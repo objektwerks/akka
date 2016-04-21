@@ -22,8 +22,8 @@ class ClusterListener extends Actor with ActorLogging {
   }
 
   override def receive: Receive = {
-    case event: ClusterDomainEvent => log.info(s"[${sender.path.name}] $event")
-    case state: CurrentClusterState => log.info(s"[${sender.path.name}] $state")
+    case event: ClusterDomainEvent => log.debug(s"[${sender.path.name}] $event")
+    case state: CurrentClusterState => log.debug(s"[${sender.path.name}] $state")
     case ClusterMetricsChanged(clusterMetrics) =>
       clusterMetrics.filter(_.address == cluster.selfAddress) foreach { nodeMetrics =>
         logHeap(nodeMetrics)
@@ -33,11 +33,11 @@ class ClusterListener extends Actor with ActorLogging {
 
   def logHeap(nodeMetrics: NodeMetrics): Unit = nodeMetrics match {
     case HeapMemory(address, timestamp, used, committed, max) =>
-      log.info("Used heap: {} MB", used.doubleValue / 1024 / 1024)
+      log.debug("Used heap: {} MB", used.doubleValue / 1024 / 1024)
   }
 
   def logCpu(nodeMetrics: NodeMetrics): Unit = nodeMetrics match {
     case Cpu(address, timestamp, Some(systemLoadAverage), cpuCombined, cpuStolen, processors) =>
-      log.info("Load: {} ({} processors)", systemLoadAverage, processors)
+      log.debug("Load: {} ({} processors)", systemLoadAverage, processors)
   }
 }
