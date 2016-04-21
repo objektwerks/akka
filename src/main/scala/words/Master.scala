@@ -17,7 +17,7 @@ object Master {
 class Master(coordinator: ActorRef) extends Actor with Router with ActorLogging {
   implicit val ec = context.dispatcher
   val receiveTimeout = 30 seconds
-  val bufferedWordCounts = mutable.ArrayBuffer[Map[String, Int]]()
+  val bufferedWordCounts = mutable.ArrayBuffer.empty[Map[String, Int]]
   var requiredWordCounts = 0
 
   override def receive: Receive = {
