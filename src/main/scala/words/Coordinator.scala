@@ -9,7 +9,7 @@ import scala.collection.concurrent.TrieMap
 import scala.concurrent.duration._
 
 class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
-  var masterToIdMapping = TrieMap.empty[ActorRef, Id]
+  val masterToIdMapping = TrieMap.empty[ActorRef, Id]
 
   override def receive: Receive = {
     case request: Request =>
@@ -27,7 +27,7 @@ class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
       context.stop(sender)
   }
 
-  private def getId(master: ActorRef, remove: Boolean): Id = {
+  def getId(master: ActorRef, remove: Boolean): Id = {
     if (masterToIdMapping.contains(master)) {
       val id = if (remove) masterToIdMapping.remove(master).get else masterToIdMapping.get(master).get
       id.copy(completed = LocalDateTime.now)
