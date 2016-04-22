@@ -27,7 +27,7 @@ class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
       context.stop(sender)
   }
 
-  def getId(master: ActorRef, remove: Boolean): Id = {
+  private def getId(master: ActorRef, remove: Boolean): Id = {
     if (masterToIdMapping.contains(master)) {
       val id = if (remove) masterToIdMapping.remove(master).get else masterToIdMapping.get(master).get
       id.copy(completed = LocalDateTime.now)
