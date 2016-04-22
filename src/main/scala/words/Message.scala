@@ -1,5 +1,10 @@
 package words
 
+import java.time.LocalDateTime
+import java.util.UUID
+
+final case class Id(uuid: String = UUID.randomUUID.toString, received: LocalDateTime = LocalDateTime.now, completed: Option[LocalDateTime] = None)
+
 final case class Words(list: List[List[String]]) {
   def size: Int = list.size
 }
