@@ -1,7 +1,5 @@
 package words
 
-import java.time.LocalDateTime
-
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import words.Master._
 
@@ -30,7 +28,7 @@ class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
   def getId(master: ActorRef, remove: Boolean): Id = {
     if (masterToIdMapping.contains(master)) {
       val id = if (remove) masterToIdMapping.remove(master).get else masterToIdMapping.get(master).get
-      id.copy(completed = LocalDateTime.now)
+      id.toCopy(id)
     } else {
       Id(uuid = "Error: Id unavailable!")
     }
