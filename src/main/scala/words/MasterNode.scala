@@ -16,6 +16,6 @@ object MasterNode extends Node {
     val list = Source.fromInputStream(getClass.getResourceAsStream("/license.mit")).mkString.split("\\P{L}+").toList
     val words = list.grouped(list.length / 8).toList // list of length 168 / 8 = 21 words per sub list
     val listener = system.actorOf(Props[Listener], name = "listener")
-    listener ! Request(Words(words))
+    listener ! Request(Id(), Words(words))
   }
 }

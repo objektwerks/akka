@@ -3,17 +3,17 @@ package words
 import java.time.LocalDateTime
 import java.util.UUID
 
-final case class Id(uuid: String = UUID.randomUUID.toString, received: LocalDateTime = LocalDateTime.now, completed: Option[LocalDateTime] = None)
-
 final case class Words(list: List[List[String]]) {
   def size: Int = list.size
 }
 
-final case class Request(words: Words)
+final case class Id(uuid: String = UUID.randomUUID.toString, received: LocalDateTime = LocalDateTime.now, completed: LocalDateTime = LocalDateTime.now)
 
-final case class PartialResponse(part: Int, of: Int, count: Map[String, Int])
+final case class Request(id: Id, words: Words)
 
-final case class Response(count: Map[String, Int], error: Option[String] = None)
+final case class PartialResponse(id: Id, part: Int, of: Int, count: Map[String, Int])
+
+final case class Response(id: Id, count: Map[String, Int], error: Option[String] = None)
 
 final case class CountWords(words: List[String]) {
   def count: Map[String, Int] = words.groupBy((word: String) => word.toLowerCase).mapValues(_.length).map(identity)
