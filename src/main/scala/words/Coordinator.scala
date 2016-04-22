@@ -18,27 +18,18 @@ class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
       val master = context.actorOf(Props(new Master(self, collector)), name = newMasterName)
       mastersToIdMapping += (master -> request.id)
       master ! words
-    case CollectorEvent(part, of, data) => listener ! PartialResponse(getId(sender), part, of, data.asInstanceOf[Map[String, Int]])
+    case CollectorEvent(part, of, data) => listener ! PartialResponse(getId(sender, remove = false), part, of, data.asInstanceOf[Map[String, Int]])
     case WordsCounted(count) =>
-      listener ! Response(removeId(sender), count)
+      listener ! Response(getId(sender, remove = true), count)
       context.stop(sender)
     case PartialWordsCounted(partialCount, cause) =>
-      listener ! Response(removeId(sender), partialCount, Some(cause))
+      listener ! Response(getId(sender, remove = true), partialCount, Some(cause))
       context.stop(sender)
   }
 
-  private def getId(master: ActorRef): Id = {
+  def getId(master: ActorRef, remove: Boolean): Id = {
     if (mastersToIdMapping.contains(master)) {
-      val id = mastersToIdMapping.get(master).get
-      id.copy(completed = LocalDateTime.now)
-    } else {
-      Id(uuid = "Error: Id unavailable!")
-    }
-  }
-
-  private def removeId(master: ActorRef): Id = {
-    if (mastersToIdMapping.contains(master)) {
-      val id = mastersToIdMapping.remove(master).get
+      val id = if (remove) mastersToIdMapping.remove(master).get else mastersToIdMapping.get(master).get
       id.copy(completed = LocalDateTime.now)
     } else {
       Id(uuid = "Error: Id unavailable!")
