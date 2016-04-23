@@ -1,6 +1,5 @@
 package words
 
-
 import akka.actor.{Actor, ActorLogging}
 
 class Responder extends Actor with ActorLogging {

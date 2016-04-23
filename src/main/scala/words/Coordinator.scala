@@ -1,12 +1,12 @@
 package words
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.actor.{Actor, ActorLogging, ActorRef, ActorSelection, Props}
 import words.Master._
 
 import scala.collection.concurrent.TrieMap
 import scala.concurrent.duration._
 
-class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
+class Coordinator extends Actor with ActorLogging {
   val masterToIdMapping = TrieMap.empty[ActorRef, Id]
 
   override def receive: Receive = {
@@ -16,14 +16,16 @@ class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
       val master = context.actorOf(Props(new Master(self, collector)), name = newMasterName)
       masterToIdMapping += (master -> request.id)
       master ! words
-    case CollectorEvent(part, of, data) => listener ! PartialResponse(getId(sender, remove = false), part, of, data.asInstanceOf[Map[String, Int]])
+    case CollectorEvent(part, of, data) => responder ! PartialResponse(getId(sender, remove = false), part, of, data.asInstanceOf[Map[String, Int]])
     case WordsCounted(count) =>
-      listener ! Response(getId(sender, remove = true), count)
+      responder ! Response(getId(sender, remove = true), count)
       context.stop(sender)
     case PartialWordsCounted(partialCount, cause) =>
-      listener ! Response(getId(sender, remove = true), partialCount, Some(cause))
+      responder ! Response(getId(sender, remove = true), partialCount, Some(cause))
       context.stop(sender)
   }
+
+  def responder: ActorSelection = context.actorSelection("/user/responder")
 
   def getId(master: ActorRef, remove: Boolean): Id = {
     if (masterToIdMapping.contains(master)) {
