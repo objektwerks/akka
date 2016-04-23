@@ -6,8 +6,8 @@ class Listener extends Actor with ActorLogging {
   override def receive: Receive = {
     case request: Request =>
       log.info(s"Listener received request: $request")
-      listener ! request
+      coordinator ! request
   }
 
-  def listener: ActorSelection = context.actorSelection("/user/listener")
+  def coordinator: ActorSelection = context.actorSelection("/user/coordinator")
 }
