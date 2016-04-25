@@ -11,7 +11,6 @@ object MasterNode extends Node {
   sys.addShutdownHook(seedNode2552.terminate())
 
   Cluster(system).registerOnMemberUp {
-    val queue = system.actorOf(Props[Queue], name = "queue")
-    system.actorOf(Props(new Broker(queue)), name = "broker")
+    system.actorOf(Props[Broker], name = "broker")
   }
 }

@@ -1,14 +1,15 @@
 package words
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.actor.{Actor, ActorLogging, Props}
 
 import scala.concurrent.duration._
 
-class Broker(queue: ActorRef) extends Actor with ActorLogging {
+class Broker extends Actor with ActorLogging {
+  val queue = context.actorOf(Props[Queue], name = "queue")
   val coordinator = context.actorOf(Props(new Coordinator(self)), name = "coordinator")
 
   import context.dispatcher
-  context.system.scheduler.scheduleOnce(1 second, queue, WorkRquest)
+  context.system.scheduler.scheduleOnce(3 seconds, queue, WorkRquest)
 
   override def receive: Receive = {
     case request: Request =>
