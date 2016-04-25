@@ -1,6 +1,7 @@
 package words
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import cluster.{Collector, CollectorEvent}
 import words.Master._
 
 import scala.collection.concurrent.TrieMap

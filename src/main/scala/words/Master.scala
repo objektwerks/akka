@@ -3,6 +3,7 @@ package words
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.{Actor, ActorLogging, ActorRef, ReceiveTimeout}
+import cluster.Collector
 
 import scala.concurrent.duration._
 

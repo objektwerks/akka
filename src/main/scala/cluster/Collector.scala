@@ -1,4 +1,4 @@
-package words
+package cluster
 
 import scala.concurrent.duration.FiniteDuration
 
