@@ -5,7 +5,7 @@ import scala.concurrent.duration.FiniteDuration
 
 final case class CollectorEvent[T](part: Int, of: Int, data: T)
 
-class Collector[T](val timeout: FiniteDuration, val collect: Int, private var collection: mutable.ArrayBuffer[T]) {
+class Collector[T](val timeout: FiniteDuration, val collect: Int, private val collection: mutable.ArrayBuffer[T]) {
   var countDown = collect
 
   def add(item: T): this.type = {
