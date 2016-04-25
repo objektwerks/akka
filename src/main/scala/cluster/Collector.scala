@@ -1,12 +1,13 @@
 package cluster
 
+import scala.collection.mutable
 import scala.concurrent.duration.FiniteDuration
 
 final case class CollectorEvent[T](part: Int, of: Int, data: T)
 
-class Collector[T](val timeout: FiniteDuration, val collect: Int, private var collection: IndexedSeq[T]) {
+class Collector[T](val timeout: FiniteDuration, val collect: Int, private var collection: mutable.ArrayBuffer[T]) {
   def add(item: T): this.type = {
-    collection = item +: collection
+    collection += item
     this
   }
 

@@ -5,6 +5,7 @@ import cluster.{Collector, CollectorEvent}
 import words.Master._
 
 import scala.collection.concurrent.TrieMap
+import scala.collection.mutable
 import scala.concurrent.duration._
 
 class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
@@ -13,7 +14,7 @@ class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
   override def receive: Receive = {
     case request: Request =>
       val words = request.words
-      val collector = new Collector[Map[String, Int]](30 seconds, words.size, IndexedSeq.empty[Map[String, Int]])
+      val collector = new Collector[Map[String, Int]](30 seconds, words.size, mutable.ArrayBuffer.empty[Map[String, Int]])
       val master = context.actorOf(Props(new Master(self, collector)), name = newMasterName)
       masterToIdMapping += (master -> request.id)
       master ! words
