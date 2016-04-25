@@ -10,7 +10,7 @@ class Queue extends Actor with ActorLogging {
 
   override def receive: Receive = {
     case WorkRquest =>
-      log.info(s"Queue received request for work from ${sender.path.name}")
+      log.info(s"Queue received work request from ${sender.path.name}")
       sender ! Request(Id(), Words(words))
   }
 }

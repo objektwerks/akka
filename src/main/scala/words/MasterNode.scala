@@ -12,6 +12,6 @@ object MasterNode extends Node {
 
   Cluster(system).registerOnMemberUp {
     val queue = system.actorOf(Props[Queue], name = "queue")
-    system.actorOf(Props(new Listener(queue)), name = "listener")
+    system.actorOf(Props(new Broker(queue)), name = "broker")
   }
 }
