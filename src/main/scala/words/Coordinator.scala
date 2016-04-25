@@ -6,7 +6,7 @@ import words.Master._
 import scala.collection.concurrent.TrieMap
 import scala.concurrent.duration._
 
-class Coordinator(broker: ActorRef) extends Actor with ActorLogging {
+class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
   val masterToIdMapping = TrieMap.empty[ActorRef, Id]
 
   override def receive: Receive = {
@@ -16,12 +16,12 @@ class Coordinator(broker: ActorRef) extends Actor with ActorLogging {
       val master = context.actorOf(Props(new Master(self, collector)), name = newMasterName)
       masterToIdMapping += (master -> request.id)
       master ! words
-    case CollectorEvent(part, of, data) => broker ! PartialResponse(getId(sender, remove = false), part, of, data.asInstanceOf[Map[String, Int]])
+    case CollectorEvent(part, of, data) => listener ! PartialResponse(getId(sender, remove = false), part, of, data.asInstanceOf[Map[String, Int]])
     case WordsCounted(count) =>
-      broker ! Response(getId(sender, remove = true), count)
+      listener ! Response(getId(sender, remove = true), count)
       context.stop(sender)
     case PartialWordsCounted(partialCount, cause) =>
-      broker ! Response(getId(sender, remove = true), partialCount, Some(cause))
+      listener ! Response(getId(sender, remove = true), partialCount, Some(cause))
       context.stop(sender)
   }
 
