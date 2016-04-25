@@ -32,9 +32,8 @@ class Master(coordinator: ActorRef, collector: Collector[Map[String, Int]]) exte
       }
     case ReceiveTimeout =>
       val partialCount = WordsCounted.merge(collector.sequence)
-      val cause =
-        s""""Master [${self.path.name}] timed out after ${collector.timeout.toSeconds} seconds,
-            |completing ${collector.count} of ${collector.collect} word counts.""".stripMargin
+      val cause = s"Master [${self.path.name}] timed out after ${collector.timeout.toSeconds} seconds, " +
+        s"completing ${collector.count} of ${collector.collect} word counts."
       coordinator ! PartialWordsCounted(partialCount, cause)
   }
 }

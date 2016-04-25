@@ -31,9 +31,9 @@ final case class Id(uuid: String = UUID.randomUUID.toString,
 
 final case class Request(id: Id, words: Words)
 
-final case class PartialResponse(id: Id, part: Int, of: Int, count: Map[String, Int])
+final case class PartialResponse(id: Id, part: Int, of: Int, wordsCounted: Map[String, Int])
 
-final case class Response(id: Id, count: Map[String, Int], error: Option[String] = None)
+final case class Response(id: Id, wordsCounted: Map[String, Int], error: Option[String] = None)
 
 final case class CountWords(words: List[String]) {
   def count: Map[String, Int] = words.groupBy((word: String) => word.toLowerCase).mapValues(_.length).map(identity)

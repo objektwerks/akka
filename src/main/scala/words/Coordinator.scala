@@ -14,7 +14,7 @@ class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
   override def receive: Receive = {
     case request: Request =>
       val words = request.words
-      val collector = new Collector[Map[String, Int]](30 seconds, words.size, mutable.ArrayBuffer.empty[Map[String, Int]])
+      val collector = new Collector[Map[String, Int]](30 seconds, words.size, new mutable.ArrayBuffer[Map[String, Int]](words.size))
       val master = context.actorOf(Props(new Master(self, collector)), name = newMasterName)
       masterToIdMapping += (master -> request.id)
       master ! words
