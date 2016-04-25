@@ -8,11 +8,13 @@ import words.Master._
 trait Router {
   this: Actor =>
 
+  private val pool = RoundRobinPool(
+    nrOfInstances = 4,
+    supervisorStrategy = SupervisorStrategy.stoppingStrategy)
   private val settings = ClusterRouterPoolSettings(
     totalInstances = 4,
     maxInstancesPerNode = 2,
     allowLocalRoutees = false,
     useRole = Some("worker"))
-  private val pool = RoundRobinPool(nrOfInstances = 4, supervisorStrategy = SupervisorStrategy.stoppingStrategy)
   val router = context.actorOf(ClusterRouterPool(pool, settings).props(Props[Worker]), name = newRouterName)
 }
