@@ -16,12 +16,16 @@ class Coordinator(listener: ActorRef) extends Actor with ActorLogging {
       val master = context.actorOf(Props(new Master(self, collector)), name = newMasterName)
       masterToIdMapping += (master -> request.id)
       master ! words
-    case CollectorEvent(part, of, data) => listener ! PartialResponse(getId(sender, remove = false), part, of, data.asInstanceOf[Map[String, Int]])
+    case CollectorEvent(part, of, data) =>
+      val id = getId(sender, remove = false)
+      listener ! PartialResponse(id, part, of, data.asInstanceOf[Map[String, Int]])
     case WordsCounted(count) =>
-      listener ! Response(getId(sender, remove = true), count)
+      val id = getId(sender, remove = true)
+      listener ! Response(id, count)
       context.stop(sender)
     case PartialWordsCounted(partialCount, cause) =>
-      listener ! Response(getId(sender, remove = true), partialCount, Some(cause))
+      val id = getId(sender, remove = true)
+      listener ! Response(id, partialCount, Some(cause))
       context.stop(sender)
   }
 
