@@ -31,6 +31,8 @@ final case class Id(uuid: String = UUID.randomUUID.toString,
 
 final case class Request(id: Id, words: Words)
 
+case object WorkRquest
+
 final case class PartialResponse(id: Id, part: Int, of: Int, wordsCounted: Map[String, Int])
 
 final case class Response(id: Id, wordsCounted: Map[String, Int], error: Option[String] = None)
