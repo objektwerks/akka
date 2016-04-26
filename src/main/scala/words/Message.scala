@@ -1,7 +1,6 @@
 package words
 
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
+import java.time.{Duration, LocalDateTime}
 import java.util.UUID
 
 final case class Words(list: List[List[String]]) {
@@ -11,21 +10,23 @@ final case class Words(list: List[List[String]]) {
 final case class Id(uuid: String = UUID.randomUUID.toString,
                     received: LocalDateTime = LocalDateTime.now,
                     completed: Option[LocalDateTime] = None,
-                    duration: Option[String] = None) {
+                    duration: Option[Duration] = None,
+                    totalDuration: Option[Duration] = None) {
   def toCopy(id: Id): Id = {
-    val onCompleted = LocalDateTime.now
-    id.copy(completed = Some(onCompleted), duration = Some(id.toDuration(id.received, onCompleted)))
+    val newCompleted = LocalDateTime.now
+    val newDuration = toDuration(id.received, newCompleted)
+    val newTotalDuration = toTotalDuraction(id.totalDuration, newDuration)
+    println(s"Duration: $newDuration / Millis: ${newDuration.toMillis}")
+    println(s"Total Duration: $newTotalDuration / Millis: ${newTotalDuration.toMillis}")
+    id.copy(completed = Some(newCompleted),
+      duration = Some(newDuration),
+      totalDuration = Some(newTotalDuration) )
   }
 
-  private def toDuration(from: LocalDateTime, to: LocalDateTime): String = {
-    var temp = LocalDateTime.from(from)
-    val hours = temp.until(to, ChronoUnit.HOURS)
-    temp = temp.plusHours(hours)
-    val minutes = temp.until(to, ChronoUnit.MINUTES)
-    temp = temp.plusMinutes(minutes)
-    val seconds = temp.until(to, ChronoUnit.SECONDS)
-    val millis = temp.until(to, ChronoUnit.MILLIS)
-    s"Hours: $hours, Minutes: $minutes, Seconds: $seconds, Millis: $millis"
+  private def toDuration(from: LocalDateTime, to: LocalDateTime): Duration = Duration.between(from, to)
+
+  private def toTotalDuraction(runningTotalDuration: Option[Duration], newDuration: Duration): Duration = {
+    runningTotalDuration.getOrElse(newDuration).plus(newDuration)
   }
 }
 
