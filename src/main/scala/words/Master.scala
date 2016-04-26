@@ -19,6 +19,7 @@ object Master {
 class Master(coordinator: ActorRef, collector: Collector[Map[String, Int]]) extends Actor with Router with ActorLogging {
   override def receive: Receive = {
     case words: Words =>
+      log.info(s"Master created Router [${router.path.name}]")
       context.setReceiveTimeout(collector.timeout)
       implicit val ec = context.dispatcher
       words.list foreach {
@@ -27,6 +28,7 @@ class Master(coordinator: ActorRef, collector: Collector[Map[String, Int]]) exte
     case WordsCounted(count) =>
       if (collector.add(count).isDone) {
         coordinator ! WordsCounted(WordsCounted.merge(collector.sequence))
+        terminate()
       } else {
         coordinator ! collector.event
       }
@@ -35,5 +37,12 @@ class Master(coordinator: ActorRef, collector: Collector[Map[String, Int]]) exte
       val cause = s"Master [${self.path.name}] timed out after ${collector.timeout.toSeconds} seconds, " +
         s"completing ${collector.count} of ${collector.collect} word counts."
       coordinator ! PartialWordsCounted(partialCount, cause)
+      terminate()
+  }
+
+  def terminate(): Unit = {
+    log.info(s"Master stopping router: ${router.path.name} and self: ${self.path.name} ...")
+    context.stop(router)
+    context.stop(self)
   }
 }

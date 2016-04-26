@@ -17,6 +17,7 @@ class Coordinator(broker: ActorRef) extends Actor with ActorLogging {
       val collector = new Collector[Map[String, Int]](30 seconds, words.size, new mutable.ArrayBuffer[Map[String, Int]](words.size))
       val master = context.actorOf(Props(new Master(self, collector)), name = newMasterName)
       masterToIdMapping += (master -> request.id)
+      log.info(s"Coordinator created Master [${master.path.name}]")
       master ! words
     case CollectorEvent(part, of, data) =>
       val id = getId(sender, remove = false)
@@ -24,11 +25,9 @@ class Coordinator(broker: ActorRef) extends Actor with ActorLogging {
     case WordsCounted(count) =>
       val id = getId(sender, remove = true)
       broker ! Response(id, count)
-      context.stop(sender)
     case PartialWordsCounted(partialCount, cause) =>
       val id = getId(sender, remove = true)
       broker ! Response(id, partialCount, Some(cause))
-      context.stop(sender)
   }
 
   def getId(master: ActorRef, remove: Boolean): Id = {
