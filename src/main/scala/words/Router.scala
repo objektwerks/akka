@@ -1,6 +1,7 @@
 package words
 
-import akka.actor.{Actor, Props, SupervisorStrategy}
+import akka.actor.SupervisorStrategy._
+import akka.actor.{Actor, Props}
 import akka.cluster.routing.{ClusterRouterPool, ClusterRouterPoolSettings}
 import akka.routing.RoundRobinPool
 import words.Master._
@@ -8,7 +9,7 @@ import words.Master._
 trait Router {
   this: Actor =>
 
-  private val pool = RoundRobinPool(nrOfInstances = 4, supervisorStrategy = SupervisorStrategy.stoppingStrategy)
+  private val pool = RoundRobinPool(nrOfInstances = 4, supervisorStrategy = stoppingStrategy)
   private val settings = ClusterRouterPoolSettings(
     totalInstances = 4,
     maxInstancesPerNode = 2,
