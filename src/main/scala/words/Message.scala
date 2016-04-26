@@ -13,6 +13,7 @@ final case class Id(uuid: String = UUID.randomUUID.toString,
                     duration: Option[Duration] = None,
                     totalDuration: Option[Duration] = None) {
   def toCopy(id: Id): Id = {
+    println(s"Old Id: $id")
     val newCompleted = LocalDateTime.now
     val newDuration = toDuration(id.received, newCompleted)
     val newTotalDuration = toTotalDuration(id.totalDuration, newDuration)
@@ -32,7 +33,8 @@ final case class Id(uuid: String = UUID.randomUUID.toString,
   }
 
   private def toTotalDuration(runningTotalDuration: Option[Duration], newDuration: Duration): Duration = {
-    if (runningTotalDuration.nonEmpty) newDuration.plus(runningTotalDuration.get) else newDuration
+    println(s"Is running total duration empty: ${runningTotalDuration.isEmpty}, $runningTotalDuration")
+    if (runningTotalDuration.nonEmpty) runningTotalDuration.get.plus(newDuration) else newDuration
   }
 }
 
