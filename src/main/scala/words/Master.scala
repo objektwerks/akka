@@ -25,6 +25,7 @@ class Master(coordinator: ActorRef, collector: Collector[Map[String, Int]]) exte
       words.list foreach {
         words => context.system.scheduler.scheduleOnce(100 millis, router, CountWords(words))
       }
+      log.info(s"Master routed ${words.size} messages to Router [${router.path.name}]")
     case WordsCounted(count) =>
       if (collector.add(count).isDone) {
         coordinator ! WordsCounted(WordsCounted.merge(collector.sequence))
