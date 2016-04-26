@@ -17,6 +17,7 @@ class Broker extends Actor with ActorLogging {
       coordinator ! request
     case response: Response =>
       log.info(s"Broker received response[count = ${response.wordsCounted.size}]: $response")
+      queue ! response
       queue ! WorkRquest
     case response: PartialResponse =>
       val statement = s"Broker received a partial response[count: ${response.wordsCounted.size}, part: ${response.part} of: ${response.of}]: $response"

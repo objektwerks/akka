@@ -12,5 +12,7 @@ class Queue extends Actor with ActorLogging {
     case WorkRquest =>
       log.info(s"Queue received work request from ${sender.path.name}")
       sender ! Request(Id(), Words(words))
+    case response: Response =>
+      log.info(s"Queue received response[${response.id}]")
   }
 }
