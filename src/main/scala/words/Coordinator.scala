@@ -20,7 +20,7 @@ class Coordinator(broker: ActorRef) extends Actor with ActorLogging {
       master ! words
     case CollectorEvent(part, of, data) =>
       val id = getId(sender, remove = false)
-      broker ! PartialResponse(id, part, of, data.asInstanceOf[Map[String, Int]])
+      broker ! Notification(id, part, of, data.asInstanceOf[Map[String, Int]])
     case WordsCounted(count) =>
       val id = getId(sender, remove = true)
       broker ! Response(id, count)
