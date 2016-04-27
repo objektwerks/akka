@@ -1,6 +1,6 @@
 package words
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.actor.{Actor, ActorRef, Props}
 import cluster.{Collector, CollectorEvent}
 import words.Master._
 
@@ -8,7 +8,7 @@ import scala.collection.concurrent.TrieMap
 import scala.collection.mutable
 import scala.concurrent.duration._
 
-class Coordinator(broker: ActorRef) extends Actor with ActorLogging {
+class Coordinator(broker: ActorRef) extends Actor {
   val masterToIdMapping = TrieMap.empty[ActorRef, Id]
 
   override def receive: Receive = {
@@ -17,7 +17,6 @@ class Coordinator(broker: ActorRef) extends Actor with ActorLogging {
       val collector = new Collector[Map[String, Int]](30 seconds, words.size, new mutable.ArrayBuffer[Map[String, Int]](words.size))
       val master = context.actorOf(Props(new Master(self, collector)), name = newMasterName)
       masterToIdMapping += (master -> request.id)
-      log.info(s"Coordinator created Master [${master.path.name}]")
       master ! words
     case CollectorEvent(part, of, data) =>
       val id = getUpdatedId(sender, remove = false)
