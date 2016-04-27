@@ -20,22 +20,24 @@ class Coordinator(broker: ActorRef) extends Actor with ActorLogging {
       log.info(s"Coordinator created Master [${master.path.name}]")
       master ! words
     case CollectorEvent(part, of, data) =>
-      val id = getId(sender, remove = false)
+      val id = getUpdatedId(sender, remove = false)
       broker ! Notification(id, part, of, data.asInstanceOf[Map[String, Int]])
     case WordsCounted(count) =>
-      val id = getId(sender, remove = true)
+      val id = getUpdatedId(sender, remove = true)
       broker ! Response(id, count)
     case PartialWordsCounted(partialCount, cause) =>
-      val id = getId(sender, remove = true)
+      val id = getUpdatedId(sender, remove = true)
       broker ! Response(id, partialCount, Some(cause))
   }
 
-  def getId(master: ActorRef, remove: Boolean): Id = {
-    if (masterToIdMapping.contains(master)) {
-      val id = if (remove) masterToIdMapping.remove(master).get else masterToIdMapping.get(master).get
-      id.toCopy(id)
+  def getUpdatedId(master: ActorRef, remove: Boolean): Id = {
+    val oldId = masterToIdMapping.get(master).get
+    val newId = oldId.toUpdatedCopy
+    if (remove) {
+      require(masterToIdMapping.remove(master, oldId))
     } else {
-      Id(uuid = "Error: Id unavailable!")
+      require(masterToIdMapping.replace(master, oldId, newId))
     }
+    newId
   }
 }

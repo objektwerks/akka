@@ -12,28 +12,16 @@ final case class Id(uuid: String = UUID.randomUUID.toString,
                     completed: Option[LocalDateTime] = None,
                     duration: Option[Duration] = None,
                     totalDuration: Option[Duration] = None) {
-  def toCopy(id: Id): Id = {
-    println(s"Old Id: $id")
+  def toUpdatedCopy: Id = {
     val newCompleted = LocalDateTime.now
-    val newDuration = toDuration(id.received, newCompleted)
-    val newTotalDuration = toTotalDuration(id.totalDuration, newDuration)
-    println(s"New Duration: $newDuration / Millis: ${newDuration.toMillis}")
-    println(s"Current total duration: ${id.totalDuration}")
-    println(s"New Total Duration: $newTotalDuration / Millis: ${newTotalDuration.toMillis}")
-    val newId = id.copy(completed = Some(newCompleted),
-      duration = Some(newDuration),
-      totalDuration = Some(newTotalDuration) )
-    println(s"New Id: $newId")
-    newId
+    val newDuration = toDuration(received, newCompleted)
+    val newTotalDuration = toTotalDuration(totalDuration, newDuration)
+    copy(completed = Some(newCompleted), duration = Some(newDuration), totalDuration = Some(newTotalDuration))
   }
 
-  private def toDuration(from: LocalDateTime, to: LocalDateTime): Duration = {
-    println(s"From: $from, To: $to")
-    Duration.between(from, to)
-  }
+  private def toDuration(from: LocalDateTime, to: LocalDateTime): Duration = Duration.between(from, to)
 
   private def toTotalDuration(runningTotalDuration: Option[Duration], newDuration: Duration): Duration = {
-    println(s"Is running total duration empty: ${runningTotalDuration.isEmpty}, $runningTotalDuration")
     if (runningTotalDuration.nonEmpty) runningTotalDuration.get.plus(newDuration) else newDuration
   }
 }
