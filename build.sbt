@@ -41,6 +41,6 @@ scalacOptions ++= Seq(
   "-Xfatal-warnings"
 )
 aspectjSettings
-javaOptions in run <++= AspectjKeys.weaverOptions in Aspectj
+javaOptions in runMain <++= AspectjKeys.weaverOptions in Aspectj
 fork := true
 run in Compile <<= Defaults.runTask(fullClasspath in (Compile, run), mainClass in (Compile, run), runner in (Compile, run))
