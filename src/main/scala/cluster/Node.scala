@@ -3,7 +3,6 @@ package cluster
 import akka.actor.{ActorSystem, Props}
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
-import kamon.Kamon
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -27,11 +26,8 @@ abstract class Node extends App {
   system.actorOf(Props[ClusterListener], name = "cluster-listener")
   println(s"Node initialized with $conf on port: $port for actor system: $actorSystemName!")
 
-  Kamon.start()
-
   sys.addShutdownHook {
     implicit val ec = system.dispatcher
-    Kamon.shutdown()
     println(s"Node terminated with $conf on port: $port for actor system: $actorSystemName.")
     Await.result(system.terminate(), 3 seconds)
   }
