@@ -12,7 +12,7 @@ class ClusterListener extends Actor with ActorLogging {
   val metrics = ClusterMetricsExtension.get(system)
 
   override def preStart(): Unit = {
-    cluster.subscribe(self, classOf[ClusterDomainEvent])
+    cluster.subscribe(self, classOf[ClusterDomainEvent], classOf[CurrentClusterState])
     metrics.subscribe(self)
   }
 
