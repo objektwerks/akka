@@ -4,6 +4,7 @@ scalaVersion := "2.11.8"
 ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
 libraryDependencies ++= {
   val akkaVersion = "2.4.4"
+  val kamonVersion = "0.6.1"
   Seq(
     "com.typesafe.akka" % "akka-actor_2.11" % akkaVersion,
     "com.typesafe.akka" % "akka-stream_2.11" % akkaVersion,
@@ -16,6 +17,8 @@ libraryDependencies ++= {
     "com.typesafe.akka" % "akka-http-experimental_2.11" % akkaVersion,
     "com.typesafe.akka" % "akka-http-spray-json-experimental_2.11" % akkaVersion,
     "io.kamon" % "sigar-loader" % "1.6.6-rev002",
+    "io.kamon" % "kamon-akka_2.11" % kamonVersion,
+    "io.kamon" %% "kamon-statsd" % kamonVersion,
     "org.iq80.leveldb" % "leveldb" % "0.7",
     "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
     "org.scalafx" % "scalafx_2.11" % "8.0.60-R9",
@@ -37,6 +40,7 @@ scalacOptions ++= Seq(
   "-Xlint",
   "-Xfatal-warnings"
 )
-javaOptions += "-Xss1m -Xmx2g"
-fork in test := true
+aspectjSettings
+javaOptions in run <++= AspectjKeys.weaverOptions in Aspectj
+fork := true
 run in Compile <<= Defaults.runTask(fullClasspath in (Compile, run), mainClass in (Compile, run), runner in (Compile, run))
