@@ -27,9 +27,7 @@ class HttpStringTest extends FunSuite with BeforeAndAfterAll {
 
   override protected def afterAll(): Unit = {
     server map { binding =>
-      binding.unbind.onComplete {
-        case _ => Await.result(system.terminate(), 1 second)
-      }
+      binding.unbind.onComplete { _ => Await.result(system.terminate(), 1 second) }
     }
   }
 
