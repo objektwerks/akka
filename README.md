@@ -50,7 +50,6 @@ Test
 Run
 ---
 1. sbt clean compile run
-2. select app number
 
 Output
 ------
