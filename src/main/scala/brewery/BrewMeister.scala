@@ -12,11 +12,6 @@ import scalafx.scene.layout.VBox
 import scalafx.scene.text.Text
 
 object BrewMeister extends JFXApp {
-  val seedNode2551 = new EmbeddedSeedNode(app = "brewery", conf = "brewery-seed-node.conf")
-  val seedNode2552 = new EmbeddedSeedNode(app = "brewery", conf = "brewery-seed-node.conf")
-  sys.addShutdownHook(seedNode2551.terminate())
-  sys.addShutdownHook(seedNode2552.terminate())
-
   val commandProperty = new ObjectProperty[Command]()
   val stateProperty = new ObjectProperty[State]()
   val eventProperty = new ObjectProperty[Event]()
