@@ -1,13 +1,6 @@
 Akka
 ----
->This project contains a (1) word count simulator; (2) brewery simulator; and (3)feature tests.
-
-Words
------
->Akka cluster master-worker distributed app that counts words. Cluster topology:
-* seed nodes - 2
-* master nodes - 1
-* worker nodes - 2
+>This project contains feature tests and a brewery simulator.
 
 Brewery
 -------
@@ -58,12 +51,6 @@ Run
 ---
 1. sbt clean compile run
 2. select app number
-
-Run Main [Words]
-----------------
-1. sbt "runMain words.WorkerNode worker.conf 2153 words"
-2. sbt "runMain words.WorkerNode worker.conf 2154 words"
-3. sbt "runMain words.MasterNode master.conf 2155 words"
 
 Output
 ------
