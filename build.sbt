@@ -4,7 +4,7 @@ version := "0.1-SNAPSHOT"
 scalaVersion := "2.11.8"
 ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
 libraryDependencies ++= {
-  val akkaVersion = "2.4.8"
+  val akkaVersion = "2.4.9"
   Seq(
     "com.typesafe.akka" % "akka-actor_2.11" % akkaVersion,
     "com.typesafe.akka" % "akka-persistence_2.11" % akkaVersion,
@@ -14,7 +14,7 @@ libraryDependencies ++= {
     "org.scalafx" % "scalafx_2.11" % "8.0.60-R9",
     "ch.qos.logback" % "logback-classic" % "1.1.3",
     "com.typesafe.akka" % "akka-testkit_2.11" % akkaVersion % "test",
-    "org.scalatest" % "scalatest_2.11" % "2.2.5" % "test"
+    "org.scalatest" % "scalatest_2.11" % "3.0.0" % "test"
   )
 }
 unmanagedJars in Compile += Attributed.blank(file(System.getenv("JAVA_HOME") + "/jre/lib/ext/jfxrt.jar"))
