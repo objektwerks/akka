@@ -30,5 +30,5 @@ scalacOptions ++= Seq(
   "-Xfatal-warnings"
 )
 javaOptions += "-Xss1m -Xmx2g"
-fork in test := false
+fork in test := true
 run in Compile <<= Defaults.runTask(fullClasspath in (Compile, run), mainClass in (Compile, run), runner in (Compile, run))
