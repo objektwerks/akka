@@ -5,8 +5,8 @@ import akka.util.Timeout
 import brewery.actor._
 import com.typesafe.config.ConfigFactory
 
+import scala.concurrent.Await
 import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
 import scalafx.beans.property.ObjectProperty
 
 object Brewery {
@@ -38,8 +38,7 @@ object Brewery {
   }
 
   def brew(recipe: Recipe): Unit = {
-    implicit val ec = system.dispatcher
-    Future { brewer ! recipe }
+    brewer ! recipe
   }
 
   def command(command: Command): Unit = {
