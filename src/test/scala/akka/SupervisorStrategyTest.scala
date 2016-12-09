@@ -61,7 +61,7 @@ class Watcher extends Actor with ActorLogging {
 
   implicit val timeout = Timeout(1 second)
   val futureChild = context.system.actorSelection("/user/nanny/*").resolveOne()
-  futureChild onSuccess { case child => context watch child }
+  futureChild foreach { child => context watch child }
 
   def receive = {
     case Terminated(child) => log.info(s"Watcher terminated simulation.event: ${child.path.name} TERMINATED!")

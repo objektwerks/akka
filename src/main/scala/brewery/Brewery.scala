@@ -54,7 +54,6 @@ object Brewery {
   }
 
   def terminate(): Unit = {
-    implicit val ec = system.dispatcher
     system.log.info("Brewery terminating...")
     Await.result(system.terminate(), 3 seconds)
   }
