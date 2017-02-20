@@ -1,6 +1,6 @@
 package brewery
 
-import scalafx.application.JFXApp
+import scalafx.application.{JFXApp, Platform}
 import scalafx.beans.property.ObjectProperty
 import scalafx.collections.ObservableBuffer
 import scalafx.geometry.Insets
@@ -71,14 +71,20 @@ object BrewMeister extends JFXApp {
     eventList.items.get().clear()
     val recipe = IPA()
     listRecipe(recipe)
-    Brewery.brew(recipe)
+    Platform.runLater(Brewery.brew(recipe))
   }
 
-  commandProperty.onChange { (_, _, command) => commandText.text = s"${command.getClass.getSimpleName}, Batch # ${command.batch}, Executed @ ${command.executed}" }
+  commandProperty.onChange { (_, _, command) =>
+    Platform.runLater(commandText.text = s"${command.getClass.getSimpleName}, Batch # ${command.batch}, Executed @ ${command.executed}")
+  }
 
-  stateProperty.onChange { (_, _, state) => stateList.items.get().add(s"${state.getClass.getSimpleName}, Batch # ${state.batch}, Started @ ${state.started}") }
+  stateProperty.onChange { (_, _, state) =>
+    Platform.runLater(stateList.items.get().add(s"${state.getClass.getSimpleName}, Batch # ${state.batch}, Started @ ${state.started}"))
+  }
 
-  eventProperty.onChange { (_, _, event) => eventList.items.get().add(s"${event.getClass.getSimpleName}, Batch # ${event.batch}, Occurred @ ${event.occurred}") }
+  eventProperty.onChange { (_, _, event) =>
+    Platform.runLater(eventList.items.get().add(s"${event.getClass.getSimpleName}, Batch # ${event.batch}, Occurred @ ${event.occurred}"))
+  }
 
   def listRecipe(recipe: Recipe): Unit = {
     val list = recipeList.items.get()
