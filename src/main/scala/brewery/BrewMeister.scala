@@ -66,11 +66,10 @@ object BrewMeister extends JFXApp {
   }
 
   brewButton.onAction = { _ =>
-    val recipe = IPA()
-    recipeList.items.get().clear()
     commandText.text = ""
     stateList.items.get().clear()
     eventList.items.get().clear()
+    val recipe = IPA()
     listRecipe(recipe)
     Brewery.brew(recipe)
   }
@@ -83,6 +82,7 @@ object BrewMeister extends JFXApp {
 
   def listRecipe(recipe: Recipe): Unit = {
     val list = recipeList.items.get()
+    list.clear()
     list.add(s"Name: ${recipe.name} Style: ${recipe.style}")
     list.add(s"IBU: ${recipe.ibu} Color: ${recipe.color} ABV: ${recipe.abv}")
     list.add(s"Gravity( original: ${recipe.gravity.original} specific: ${recipe.gravity.specific} final: ${recipe.gravity.finished})")
