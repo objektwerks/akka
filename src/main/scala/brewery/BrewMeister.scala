@@ -1,10 +1,8 @@
 package brewery
 
-import scalafx.Includes._
 import scalafx.application.JFXApp
 import scalafx.beans.property.ObjectProperty
 import scalafx.collections.ObservableBuffer
-import scalafx.event.ActionEvent
 import scalafx.geometry.Insets
 import scalafx.scene.Scene
 import scalafx.scene.control._
@@ -16,45 +14,31 @@ object BrewMeister extends JFXApp {
   val stateProperty = new ObjectProperty[State]()
   val eventProperty = new ObjectProperty[Event]()
   Brewery.register(commandProperty, stateProperty, eventProperty)
-  sys.addShutdownHook(Brewery.terminate())
+  sys.addShutdownHook(Brewery.close())
 
-  val brewButton = new Button {
-    text = "Brew"
-  }
+  val brewButton = new Button { text = "Brew" }
 
-  val toolbar = new ToolBar {
-    content = List(brewButton)
-  }
+  val toolbar = new ToolBar { content = List(brewButton) }
 
-  val recipeLabel = new Label {
-    text = "Receipe:"
-  }
+  val recipeLabel = new Label { text = "Receipe:" }
 
   val recipeList =  new ListView[String] {
     prefHeight = 230
     items = ObservableBuffer[String]()
   }
 
-  val commandLabel = new Label {
-    text = "Commands:"
-  }
+  val commandLabel = new Label { text = "Commands:" }
 
-  val commandText = new Text {
-    wrappingWidth = 600
-  }
+  val commandText = new Text { wrappingWidth = 600 }
 
-  val stateLabel = new Label {
-    text = "States:"
-  }
+  val stateLabel = new Label { text = "States:" }
 
   val stateList = new ListView[String] {
     prefHeight = 240
     items = ObservableBuffer[String]()
   }
 
-  val eventLabel = new Label {
-    text = "Events:"
-  }
+  val eventLabel = new Label { text = "Events:" }
 
   val eventList = new ListView[String] {
     prefHeight = 260
@@ -81,9 +65,8 @@ object BrewMeister extends JFXApp {
     }
   }
 
-  brewButton.onAction = { ae: ActionEvent =>
+  brewButton.onAction = { _ =>
     val recipe = IPA()
-    brewButton.disable = true
     recipeList.items.get().clear()
     commandText.text = ""
     stateList.items.get().clear()
@@ -92,21 +75,11 @@ object BrewMeister extends JFXApp {
     Brewery.brew(recipe)
   }
 
-  commandProperty.onChange { (_, _, newCommand) =>
-    commandText.text = s"${newCommand.getClass.getSimpleName}, Batch # ${newCommand.batch}, Executed @ ${newCommand.executed}"
-  }
+  commandProperty.onChange { (_, _, command) => commandText.text = s"${command.getClass.getSimpleName}, Batch # ${command.batch}, Executed @ ${command.executed}" }
 
-  stateProperty.onChange { (_, _, newState) =>
-    stateList.items.get().add(s"${newState.getClass.getSimpleName}, Batch # ${newState.batch}, Started @ ${newState.started}")
-  }
+  stateProperty.onChange { (_, _, state) => stateList.items.get().add(s"${state.getClass.getSimpleName}, Batch # ${state.batch}, Started @ ${state.started}") }
 
-  eventProperty.onChange { (_, _, newEvent) =>
-    eventList.items.get().add(s"${newEvent.getClass.getSimpleName}, Batch # ${newEvent.batch}, Occurred @ ${newEvent.occurred}")
-    newEvent match {
-      case Brewed(batch) => brewButton.disable = false
-      case _ =>
-    }
-  }
+  eventProperty.onChange { (_, _, event) => eventList.items.get().add(s"${event.getClass.getSimpleName}, Batch # ${event.batch}, Occurred @ ${event.occurred}") }
 
   def listRecipe(recipe: Recipe): Unit = {
     val list = recipeList.items.get()

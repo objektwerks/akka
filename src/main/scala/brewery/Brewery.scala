@@ -47,8 +47,8 @@ object Brewery {
 
   def onEvent(event: Event): Unit = eventPropertyListener foreach { _.value = event }
 
-  def terminate(): Unit = {
-    system.log.info("Brewery terminating...")
+  def close(): Unit = {
+    system.log.info("Brewery closing...")
     Await.result(system.terminate(), 3 seconds)
   }
 }
