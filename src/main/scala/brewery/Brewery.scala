@@ -37,21 +37,13 @@ object Brewery {
     eventPropertyListener = Some(eventProperty)
   }
 
-  def brew(recipe: Recipe): Unit = {
-    brewer ! recipe
-  }
+  def brew(recipe: Recipe): Unit = brewer ! recipe
 
-  def command(command: Command): Unit = {
-    commandPropertyListener foreach { _.value = command }
-  }
+  def command(command: Command): Unit = commandPropertyListener foreach { _.value = command }
 
-  def state(state: State): Unit = {
-    statePropertyListener foreach { _.value = state }
-  }
+  def state(state: State): Unit = statePropertyListener foreach { _.value = state }
 
-  def event(event: Event): Unit = {
-    eventPropertyListener foreach { _.value = event }
-  }
+  def event(event: Event): Unit = eventPropertyListener foreach { _.value = event }
 
   def terminate(): Unit = {
     system.log.info("Brewery terminating...")
