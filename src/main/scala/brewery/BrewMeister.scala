@@ -13,6 +13,7 @@ object BrewMeister extends JFXApp {
   val commandProperty = new ObjectProperty[Command]()
   val stateProperty = new ObjectProperty[State]()
   val eventProperty = new ObjectProperty[Event]()
+
   Brewery.register(commandProperty, stateProperty, eventProperty)
   sys.addShutdownHook(Brewery.close())
 
