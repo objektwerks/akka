@@ -17,29 +17,24 @@ object BrewMeister extends JFXApp {
   sys.addShutdownHook(Brewery.close())
 
   val brewButton = new Button { text = "Brew" }
-
   val toolbar = new ToolBar { content = List(brewButton) }
 
   val recipeLabel = new Label { text = "Receipe:" }
-
   val recipeList =  new ListView[String] {
     prefHeight = 230
     items = ObservableBuffer[String]()
   }
 
   val commandLabel = new Label { text = "Commands:" }
-
   val commandText = new Text { wrappingWidth = 600 }
 
   val stateLabel = new Label { text = "States:" }
-
   val stateList = new ListView[String] {
     prefHeight = 240
     items = ObservableBuffer[String]()
   }
 
   val eventLabel = new Label { text = "Events:" }
-
   val eventList = new ListView[String] {
     prefHeight = 260
     items = ObservableBuffer[String]()
