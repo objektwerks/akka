@@ -12,7 +12,7 @@ libraryDependencies ++= {
     "org.iq80.leveldb" % "leveldb" % "0.9",
     "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
     "org.scalafx" % "scalafx_2.12" % "8.0.102-R11",
-    "ch.qos.logback" % "logback-classic" % "1.1.9",
+    "ch.qos.logback" % "logback-classic" % "1.2.3",
     "com.typesafe.akka" % "akka-testkit_2.12" % akkaVersion % "test",
     "org.scalatest" % "scalatest_2.12" % "3.0.3" % "test"
   )
