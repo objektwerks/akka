@@ -40,7 +40,7 @@ class Computer extends PersistentActor with ActorLogging {
     case command: Compute => persistAsync(Computed(command.execute))(updateState)
     case Snapshot => saveSnapshot(state)
     case SaveSnapshotSuccess(metadata) => log.info(s"Computer snapshot successful: $metadata")
-    case SaveSnapshotFailure(metadata, reason) => throw reason
+    case SaveSnapshotFailure(_, reason) => throw reason
     case Result => sender ! state.list
     case Shutdown => context.stop(self)
   }
