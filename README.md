@@ -50,7 +50,3 @@ Test
 Run
 ---
 1. sbt clean compile run
-
-Output
-------
-1. target/output
