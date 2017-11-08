@@ -9,13 +9,13 @@ import scala.concurrent.duration._
 
 class Service extends Actor with ActorLogging {
   def receive = {
-    case message: String => log.info(s"*** Service: $message")
+    case message: String => log.info(s"*** Service received message: $message")
   }
 }
 
 class Listener extends Actor with ActorLogging {
   def receive = {
-    case deadLetter: DeadLetter => log.info(s"*** Service Deadletter: ${deadLetter.message}")
+    case deadLetter: DeadLetter => log.info(s"*** Listener received dead letter!")
   }
 }
 
