@@ -39,7 +39,7 @@ class Computer extends PersistentActor with ActorLogging {
   override def receiveCommand: Receive = {
     case command: Compute => persistAsync(Computed(command.execute))(updateState)
     case Snapshot => saveSnapshot(state)
-    case SaveSnapshotSuccess(metadata) => log.info(s"Computer snapshot successful: $metadata")
+    case SaveSnapshotSuccess(metadata) => log.info(s"*** Computer snapshot successful: $metadata")
     case SaveSnapshotFailure(_, reason) => throw reason
     case Result => sender ! state.list
     case Shutdown => context.stop(self)
@@ -48,7 +48,7 @@ class Computer extends PersistentActor with ActorLogging {
   override def receiveRecover: Receive = {
     case computed: Computed => updateState(computed)
     case SnapshotOffer(_, snapshot: Events) => state = snapshot
-    case RecoveryCompleted => log.info("Computer snapshot recovery completed.")
+    case RecoveryCompleted => log.info("*** Computer snapshot recovery completed.")
   }
 }
 

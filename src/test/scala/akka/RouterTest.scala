@@ -26,9 +26,12 @@ class Clock extends Actor {
   }
 }
 
-class Time extends Actor {
+class Time extends Actor with ActorLogging {
   def receive = {
-    case timeIs: String => sender.tell(s"$timeIs ${LocalTime.now().toString}", context.parent)
+    case timeIs: String =>
+      val time = s"$timeIs ${LocalTime.now.toString}"
+      log.info(s"*** $time")
+      sender.tell(time, context.parent)
   }
 }
 
@@ -42,13 +45,11 @@ class RouterTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("router") {
-    for(i <- 1 to 30) {
-      whatTimeIsIt()
+    val whatTimeIsIt = (i: Int) => {
+      val future = ask(clock, s"$i. The time is:").mapTo[String]
+      val time = Await.result(future, 1 second)
+      assert(time.nonEmpty)
     }
-  }
-
-  def whatTimeIsIt(): Unit = {
-    val future = ask(clock, s"time is:").mapTo[String]
-    assert(Await.result(future, 1 second).nonEmpty)
+    for(i <- 1 to 3) whatTimeIsIt(i)
   }
 }

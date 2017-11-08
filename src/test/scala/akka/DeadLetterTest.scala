@@ -9,13 +9,13 @@ import scala.concurrent.duration._
 
 class Service extends Actor with ActorLogging {
   def receive = {
-    case message: String => log.info(s"Service: $message")
+    case message: String => log.info(s"*** Service: $message")
   }
 }
 
 class Listener extends Actor with ActorLogging {
   def receive = {
-    case deadLetter: DeadLetter => log.info(s"Deadletter: ${deadLetter.message}")
+    case deadLetter: DeadLetter => log.info(s"*** Service Deadletter: ${deadLetter.message}")
   }
 }
 
@@ -32,9 +32,9 @@ class DeadLetterTest extends FunSuite  with BeforeAndAfterAll {
 
   test("dead letter") {
     service ! "First message!"
-    Thread.sleep(500)
+    Thread.sleep(1000)
     service ! PoisonPill
-    Thread.sleep(500)
+    Thread.sleep(1000)
     service ! "Second message!"
   }
 }

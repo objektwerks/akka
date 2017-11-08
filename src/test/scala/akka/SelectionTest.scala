@@ -15,7 +15,7 @@ case object ToChildren
 class GrandParents extends Actor with ActorLogging {
   import context.dispatcher
 
-  log.info(s"GrandParents created: $self")
+  log.info(s"*** GrandParents created: $self")
   implicit val timeout = Timeout(1 second)
   val parent: ActorRef = context.actorOf(Props[Parents], name = "parents")
 
@@ -29,7 +29,7 @@ class GrandParents extends Actor with ActorLogging {
 class Parents extends Actor with ActorLogging {
   import context.dispatcher
 
-  log.info(s"Parents created: $self")
+  log.info(s"*** Parents created: $self")
   implicit val timeout = Timeout(1 second)
   val child: ActorRef = context.actorOf(Props[Children], name = "children")
 
@@ -40,7 +40,7 @@ class Parents extends Actor with ActorLogging {
 }
 
 class Children extends Actor with ActorLogging {
-  log.info(s"Children created: $self")
+  log.info(s"*** Children created: $self")
   implicit val timeout = Timeout(1 second)
 
   def receive = {
@@ -58,17 +58,17 @@ class SelectionTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("grand parents") {
-    assert("grandparents" == Await.result(system.actorSelection("/user/grandparents") ? ToGrandParents, 1 second).asInstanceOf[String])
-    assert("parents" == Await.result(system.actorSelection("/user/grandparents") ? ToParents, 1 second).asInstanceOf[String])
-    assert("children" == Await.result(system.actorSelection("/user/grandparents") ? ToChildren, 1 second).asInstanceOf[String])
+    assert("grandparents" == Await.result( (system.actorSelection("/user/grandparents") ? ToGrandParents).mapTo[String], 1 second))
+    assert("parents" == Await.result( (system.actorSelection("/user/grandparents") ? ToParents).mapTo[String], 1 second))
+    assert("children" == Await.result( (system.actorSelection("/user/grandparents") ? ToChildren).mapTo[String], 1 second))
   }
 
   test("parents") {
-    assert("parents" == Await.result(system.actorSelection("/user/grandparents/parents") ? ToParents, 1 second).asInstanceOf[String])
-    assert("children" == Await.result(system.actorSelection("/user/grandparents/*") ? ToChildren, 1 second).asInstanceOf[String])
+    assert("parents" == Await.result( (system.actorSelection("/user/grandparents/parents") ? ToParents).mapTo[String], 1 second))
+    assert("children" == Await.result( (system.actorSelection("/user/grandparents/*") ? ToChildren).mapTo[String], 1 second))
   }
 
   test("children") {
-    assert("children" == Await.result(system.actorSelection("/user/grandparents/parents/*") ? ToChildren, 1 second).asInstanceOf[String])
+    assert("children" == Await.result( (system.actorSelection("/user/grandparents/parents/*") ? ToChildren).mapTo[String], 1 second))
   }
 }

@@ -17,25 +17,25 @@ class Triathlete extends Actor with ActorLogging {
   def receive = prepare
 
   def prepare: Actor.Receive = {
-    case Ready => log.info("Triathlete ready!")
-    case Swim => log.info("Triathlete swimming!"); context.become(swim)
+    case Ready => log.info("*** Triathlete ready!")
+    case Swim => log.info("*** Triathlete swimming!"); context.become(swim)
   }
 
   def swim: Actor.Receive = {
-    case Bike => log.info("Triathlete biking!"); context.become(bike)
+    case Bike => log.info("*** Triathlete biking!"); context.become(bike)
   }
 
   def bike: Actor.Receive = {
-    case Run => log.info("Triathlete running!"); context.become(run)
+    case Run => log.info("*** Triathlete running!"); context.become(run)
   }
 
   def run: Actor.Receive = {
-    case Finish => log.info("Triathlete finished race!"); context.become(prepare)
+    case Finish => log.info("*** Triathlete finished race!"); context.become(prepare)
   }
 
   override def unhandled(message: Any): Unit = {
     super.unhandled(message)
-    log.info(s"Triathlete failed to handle message: $message.")
+    log.info(s"*** Triathlete failed to handle message: $message.")
   }
 }
 

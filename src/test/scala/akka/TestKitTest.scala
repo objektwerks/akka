@@ -10,7 +10,7 @@ import scala.concurrent.duration._
 class Ping extends Actor with ActorLogging {
   def receive = {
     case ping: String => log.info(ping); sender ! ping
-    case _ => log.info("Ping received an invalid message.")
+    case _ => log.info("*** Ping received an invalid message.")
   }
 }
 
