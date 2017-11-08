@@ -10,13 +10,11 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-sealed trait MessageType
-case object Tell extends MessageType
-case object TellWorker extends MessageType
-case object Ask extends MessageType
-case object AskWorker extends MessageType
-
-case class Message(messageType: MessageType, from: String, message: String)
+sealed trait Message
+case class Tell(message: String) extends Message
+case class TellWorker(message: String) extends Message
+case class Ask(message: String) extends Message
+case class AskWorker(message: String) extends Message
 
 class Master extends Actor with ActorLogging {
   import context.dispatcher
@@ -25,17 +23,27 @@ class Master extends Actor with ActorLogging {
   val worker: ActorRef = context.actorOf(Props[Worker], name = "worker")
 
   def receive = {
-    case Message(Tell, from, message) => log.info(s"*** Master received $message from $from.")
-    case Message(TellWorker, from, message) => worker ! Message(Tell, s"$from -> Master", message)
-    case Message(Ask, from, message) => sender ! s"*** Master received and responded to $message from $from."
-    case Message(AskWorker, from, message) => worker ? Message(AskWorker, s"$from -> Master", message) pipeTo sender
+    case Tell(message) =>
+      log.info(s"*** [Tell] Master received tell message: $message.")
+    case tellWorker@ TellWorker(message) =>
+      log.info(s"*** [Tell Worker] Master received tell worker message: $message.")
+      worker ! tellWorker
+    case Ask(message) =>
+      log.info(s"*** [Ask] Master received and responded to ask message: $message.")
+      sender ! s"*** Master responded to ask $message."
+    case askWorker@ AskWorker(message) =>
+      log.info(s"*** [Ask Worker] Master received ask worker message: $message.")
+      worker ? askWorker pipeTo sender
   }
 }
 
 class Worker extends Actor with ActorLogging {
   def receive = {
-    case Message(Tell, from, message) => log.info(s"*** Worker received $message from $from.")
-    case Message(AskWorker, from, message) => sender ! s"Worker received and responded to $message from $from."
+    case TellWorker(message) =>
+      log.info(s"*** [Tell Worker] Worker received tell worker message from master: $message.")
+    case AskWorker(message) =>
+      log.info(s"*** [Ask Worker] Worker received ask worker message from master: $message.")
+      sender ! s"Worker responded to $message."
   }
 }
 
@@ -49,18 +57,18 @@ class TellAskTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("master ! tell") {
-    master ! Message(Tell, "System", "tell ! message")
+    master ! Tell("master ! tell")
   }
 
   test("master ! tell worker") {
-    master ! Message(TellWorker, "System", "tell ! message")
+    master ! TellWorker("master ! tell worker")
   }
 
   test("master ? ask") {
-    assert(Await.result((master ? Message(Ask, "System", "ask ? message")).mapTo[String], 1 second).nonEmpty)
+    assert(Await.result((master ? Ask("master ? ask")).mapTo[String], 1 second).nonEmpty)
   }
 
   test("master ? ask worker") {
-    assert(Await.result((master ? Message(AskWorker, "System", "ask ? message")).mapTo[String], 1 second).nonEmpty)
+    assert(Await.result((master ? AskWorker("master ? ask worker")).mapTo[String], 1 second).nonEmpty)
   }
 }

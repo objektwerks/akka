@@ -15,7 +15,7 @@ class Service extends Actor with ActorLogging {
 
 class Listener extends Actor with ActorLogging {
   def receive = {
-    case deadLetter: DeadLetter => log.info(s"*** Listener received dead letter!")
+    case _: DeadLetter => log.info(s"*** Listener received dead letter!")
   }
 }
 
