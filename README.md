@@ -25,21 +25,21 @@ Brewery
        * boiler --- boiling(s) ---> brewer
        * boiler --- boiled(e) ---> brewer
     4. cooler --- brew(c) ---> fermenter
-        * cooler --- cooling(s) ---> brewer
-        * cooler --- cooled(e) ---> brewer
+       * cooler --- cooling(s) ---> brewer
+       * cooler --- cooled(e) ---> brewer
     5. fermenter --- brew(c) ---> conditioner
-        * fermenter --- fermenting(s) ---> brewer
-        * fermenter --- fermented(e) ---> brewer
+       * fermenter --- fermenting(s) ---> brewer
+       * fermenter --- fermented(e) ---> brewer
     6. conditioner --- brew(c) ---> bottler && kegger && casker
-        * conditioner --- conditioning(s) ---> brewer
-        * conditioner --- conditioned(e) ---> brewer
-        * conditioner --- brewed(e) ---> brewer
+       * conditioner --- conditioning(s) ---> brewer
+       * conditioner --- conditioned(e) ---> brewer
+       * conditioner --- brewed(e) ---> brewer
     7. bottler --- bottling(s) ---> brewer
-        * bottler --- bottled(e) ---> brewer
+       * bottler --- bottled(e) ---> brewer
     8. kegger --- kegging(s) ---> brewer
-        * kegger --- kegged(e) ---> brewer
+       * kegger --- kegged(e) ---> brewer
     9. casker --- casking(s) ---> brewer
-        * casker --- casked(e) ---> brewer
+       * casker --- casked(e) ---> brewer
 3. brewer --- brewed(e) ---> brewery
 4. brewery --- brewed(e) ---> app
 
