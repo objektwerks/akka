@@ -4,11 +4,11 @@ Akka
 
 Brewery
 -------
->Akka app that visually simulates a beer brewing process:
+>Akka app that visually simulates a beer brewing process. See akka/src/main/brewery directory for source.
 
->The Brew command, via Akka messaging, flows through each step of the brewing process, during which brewing Command,
+>The Brew command, via Akka messaging, flows through each actor of the brewing process, during which brewing Command,
  State and Event instances, subscribed to by the Brewer, are published via Akka event streaming and pushed to ScalaFx
- property change listeners and displayed in the Simulator UI.
+ property change listeners and displayed in the BrewMeister UI.
 
 * (m) = message [1]
 * (c) = command [1]
@@ -42,6 +42,8 @@ Brewery
         * casker --- casked(e) ---> brewer
 3. brewer --- brewed(e) ---> brewery
 4. brewery --- brewed(e) ---> app
+
+>See akka/brewmeister.app.png for a visual of the simulation.
 
 Test
 ----
