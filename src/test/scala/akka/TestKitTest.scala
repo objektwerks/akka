@@ -9,8 +9,7 @@ import scala.concurrent.duration._
 
 class Ping extends Actor with ActorLogging {
   def receive = {
-    case ping: String => log.info(ping); sender ! ping
-    case _ => log.info("*** Ping received an invalid message.")
+    case ping: String => sender ! ping
   }
 }
 
@@ -25,8 +24,8 @@ class TestKitTest extends TestKit(ActorSystem("testkit", Conf.config))
     Await.result(system.terminate(), 1 second)
   }
 
-  "Ping simulation.actor" should {
-    "reply with an identical message" in {
+  "Ping actor" should {
+    "reply with a ping" in {
       within(2 seconds) {
         ping ! "ping"
         expectMsg("ping")
