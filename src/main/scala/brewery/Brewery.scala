@@ -50,5 +50,6 @@ object Brewery {
   def close(): Unit = {
     system.log.info("Brewery closing...")
     Await.result(system.terminate(), 3 seconds)
+    System.exit(0)
   }
 }
