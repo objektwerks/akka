@@ -7,8 +7,8 @@ Brewery
 >Akka app that visually simulates a beer brewing process:
 
 >The Brew command, via Akka messaging, flows through each step of the brewing process, during which brewing Command,
- State and Event instances, subscribed to by the Brewer, are published via Akka event streaming and displayed in the
- Simulator UI.
+ State and Event instances, subscribed to by the Brewer, are published via Akka event streaming and pushed to ScalaFx
+ property change listeners and displayed in the Simulator UI.
 
 * (m) = message [1]
 * (c) = command [1]
