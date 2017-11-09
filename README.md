@@ -1,6 +1,6 @@
 Akka
 ----
->This project contains feature tests and a brewery simulator.
+>This project contains Akka feature tests and a brewery simulator.
 
 Brewery
 -------
@@ -34,7 +34,8 @@ Brewery
 3. brewer --- brewed(e) ---> brewery
 4. brewery --- brewed(e) ---> app
 
->The brew command flows through the brewing process, during which brewing states and events are emitted and displayed in the Simulator.
+>The Brew command flows through each step of the brewing process, via Akka messaging, during which brewing State and
+ Events are published via Akka event streaming and displayed in the Simulator UI.
 
 * (m) = message
 * (c) = command
