@@ -4,7 +4,16 @@ Akka
 
 Brewery
 -------
->Akka cluster that visually simulates a beer brewing process:
+>Akka app that visually simulates a beer brewing process:
+
+>The Brew command, via Akka messaging, flows through each step of the brewing process, during which brewing Command,
+ State and Event instances, subscribed to by the Brewer, are published via Akka event streaming and displayed in the
+ Simulator UI.
+
+* (m) = message [1]
+* (c) = command [1]
+* (s) = state   [8]
+* (e) = event   [9]
 
 1. app --- recipe(m) ---> brewery
 2. brewery --- recipe(m) ---> brewer
@@ -33,16 +42,6 @@ Brewery
         * casker --- casked(e) ---> brewer
 3. brewer --- brewed(e) ---> brewery
 4. brewery --- brewed(e) ---> app
-
->The Brew command flows through each step of the brewing process, via Akka messaging, during which brewing State and
- Events are published via Akka event streaming and displayed in the Simulator UI.
-
-* (m) = message
-* (c) = command
-* (s) = state
-* (e) = event
-
->1 message, 1 command, 8 states and 9 events.
 
 Test
 ----
