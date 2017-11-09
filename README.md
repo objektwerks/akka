@@ -43,7 +43,7 @@ Brewery
 3. brewer --- brewed(e) ---> brewery
 4. brewery --- brewed(e) ---> app
 
->See akka/brewmeister.app.png for a visual of the simulation.
+>See akka/brewmeister.png for a visual of the simulation.
 
 Test
 ----
