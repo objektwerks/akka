@@ -33,4 +33,3 @@ scalacOptions ++= Seq(
   "-Xlint"
 )
 javaOptions += "-Xss1m -Xmx2g"
-fork in test := true
