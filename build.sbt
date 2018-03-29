@@ -1,9 +1,9 @@
 name := "akka"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.5"
 libraryDependencies ++= {
-  val akkaVersion = "2.5.6"
+  val akkaVersion = "2.5.11"
   Seq(
     "com.typesafe.akka" % "akka-actor_2.12" % akkaVersion,
     "com.typesafe.akka" % "akka-persistence_2.12" % akkaVersion,
