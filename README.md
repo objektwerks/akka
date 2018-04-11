@@ -1,6 +1,6 @@
 Akka
 ----
->This project contains Akka feature tests and a brewery simulator. test
+>This project contains Akka feature tests and a brewery simulator.
 
 Brewery
 -------
