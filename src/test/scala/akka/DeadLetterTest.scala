@@ -6,6 +6,7 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
+import scala.language.postfixOps
 
 class Service extends Actor with ActorLogging {
   def receive = {
@@ -28,6 +29,7 @@ class DeadLetterTest extends FunSuite  with BeforeAndAfterAll {
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 1 second)
+    ()
   }
 
   test("dead letter") {

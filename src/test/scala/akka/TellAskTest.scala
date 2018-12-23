@@ -9,6 +9,7 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
+import scala.language.postfixOps
 
 sealed trait Message
 case class Tell(message: String) extends Message
@@ -33,7 +34,7 @@ class Master extends Actor with ActorLogging {
       sender ! s"*** Master responded to ask $message."
     case askWorker@ AskWorker(message) =>
       log.info(s"*** [Ask Worker] Master received ask worker message: $message.")
-      worker ? askWorker pipeTo sender
+      worker ? askWorker pipeTo sender; ()
   }
 }
 
@@ -54,6 +55,7 @@ class TellAskTest extends FunSuite with BeforeAndAfterAll {
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 1 second)
+    ()
   }
 
   test("master ! tell") {

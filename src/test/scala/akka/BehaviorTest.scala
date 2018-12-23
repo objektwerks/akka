@@ -6,6 +6,7 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
+import scala.language.postfixOps
 
 case object Ready
 case object Swim
@@ -46,6 +47,7 @@ class BehaviorTest extends FunSuite with BeforeAndAfterAll {
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 1 second)
+    ()
   }
 
   test("race") {

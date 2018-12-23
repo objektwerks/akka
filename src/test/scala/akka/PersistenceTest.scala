@@ -11,8 +11,9 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import scala.annotation.tailrec
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.language.postfixOps
 
-case class Compute(f: (Int) => Int, n: Int) {
+case class Compute(f: Int => Int, n: Int) {
   def execute: Int = f(n)
 }
 
@@ -69,6 +70,7 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 3 seconds)
+    ()
   }
 
   test("persistence") {

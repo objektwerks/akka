@@ -7,6 +7,7 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
+import scala.language.postfixOps
 
 case object ToGrandParents
 case object ToParents
@@ -21,8 +22,8 @@ class GrandParents extends Actor with ActorLogging {
 
   def receive = {
     case ToGrandParents => sender ! "grandparents"
-    case ToParents => parent ? ToParents pipeTo sender
-    case ToChildren => parent ? ToChildren pipeTo sender
+    case ToParents => parent ? ToParents pipeTo sender; ()
+    case ToChildren => parent ? ToChildren pipeTo sender; ()
   }
 }
 
@@ -35,7 +36,7 @@ class Parents extends Actor with ActorLogging {
 
   def receive = {
     case ToParents => sender ! "parents"
-    case ToChildren => child ? ToChildren pipeTo sender
+    case ToChildren => child ? ToChildren pipeTo sender; ()
   }
 }
 
@@ -55,6 +56,7 @@ class SelectionTest extends FunSuite with BeforeAndAfterAll {
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 1 second)
+    ()
   }
 
   test("grand parents") {

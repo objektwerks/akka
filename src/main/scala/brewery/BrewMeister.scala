@@ -103,5 +103,6 @@ object BrewMeister extends JFXApp {
     list.add(s"Bottle: ${recipe.bottle}")
     list.add(s"Keg: ${recipe.keg}")
     list.add(s"Cask: ${recipe.cask}")
+    ()
   }
 }

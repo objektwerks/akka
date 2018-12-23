@@ -8,6 +8,7 @@ import com.typesafe.config.ConfigFactory
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scalafx.beans.property.ObjectProperty
+import scala.language.postfixOps
 
 object Brewery {
   implicit val timeout = Timeout(10 seconds)
@@ -49,6 +50,7 @@ object Brewery {
 
   def close(): Unit = {
     system.log.info("Brewery closing...")
-    Await.result(system.terminate(), 3 seconds)
+    Await.result(system.terminate, 3 seconds)
+    ()
   }
 }

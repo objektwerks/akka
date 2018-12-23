@@ -6,6 +6,7 @@ import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
+import scala.language.postfixOps
 
 class Ping extends Actor with ActorLogging {
   def receive = {
@@ -22,6 +23,7 @@ class TestKitTest extends TestKit(ActorSystem("testkit", Conf.config))
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 1 second)
+    ()
   }
 
   "Ping actor" should {

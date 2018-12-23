@@ -6,6 +6,7 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
+import scala.language.postfixOps
 
 sealed trait State
 case object Off extends State
@@ -33,6 +34,7 @@ class FSMTest extends FunSuite with BeforeAndAfterAll {
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 1 second)
+    ()
   }
 
   test("fsm") {
