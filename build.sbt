@@ -6,7 +6,6 @@ libraryDependencies ++= {
   val akkaVersion = "2.5.19"
   Seq(
     "com.typesafe.akka" % "akka-actor_2.12" % akkaVersion,
-    "com.typesafe.akka" % "akka-actor-typed_2.12" % akkaVersion,
     "com.typesafe.akka" % "akka-persistence_2.12" % akkaVersion,
     "com.typesafe.akka" % "akka-slf4j_2.12" % akkaVersion,
     "org.iq80.leveldb" % "leveldb" % "0.10",

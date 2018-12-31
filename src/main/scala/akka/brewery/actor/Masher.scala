@@ -1,7 +1,7 @@
-package brewery.actor
+package akka.brewery.actor
 
 import akka.actor.{Actor, ActorRef}
-import brewery.{Brew, Mashed, Mashing}
+import akka.brewery.{Brew, Mashed, Mashing}
 
 class Masher(boiler: ActorRef) extends Actor {
   val publisher = context.system.eventStream

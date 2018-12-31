@@ -1,4 +1,4 @@
-package brewery
+package akka.brewery
 
 import scalafx.application.{JFXApp, Platform}
 import scalafx.beans.property.ObjectProperty

@@ -1,9 +1,9 @@
-package brewery.actor
+package akka.brewery.actor
 
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.{Actor, ActorLogging, ActorRef}
-import brewery._
+import akka.brewery._
 
 class Brewer(masher: ActorRef) extends Actor with ActorLogging {
   val batchNumber = new AtomicInteger()

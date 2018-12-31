@@ -1,7 +1,7 @@
-package brewery.actor
+package akka.brewery.actor
 
 import akka.actor.{Actor, ActorRef}
-import brewery.{Brew, Cooled, Cooling}
+import akka.brewery.{Brew, Cooled, Cooling}
 
 class Cooler(fermenter: ActorRef) extends Actor {
   val publisher = context.system.eventStream

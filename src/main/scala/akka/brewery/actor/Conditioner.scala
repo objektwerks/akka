@@ -1,7 +1,7 @@
-package brewery.actor
+package akka.brewery.actor
 
 import akka.actor.{Actor, ActorRef}
-import brewery.{Brew, Brewed, Conditioned, Conditioning}
+import akka.brewery.{Brew, Brewed, Conditioned, Conditioning}
 
 class Conditioner(bottler: ActorRef, kegger: ActorRef, casker: ActorRef) extends Actor {
   val publisher = context.system.eventStream

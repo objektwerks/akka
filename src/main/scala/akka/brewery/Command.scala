@@ -1,4 +1,4 @@
-package brewery
+package akka.brewery
 
 import java.time.LocalTime
 

@@ -1,4 +1,4 @@
-package brewery
+package akka.brewery
 
 final case class Gravity(original: Double, specific: Double, finished: Double)
 final case class Adjunct(kind: String, amount: Double, as: Measurement.Value)
@@ -33,7 +33,7 @@ sealed trait Recipe {
   def cask: String
 }
 
-import brewery.Measurement._
+import akka.brewery.Measurement._
 final case class IPA(name: String = "Dogfish Head 60' IPA",
                      style: String = "IPA",
                      ibu: Int = 60,
