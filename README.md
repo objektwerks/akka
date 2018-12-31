@@ -2,13 +2,17 @@ Akka
 ----
 >This project contains Akka feature tests and a akka.brewery simulator.
 
+Note
+----
+>I recently explored Akka.Typed. And my conclusion is that it will not succeed. Period.
+
 Brewery
 -------
 >Akka app that visually simulates a beer brewing process. See akka/src/main/akka.brewery directory for source.
 
 >The Brew command, via Akka messaging, flows through each actor of the brewing process, during which brewing Command,
- State and Event instances, subscribed to by the Brewer, are published via Akka event streaming and pushed to ScalaFx
- property change listeners and displayed in the BrewMeister UI.
+State and Event instances, subscribed to by the Brewer, are published via Akka event streaming and pushed to ScalaFx
+property change listeners and displayed in the BrewMeister UI.
 
 * (m) = message [1]
 * (c) = command [1]
