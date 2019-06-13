@@ -3,17 +3,17 @@ organization := "objektwerks"
 version := "0.1-SNAPSHOT"
 scalaVersion := "2.12.8"
 libraryDependencies ++= {
-  val akkaVersion = "2.5.22"
+  val akkaVersion = "2.5.23"
   Seq(
-    "com.typesafe.akka" % "akka-actor_2.12" % akkaVersion,
-    "com.typesafe.akka" % "akka-persistence_2.12" % akkaVersion,
-    "com.typesafe.akka" % "akka-slf4j_2.12" % akkaVersion,
+    "com.typesafe.akka" %% "akka-actor" % akkaVersion,
+    "com.typesafe.akka" %% "akka-persistence" % akkaVersion,
+    "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
     "org.iq80.leveldb" % "leveldb" % "0.10",
     "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
-    "org.scalafx" % "scalafx_2.12" % "11-R16",
+    "org.scalafx" %% "scalafx" % "11-R16",
     "ch.qos.logback" % "logback-classic" % "1.2.3",
-    "com.typesafe.akka" % "akka-testkit_2.12" % akkaVersion % Test,
-    "org.scalatest" % "scalatest_2.12" % "3.0.5" % Test
+    "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
+    "org.scalatest" %% "scalatest" % "3.0.5" % Test
   )
 }
 // Determine OS version of JavaFX binaries
