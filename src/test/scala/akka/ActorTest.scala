@@ -1,15 +1,15 @@
 package akka
 
 import akka.actor._
-import akka.testkit.{ImplicitSender, TestKit}
+import akka.testkit.{ImplicitSender, TestKit, TestProbe}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-class Ping extends Actor {
+class Echo extends Actor {
   def receive: Receive = {
-    case ping: String => sender ! ping
+    case echo: String => sender ! echo
   }
 }
 
@@ -18,15 +18,25 @@ class TestKitTest extends TestKit(ActorSystem("testkit", Conf.config))
   with WordSpecLike
   with Matchers
   with BeforeAndAfterAll {
-  val ping: ActorRef = system.actorOf(Props[Ping], name = "ping")
+  val echo: ActorRef = system.actorOf(Props[Echo], name = "echo")
 
   override protected def afterAll(): Unit = TestKit.shutdownActorSystem(system)
 
-  "Ping actor" should {
-    "reply with a ping" in {
+  "Echo actor" should {
+    "reply with a echo" in {
       within(1 second) {
-        ping ! "ping"
+        echo ! "ping"
         expectMsg("ping")
+      }
+    }
+  }
+
+  "Echo actor" should {
+    "reply with a pong" in {
+      val probe = TestProbe("probe")
+      within(1 second) {
+        probe.send(echo, "pong")
+        probe.expectMsg("pong")
       }
     }
   }
