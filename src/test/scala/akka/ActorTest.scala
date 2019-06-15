@@ -1,7 +1,7 @@
 package akka
 
 import akka.actor._
-import akka.testkit.{ImplicitSender, TestKit, TestProbe}
+import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 import scala.concurrent.duration._
@@ -36,6 +36,14 @@ class ActorTest extends TestKit(ActorSystem("testkit", Conf.config))
       val probe = TestProbe("probe")
       probe.send(echo, "pong")
       probe.expectMsg(1 second, "pong")
+    }
+  }
+
+  "Echo actor" should {
+    "echo test" in {
+      val testEchoRef = TestActorRef[Echo](Props[Echo], name = "test echo ref")
+      testEchoRef ! "test"
+      expectMsg("test")
     }
   }
 }
