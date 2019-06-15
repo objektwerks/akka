@@ -23,7 +23,7 @@ class ActorTest extends TestKit(ActorSystem("testkit", Conf.config))
   override protected def afterAll(): Unit = TestKit.shutdownActorSystem(system)
 
   "Echo actor" should {
-    "reply with a echo" in {
+    "echo ping" in {
       within(1 second) {
         echo ! "ping"
         expectMsg("ping")
@@ -32,7 +32,7 @@ class ActorTest extends TestKit(ActorSystem("testkit", Conf.config))
   }
 
   "Echo actor" should {
-    "reply with a pong" in {
+    "echo pong" in {
       val probe = TestProbe("probe")
       within(1 second) {
         probe.send(echo, "pong")
