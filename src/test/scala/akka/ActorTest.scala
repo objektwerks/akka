@@ -29,17 +29,13 @@ class ActorTest extends TestKit(ActorSystem("testkit", Conf.config))
         expectMsg("ping")
       }
     }
-  }
 
-  "Echo actor" should {
     "echo pong" in {
       val probe = TestProbe("probe")
       probe.send(echo, "pong")
       probe.expectMsg(1 second, "pong")
     }
-  }
 
-  "Echo actor" should {
     "echo test" in {
       val testEchoRef = TestActorRef[Echo](Props[Echo], name = "test echo ref")
       testEchoRef ! "test"
