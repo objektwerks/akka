@@ -13,7 +13,7 @@ class Echo extends Actor {
   }
 }
 
-class TestKitTest extends TestKit(ActorSystem("testkit", Conf.config))
+class ActorTest extends TestKit(ActorSystem("testkit", Conf.config))
   with ImplicitSender
   with WordSpecLike
   with Matchers
