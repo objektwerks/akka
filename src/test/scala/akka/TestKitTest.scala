@@ -4,12 +4,11 @@ import akka.actor._
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
-import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-class Ping extends Actor with ActorLogging {
-  def receive = {
+class Ping extends Actor {
+  def receive: Receive = {
     case ping: String => sender ! ping
   }
 }
@@ -21,14 +20,11 @@ class TestKitTest extends TestKit(ActorSystem("testkit", Conf.config))
   with BeforeAndAfterAll {
   val ping: ActorRef = system.actorOf(Props[Ping], name = "ping")
 
-  override protected def afterAll(): Unit = {
-    Await.result(system.terminate(), 1 second)
-    ()
-  }
+  override protected def afterAll(): Unit = TestKit.shutdownActorSystem(system)
 
   "Ping actor" should {
     "reply with a ping" in {
-      within(2 seconds) {
+      within(1 second) {
         ping ! "ping"
         expectMsg("ping")
       }
