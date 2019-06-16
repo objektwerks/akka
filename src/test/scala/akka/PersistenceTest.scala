@@ -2,7 +2,7 @@ package akka
 
 import java.time.LocalDateTime
 
-import akka.actor.{ActorLogging, ActorRef, ActorSystem, Props}
+import akka.actor.{ActorLogging, ActorSystem, Props}
 import akka.pattern._
 import akka.persistence._
 import akka.util.Timeout
@@ -55,9 +55,9 @@ class Computer extends PersistentActor with ActorLogging {
 
 class PersistenceTest extends FunSuite with BeforeAndAfterAll {
   implicit val ec = ExecutionContext.global
-  implicit val timeout = Timeout(1 second)
-  val system: ActorSystem = ActorSystem.create("persistence", Conf.config)
-  val computer: ActorRef = system.actorOf(Props[Computer], name = "computer")
+  implicit val timeout = Timeout(3 seconds)
+  val system = ActorSystem.create("persistence", Conf.config)
+  val computer = system.actorOf(Props[Computer], name = "computer")
 
   def fibonacci(n: Int): Int = {
     @tailrec
@@ -85,7 +85,7 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
 
     computer ! Snapshot
 
-    assert(Await.result(computer ? Result, 3 seconds).asInstanceOf[List[Int]].size == 10)
+    assert(Await.result(computer ? Result, 3 seconds).asInstanceOf[List[Int]].size >= 10)
 
     computer ! Shutdown
   }
