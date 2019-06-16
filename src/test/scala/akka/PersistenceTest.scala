@@ -10,7 +10,7 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 import scala.annotation.tailrec
 import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
 case class Compute(f: Int => Int, n: Int) {
@@ -54,10 +54,10 @@ class Computer extends PersistentActor with ActorLogging {
 }
 
 class PersistenceTest extends FunSuite with BeforeAndAfterAll {
-  implicit val ec = ExecutionContext.global
   implicit val timeout = Timeout(3 seconds)
   val system = ActorSystem.create("persistence", Conf.config)
   val computer = system.actorOf(Props[Computer], name = "computer")
+  implicit val ec = system.dispatcher
 
   def fibonacci(n: Int): Int = {
     @tailrec
