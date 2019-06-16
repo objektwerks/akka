@@ -18,26 +18,26 @@ class ActorTest extends TestKit(ActorSystem("actor-test", Conf.config))
   with WordSpecLike
   with Matchers
   with BeforeAndAfterAll {
-  val echo: ActorRef = system.actorOf(Props[Echo], name = "echo")
+  val echo = system.actorOf(Props[Echo], name = "echo")
 
   override protected def afterAll(): Unit = TestKit.shutdownActorSystem(system)
 
   "Echo actor" should {
-    "echo ping" in {
+    "expect ping" in {
       within(1 second) {
         echo ! "ping"
         expectMsg("ping")
       }
     }
 
-    "echo pong" in {
-      val probe = TestProbe("probe")
+    "expect pong via test probe" in {
+      val probe = TestProbe("echo-test-probe")
       probe.send(echo, "pong")
       probe.expectMsg(1 second, "pong")
     }
 
-    "echo test" in {
-      val testEchoRef = TestActorRef[Echo](Props[Echo], name = "test echo ref")
+    "expect test via test actor ref" in {
+      val testEchoRef = TestActorRef[Echo](Props[Echo], name = "echo-test-actor-ref")
       testEchoRef ! "test"
       expectMsg("test")
     }
