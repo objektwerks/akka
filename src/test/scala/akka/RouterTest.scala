@@ -22,7 +22,7 @@ class Clock extends Actor {
     Router(RoundRobinRoutingLogic(), routees)
   }
 
-  def receive = {
+  def receive: Receive = {
     case timeIs: String => router.route(timeIs, sender)
   }
 }
@@ -38,8 +38,8 @@ class Time extends Actor with ActorLogging {
 
 class RouterTest extends FunSuite with BeforeAndAfterAll {
   implicit val timeout = Timeout(1 second)
-  val system: ActorSystem = ActorSystem.create("router", Conf.config)
-  val clock: ActorRef = system.actorOf(Props[Clock], name = "clock")
+  val system = ActorSystem.create("router", Conf.config)
+  val clock = system.actorOf(Props[Clock], name = "clock")
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 1 second)
