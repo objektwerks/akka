@@ -17,20 +17,20 @@ class CleanRoomException(cause: String) extends Exception(cause)
 
 class Nanny extends Actor with ActorLogging {
   implicit val timeout = Timeout(3 seconds)
-  val child: ActorRef = context.actorOf(Props[Child], name = "child")
+  val child = context.actorOf(Props[Child], name = "child")
 
   override def supervisorStrategy: SupervisorStrategy =
     OneForOneStrategy(maxNrOfRetries = 1, withinTimeRange = 1 second) {
       case _: CleanRoomException => Restart
   }
 
-  def receive = {
+  def receive: Receive = {
     case task: Task => child ! task
   }
 }
 
 class Child extends Actor with ActorLogging {
-  def receive = {
+  def receive: Receive = {
     case Play => log.info("*** Child happily playing!")
     case CleanRoom => throw new CleanRoomException("Child refuses to clean room!")
   }
@@ -38,8 +38,8 @@ class Child extends Actor with ActorLogging {
 
 class SupervisorStrategyTest extends FunSuite with BeforeAndAfterAll {
   implicit val timeout = Timeout(1 second)
-  val system: ActorSystem = ActorSystem.create("supervisor", Conf.config)
-  val nanny: ActorRef = system.actorOf(Props[Nanny], name = "nanny")
+  val system = ActorSystem.create("supervisor", Conf.config)
+  val nanny = system.actorOf(Props[Nanny], name = "nanny")
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 1 second)
