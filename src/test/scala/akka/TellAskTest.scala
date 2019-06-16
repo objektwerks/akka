@@ -21,9 +21,9 @@ class Master extends Actor with ActorLogging {
   import context.dispatcher
 
   implicit val timeout = new Timeout(1, TimeUnit.SECONDS)
-  val worker: ActorRef = context.actorOf(Props[Worker], name = "worker")
+  val worker = context.actorOf(Props[Worker], name = "worker")
 
-  def receive = {
+  def receive: Receive = {
     case Tell(message) =>
       log.info(s"*** [Tell] Master received tell message: $message.")
     case tellWorker@ TellWorker(message) =>
@@ -39,7 +39,7 @@ class Master extends Actor with ActorLogging {
 }
 
 class Worker extends Actor with ActorLogging {
-  def receive = {
+  def receive: Receive = {
     case TellWorker(message) =>
       log.info(s"*** [Tell Worker] Worker received tell worker message from master: $message.")
     case AskWorker(message) =>
@@ -50,8 +50,8 @@ class Worker extends Actor with ActorLogging {
 
 class TellAskTest extends FunSuite with BeforeAndAfterAll {
   implicit val timeout = Timeout(1 second)
-  val system: ActorSystem = ActorSystem.create("tellask", Conf.config)
-  val master: ActorRef = system.actorOf(Props[Master], name = "master")
+  val system = ActorSystem.create("tellask", Conf.config)
+  val master = system.actorOf(Props[Master], name = "master")
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 1 second)
