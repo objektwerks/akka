@@ -15,22 +15,22 @@ case object Run
 case object Finish
 
 class Triathlete extends Actor with ActorLogging {
-  def receive = prepare
+  def receive: Receive = prepare
 
-  def prepare: Actor.Receive = {
+  def prepare: Receive = {
     case Ready => log.info("*** Triathlete ready!")
     case Swim => log.info("*** Triathlete swimming!"); context.become(swim)
   }
 
-  def swim: Actor.Receive = {
+  def swim: Receive = {
     case Bike => log.info("*** Triathlete biking!"); context.become(bike)
   }
 
-  def bike: Actor.Receive = {
+  def bike: Receive = {
     case Run => log.info("*** Triathlete running!"); context.become(run)
   }
 
-  def run: Actor.Receive = {
+  def run: Receive = {
     case Finish => log.info("*** Triathlete finished race!"); context.become(prepare)
   }
 
@@ -42,8 +42,8 @@ class Triathlete extends Actor with ActorLogging {
 
 class BehaviorTest extends FunSuite with BeforeAndAfterAll {
   implicit val timeout = Timeout(1 second)
-  val system: ActorSystem = ActorSystem.create("behavior", Conf.config)
-  val triathlete: ActorRef = system.actorOf(Props[Triathlete], name = "triathlete")
+  val system = ActorSystem.create("behavior", Conf.config)
+  val triathlete = system.actorOf(Props[Triathlete], name = "triathlete")
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 1 second)
