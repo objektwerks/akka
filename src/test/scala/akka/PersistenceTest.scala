@@ -9,8 +9,8 @@ import akka.util.Timeout
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 
 import scala.annotation.tailrec
+import scala.concurrent.Await
 import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
 case class Compute(f: Int => Int, n: Int) {
@@ -81,11 +81,14 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
     assert(event.value == 1)
 
     for (n <- 1 to 10) computer ! Compute(fibonacci, n)
-    Await.result(Future { Thread.sleep(3000) }, 4 seconds)
+
+    Thread.sleep(3000)
 
     computer ! Snapshot
 
-    assert(Await.result(computer ? Result, 3 seconds).asInstanceOf[List[Int]].size >= 10)
+    Thread.sleep(3000)
+
+    assert(Await.result( (computer ? Result).mapTo[List[Int]], 10 seconds).size >= 10)
 
     computer ! Shutdown
   }
