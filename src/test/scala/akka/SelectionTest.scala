@@ -20,7 +20,7 @@ class GrandParents extends Actor with ActorLogging {
   implicit val timeout = Timeout(1 second)
   val parent = context.actorOf(Props[Parents], name = "parents")
 
-  def receive = {
+  def receive: Receive = {
     case ToGrandParents => sender ! "grandparents"
     case ToParents => parent ? ToParents pipeTo sender; ()
     case ToChildren => parent ? ToChildren pipeTo sender; ()
@@ -34,7 +34,7 @@ class Parents extends Actor with ActorLogging {
   implicit val timeout = Timeout(1 second)
   val child = context.actorOf(Props[Children], name = "children")
 
-  def receive = {
+  def receive: Receive = {
     case ToParents => sender ! "parents"
     case ToChildren => child ? ToChildren pipeTo sender; ()
   }
@@ -44,7 +44,7 @@ class Children extends Actor with ActorLogging {
   log.info(s"*** Children created: $self")
   implicit val timeout = Timeout(1 second)
 
-  def receive = {
+  def receive: Receive = {
     case ToChildren => sender ! "children"
   }
 }
