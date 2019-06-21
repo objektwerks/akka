@@ -12,12 +12,10 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-class Clock extends Actor {
+class Clock extends Actor with ActorLogging {
   var router = {
     val routees = Vector.fill(2) {
-      val time = context.actorOf(Props[Time])
-      context watch time
-      ActorRefRoutee(time)
+      ActorRefRoutee( context.actorOf(Props[Time]) )
     }
     Router(RoundRobinRoutingLogic(), routees)
   }
@@ -28,7 +26,7 @@ class Clock extends Actor {
 }
 
 class Time extends Actor with ActorLogging {
-  def receive = {
+  def receive: Receive = {
     case timeIs: String =>
       val time = s"$timeIs ${LocalTime.now.toString}"
       log.info(s"*** $time")
