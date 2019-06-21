@@ -32,7 +32,7 @@ case object Shutdown
 class Computer extends PersistentActor with ActorLogging {
   var events = Events()
 
-  override def persistenceId: String = "computer-persistence-id"
+  override def persistenceId: String = "computed-event-persistence-id"
 
   def updateState(event: Computed): Unit = {
     events = events.add(event)
