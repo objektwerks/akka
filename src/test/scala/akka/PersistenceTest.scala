@@ -74,12 +74,6 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("persistence") {
-    val command = Compute(fibonacci, 1)
-    assert(command.execute == 1)
-
-    val event = Computed(command.execute)
-    assert(event.value == 1)
-
     for (n <- 1 to 10) computer ! Compute(fibonacci, n)
 
     Thread.sleep(3000)
@@ -88,7 +82,9 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
 
     Thread.sleep(3000)
 
-    assert(Await.result( (computer ? Result).mapTo[List[Int]], 10 seconds).size >= 10)
+    val results = Await.result( (computer ? Result).mapTo[List[Int]], 10 seconds)
+    results.foreach(r => println(s"fibonacci: $r"))
+    assert(results.size >= 10)
 
     computer ! Shutdown
   }
