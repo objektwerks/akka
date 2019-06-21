@@ -13,7 +13,7 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 
 class Clock extends Actor with ActorLogging {
-  var router = {
+  val router = {
     val routees = Vector.fill(2) {
       ActorRefRoutee( context.actorOf(Props[Time]) )
     }
