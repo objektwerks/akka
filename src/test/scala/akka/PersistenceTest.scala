@@ -1,6 +1,7 @@
 package akka
 
 import java.time.LocalTime
+import java.util.UUID
 
 import akka.actor.{ActorLogging, ActorSystem, Props}
 import akka.pattern._
@@ -13,11 +14,11 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-case class Compute(f: Int => Int, n: Int) {
+case class Compute(f: Int => Int, n: Int, id: String = UUID.randomUUID.toString, created: LocalTime = LocalTime.now()) {
   def execute: Int = f(n)
 }
 
-case class Computed(value: Int, created: LocalTime = LocalTime.now())
+case class Computed(value: Int, id: String = UUID.randomUUID.toString, created: LocalTime = LocalTime.now())
 
 case class Events(events: List[Computed] = Nil) {
   def add(event: Computed): Events = copy(event :: events)
@@ -82,7 +83,7 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
 
     val events = Await.result( (computer ? Result).mapTo[List[Computed]], 10 seconds)
     println("fibonacci computed events:")
-    events.foreach(event => println(s"created: ${event.created} value: ${event.value}"))
+    events.foreach(event => println(s"id: ${event.id} created: ${event.created} value: ${event.value}"))
     assert(events.size >= 10)
 
     computer ! Shutdown
