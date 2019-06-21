@@ -1,6 +1,6 @@
 package akka
 
-import java.time.LocalDateTime
+import java.time.LocalTime
 
 import akka.actor.{ActorLogging, ActorSystem, Props}
 import akka.pattern._
@@ -17,7 +17,7 @@ case class Compute(f: Int => Int, n: Int) {
   def execute: Int = f(n)
 }
 
-case class Computed(value: Int, created: LocalDateTime = LocalDateTime.now())
+case class Computed(value: Int, created: LocalTime = LocalTime.now())
 
 case class Events(events: List[Computed] = Nil) {
   def add(event: Computed): Events = copy(event :: events)
@@ -42,7 +42,7 @@ class Computer extends PersistentActor with ActorLogging {
     case Snapshot => saveSnapshot(state)
     case SaveSnapshotSuccess(metadata) => log.info(s"*** Computer snapshot successful: $metadata")
     case SaveSnapshotFailure(_, reason) => throw reason
-    case Result => sender ! state.list
+    case Result => sender ! state.events
     case Shutdown => context.stop(self)
   }
 
@@ -75,16 +75,15 @@ class PersistenceTest extends FunSuite with BeforeAndAfterAll {
 
   test("persistence") {
     for (n <- 1 to 10) computer ! Compute(fibonacci, n)
-
     Thread.sleep(3000)
 
     computer ! Snapshot
-
     Thread.sleep(3000)
 
-    val results = Await.result( (computer ? Result).mapTo[List[Int]], 10 seconds)
-    results.foreach(r => println(s"fibonacci: $r"))
-    assert(results.size >= 10)
+    val events = Await.result( (computer ? Result).mapTo[List[Computed]], 10 seconds)
+    println("fibonacci compute events:")
+    events.foreach(event => println(s"created: ${event.created} value: ${event.value}"))
+    assert(events.size >= 10)
 
     computer ! Shutdown
   }
