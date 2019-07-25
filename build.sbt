@@ -13,7 +13,7 @@ libraryDependencies ++= {
     "org.scalafx" %% "scalafx" % "11-R16",
     "ch.qos.logback" % "logback-classic" % "1.2.3",
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
-    "org.scalatest" %% "scalatest" % "3.0.5" % Test
+    "org.scalatest" %% "scalatest" % "3.0.8" % Test
   )
 }
 // Determine OS version of JavaFX binaries
