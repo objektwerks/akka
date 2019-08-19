@@ -3,12 +3,12 @@ organization := "objektwerks"
 version := "0.1-SNAPSHOT"
 scalaVersion := "2.12.9"
 libraryDependencies ++= {
-  val akkaVersion = "2.5.23"
+  val akkaVersion = "2.5.24"
   Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
     "com.typesafe.akka" %% "akka-persistence" % akkaVersion,
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
-    "org.iq80.leveldb" % "leveldb" % "0.10",
+    "org.iq80.leveldb" % "leveldb" % "0.12",
     "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
     "org.scalafx" %% "scalafx" % "11-R16",
     "ch.qos.logback" % "logback-classic" % "1.2.3",
