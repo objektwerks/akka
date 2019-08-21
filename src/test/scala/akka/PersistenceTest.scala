@@ -14,11 +14,16 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-case class Compute(f: Int => Int, n: Int, id: String = UUID.randomUUID.toString, created: LocalTime = LocalTime.now()) {
+case class Compute(f: Int => Int,
+                   n: Int,
+                   id: String = UUID.randomUUID.toString,
+                   created: LocalTime = LocalTime.now) {
   def execute: Int = f(n)
 }
 
-case class Computed(value: Int, id: String = UUID.randomUUID.toString, created: LocalTime = LocalTime.now())
+case class Computed(value: Int,
+                    id: String = UUID.randomUUID.toString,
+                    created: LocalTime = LocalTime.now)
 
 case class Events(events: List[Computed] = Nil) {
   def add(event: Computed): Events = copy(event :: events)
