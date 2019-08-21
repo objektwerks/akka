@@ -26,13 +26,13 @@ class Master extends Actor with ActorLogging {
   def receive: Receive = {
     case Tell(message) =>
       log.info(s"*** [Tell] Master received tell message: $message.")
-    case tellWorker@ TellWorker(message) =>
+    case tellWorker @ TellWorker(message) =>
       log.info(s"*** [Tell Worker] Master received tell worker message: $message.")
       worker ! tellWorker
     case Ask(message) =>
       log.info(s"*** [Ask] Master received and responded to ask message: $message.")
       sender ! s"*** Master responded to ask $message."
-    case askWorker@ AskWorker(message) =>
+    case askWorker @ AskWorker(message) =>
       log.info(s"*** [Ask Worker] Master received ask worker message: $message.")
       worker ? askWorker pipeTo sender; ()
   }
