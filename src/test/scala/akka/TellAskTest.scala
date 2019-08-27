@@ -34,7 +34,9 @@ class Master extends Actor with ActorLogging {
       sender ! s"*** Master responded to ask $message."
     case askWorker @ AskWorker(message) =>
       log.info(s"*** [Ask Worker] Master received ask worker message: $message.")
-      worker ? askWorker pipeTo sender; ()
+      log.info(s"*** [Ask Worker] ask worker message ? Worker, pipeTo Master: $message.")
+      worker ? askWorker pipeTo sender
+      ()
   }
 }
 
@@ -67,10 +69,10 @@ class TellAskTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("master ? ask") {
-    assert(Await.result((master ? Ask("master ? ask")).mapTo[String], 1 second).nonEmpty)
+    assert( Await.result((master ? Ask("master ? ask")).mapTo[String], 1 second).nonEmpty )
   }
 
   test("master ? ask worker") {
-    assert(Await.result((master ? AskWorker("master ? ask worker")).mapTo[String], 1 second).nonEmpty)
+    assert( Await.result((master ? AskWorker("master ? ask worker")).mapTo[String], 1 second).nonEmpty )
   }
 }
