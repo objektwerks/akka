@@ -1,16 +1,16 @@
 name := "akka"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.12.10"
+scalaVersion := "2.12.11"
 libraryDependencies ++= {
-  val akkaVersion = "2.5.25"
+  val akkaVersion = "2.6.4"
   Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
     "com.typesafe.akka" %% "akka-persistence" % akkaVersion,
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
     "org.iq80.leveldb" % "leveldb" % "0.12",
     "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
-    "org.scalafx" %% "scalafx" % "11-R16",
+    "org.scalafx" %% "scalafx" % "12.0.2-R18",
     "ch.qos.logback" % "logback-classic" % "1.2.3",
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
     "org.scalatest" %% "scalatest" % "3.0.8" % Test
