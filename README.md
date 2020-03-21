@@ -59,7 +59,9 @@ Run
 
 Bloop
 -----
+>Must edit /usr/local/Cellar/bloop/1.4.0-RC1/bin/blp-server to use JDK 11. Replace 1.8 with 11.
 1. sbt bloopInstall
 2. bloop clean akka
 3. bloop compile akka
 4. bloop test akka
+5. bloop run akka
