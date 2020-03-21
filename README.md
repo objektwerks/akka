@@ -2,6 +2,10 @@ Akka
 ----
 >This project contains Akka feature tests and a akka.brewery simulator.
 
+WARNING
+-------
+>**Must build and run with JDK 11!**
+
 Brewery
 -------
 >Akka app that visually simulates a beer brewing process. See akka/src/main/akka.brewery directory for source.
