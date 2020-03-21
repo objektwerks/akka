@@ -2,10 +2,6 @@ Akka
 ----
 >This project contains Akka feature tests and a akka.brewery simulator.
 
-Note
-----
->I recently explored Akka.Typed. And my conclusion is that it will not succeed. Period.
-
 Brewery
 -------
 >Akka app that visually simulates a beer brewing process. See akka/src/main/akka.brewery directory for source.
@@ -56,3 +52,10 @@ Test
 Run
 ---
 1. sbt clean compile run
+
+Bloop
+-----
+1. sbt bloopInstall
+2. bloop clean akka
+3. bloop compile akka
+4. bloop test akka

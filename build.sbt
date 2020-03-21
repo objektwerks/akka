@@ -1,7 +1,7 @@
 name := "akka"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.12.11"
+scalaVersion := "2.13.1"
 libraryDependencies ++= {
   val akkaVersion = "2.6.4"
   Seq(
@@ -16,12 +16,14 @@ libraryDependencies ++= {
     "org.scalatest" %% "scalatest" % "3.0.8" % Test
   )
 }
+
 // Determine OS version of JavaFX binaries
-lazy val osName = System.getProperty("os.name") match {
-  case n if n.startsWith("Linux")   => "linux"
-  case n if n.startsWith("Mac")     => "mac"
+val osName = System.getProperty("os.name") match {
+  case n if n.startsWith("Linux") => "linux"
+  case n if n.startsWith("Mac") => "mac"
   case n if n.startsWith("Windows") => "win"
   case _ => throw new Exception("Unknown platform!")
 }
-lazy val javaFXModules = Seq("base", "controls", "fxml", "graphics", "media", "swing", "web")
-libraryDependencies ++= javaFXModules.map( m => "org.openjfx" % s"javafx-$m" % "11" classifier osName )
+val javafxModules = Seq("base", "controls", "fxml", "graphics", "media", "swing", "web")
+val javafxVersion = "14"
+libraryDependencies ++= javafxModules.map(m => "org.openjfx" % s"javafx-$m" % javafxVersion classifier osName)
