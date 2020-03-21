@@ -16,7 +16,7 @@ object Brewery {
   var statePropertyListener: Option[ObjectProperty[State]] = None
   var eventPropertyListener: Option[ObjectProperty[Event]] = None
 
-  val system = ActorSystem.create("akka/brewery", ConfigFactory.load("brewery.conf"))
+  val system = ActorSystem.create("brewmeister", ConfigFactory.load("brewery.conf"))
   val bottler = system.actorOf(Props[Bottler], name = "bottler")
   val kegger = system.actorOf(Props[Kegger], name = "kegger")
   val casker = system.actorOf(Props[Casker], name = "casker")
