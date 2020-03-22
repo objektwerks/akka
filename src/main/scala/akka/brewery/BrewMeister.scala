@@ -61,7 +61,8 @@ object BrewMeister extends JFXApp {
     }
   }
 
-  brewButton.onAction = { _ =>
+  import scalafx.Includes._
+  brewButton.onAction = handle {
     commandText.text = ""
     stateList.items.get().clear()
     eventList.items.get().clear()
