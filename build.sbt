@@ -24,3 +24,4 @@ libraryDependencies ++= {
     "org.scalatest" %% "scalatest" % "3.0.8" % Test
   )
 }
+scalacOptions ++= Seq("-target:jvm-11")
