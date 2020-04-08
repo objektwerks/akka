@@ -73,5 +73,6 @@ Bloop
 Package and Run
 ---------------
 >Fails with java.lang.NoClassDefFoundError: sun/misc/Unsafe due to Akka!
+>Adding the **jdk.unsupported** module resolves the issue.
 1. sbt stage
 2. ./target/universal/stage/bin/akka
