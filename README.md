@@ -69,3 +69,7 @@ Bloop
 3. bloop compile akka
 4. bloop test akka
 5. bloop run akka
+
+Package
+-------
+1. sbt stage
