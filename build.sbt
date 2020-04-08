@@ -25,4 +25,4 @@ scalacOptions ++= Seq("-target:jvm-11")
 jlinkModules := {
   jlinkModules.value :+ "jdk.unsupported"
 }
-jlinkIgnoreMissingDependency := JlinkIgnore.everythings
+jlinkIgnoreMissingDependency := JlinkIgnore.everything
