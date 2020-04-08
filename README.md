@@ -58,7 +58,7 @@ Run
 ---
 >**Must build and run with JDK 11!** To build and run:
 1. sbt clean compile run -java-home /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
->**Or if JDK11 is installed:
+>**Or if JDK11 is installed:**
 1. sbt run
 
 Bloop
