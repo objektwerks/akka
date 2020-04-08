@@ -70,6 +70,8 @@ Bloop
 4. bloop test akka
 5. bloop run akka
 
-Package
--------
+Package and Run
+---------------
+>Fails with java.lang.NoClassDefFoundError: sun/misc/Unsafe
 1. sbt stage
+2. ./target/universal/stage/bin/akka
