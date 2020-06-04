@@ -5,9 +5,9 @@ useCoursier := false
 name := "akka"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.13.1"
+scalaVersion := "2.13.2"
 libraryDependencies ++= {
-  val akkaVersion = "2.6.4"
+  val akkaVersion = "2.6.5"
   val openjfxVersion = "14"
   Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
