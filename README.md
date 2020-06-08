@@ -4,8 +4,9 @@ Akka
 
 WARNING
 -------
->**Must build and run with JDK 11!** To build and run:
-1. sbt clean compile run -java-home /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
+>**Must build, test and run with JDK 11!** To build and run:
+1. Run: sbt clean compile run -java-home /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
+2. Test: sbt clean test -java-home /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
 
 Brewery
 -------
