@@ -5,7 +5,7 @@ organization := "objektwerks"
 version := "0.1-SNAPSHOT"
 scalaVersion := "2.13.2"
 libraryDependencies ++= {
-  val akkaVersion = "2.6.5"
+  val akkaVersion = "2.6.6"
   val openjfxVersion = "14"
   Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
