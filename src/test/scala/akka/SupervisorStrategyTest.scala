@@ -3,7 +3,9 @@ package akka
 import akka.actor.SupervisorStrategy.Restart
 import akka.actor._
 import akka.util.Timeout
-import org.scalatest.{BeforeAndAfterAll, FunSuite}
+
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.funsuite.AnyFunSuite
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -36,7 +38,7 @@ class Child extends Actor with ActorLogging {
   }
 }
 
-class SupervisorStrategyTest extends FunSuite with BeforeAndAfterAll {
+class SupervisorStrategyTest extends AnyFunSuite with BeforeAndAfterAll {
   implicit val timeout = Timeout(1 second)
   val system = ActorSystem.create("supervisor", Conf.config)
   val nanny = system.actorOf(Props[Nanny], name = "nanny")

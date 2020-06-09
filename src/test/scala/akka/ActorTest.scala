@@ -2,7 +2,10 @@ package akka
 
 import akka.actor._
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
-import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
@@ -15,7 +18,7 @@ class Echo extends Actor {
 
 class ActorTest extends TestKit(ActorSystem("actor-test", Conf.config))
   with ImplicitSender
-  with WordSpecLike
+  with AnyWordSpecLike
   with Matchers
   with BeforeAndAfterAll {
   val echo = system.actorOf(Props[Echo], name = "echo")

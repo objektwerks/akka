@@ -5,7 +5,9 @@ import java.util.concurrent.TimeUnit
 import akka.actor._
 import akka.pattern._
 import akka.util.Timeout
-import org.scalatest.{BeforeAndAfterAll, FunSuite}
+
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.funsuite.AnyFunSuite
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -50,7 +52,7 @@ class Worker extends Actor with ActorLogging {
   }
 }
 
-class TellAskTest extends FunSuite with BeforeAndAfterAll {
+class TellAskTest extends AnyFunSuite with BeforeAndAfterAll {
   implicit val timeout = Timeout(1 second)
   val system = ActorSystem.create("tellask", Conf.config)
   val master = system.actorOf(Props[Master], name = "master")

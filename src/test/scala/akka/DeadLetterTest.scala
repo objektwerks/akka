@@ -2,7 +2,8 @@ package akka
 
 import akka.actor._
 import akka.util.Timeout
-import org.scalatest.{BeforeAndAfterAll, FunSuite}
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.funsuite.AnyFunSuite
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -20,7 +21,7 @@ class Listener extends Actor with ActorLogging {
   }
 }
 
-class DeadLetterTest extends FunSuite  with BeforeAndAfterAll {
+class DeadLetterTest extends AnyFunSuite  with BeforeAndAfterAll {
   implicit val timeout = Timeout(1 second)
   val system = ActorSystem.create("deadletter", Conf.config)
   val service = system.actorOf(Props[Service], name = "service")

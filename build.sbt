@@ -18,7 +18,7 @@ libraryDependencies ++= {
     "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8" % Test,
     "com.typesafe.akka" %% "akka-persistence" % akkaVersion % Test,
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
-    "org.scalatest" %% "scalatest" % "3.0.8" % Test
+    "org.scalatest" %% "scalatest" % "3.1.2" % Test
   )
 }
 scalacOptions ++= Seq("-target:jvm-11")

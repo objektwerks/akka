@@ -7,7 +7,9 @@ import akka.actor.{ActorLogging, ActorSystem, Props}
 import akka.pattern._
 import akka.persistence._
 import akka.util.Timeout
-import org.scalatest.{BeforeAndAfterAll, FunSuite}
+
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.funsuite.AnyFunSuite
 
 import scala.annotation.tailrec
 import scala.concurrent.Await
@@ -59,7 +61,7 @@ class Computer extends PersistentActor with ActorLogging {
   }
 }
 
-class PersistenceTest extends FunSuite with BeforeAndAfterAll {
+class PersistenceTest extends AnyFunSuite with BeforeAndAfterAll {
   implicit val timeout = Timeout(3 seconds)
   val system = ActorSystem.create("persistence", Conf.config)
   val computer = system.actorOf(Props[Computer], name = "computer")

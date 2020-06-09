@@ -6,7 +6,9 @@ import akka.actor._
 import akka.pattern._
 import akka.routing.{ActorRefRoutee, RoundRobinRoutingLogic, Router}
 import akka.util.Timeout
-import org.scalatest.{BeforeAndAfterAll, FunSuite}
+
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.funsuite.AnyFunSuite
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -34,7 +36,7 @@ class Time extends Actor with ActorLogging {
   }
 }
 
-class RouterTest extends FunSuite with BeforeAndAfterAll {
+class RouterTest extends AnyFunSuite with BeforeAndAfterAll {
   implicit val timeout = Timeout(1 second)
   val system = ActorSystem.create("router", Conf.config)
   val clock = system.actorOf(Props[Clock], name = "clock")
