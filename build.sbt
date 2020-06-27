@@ -26,7 +26,6 @@ lazy val osName = System.getProperty("os.name") match {
 }
 lazy val javaFXModules = Seq("base", "controls", "fxml", "graphics", "media", "swing", "web")
 libraryDependencies ++= javaFXModules.map( m => "org.openjfx" % s"javafx-$m" % "14.0.1" classifier osName )
-scalacOptions ++= Seq("-target:jvm-11")
 jlinkModules := {
   jlinkModules.value :+ "jdk.unsupported"
 }
