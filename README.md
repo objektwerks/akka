@@ -10,7 +10,7 @@ WARNING
 
 Brewery
 -------
->Akka app that visually simulates a beer brewing process. See akka/src/main/akka.brewery directory for source.
+>Akka app that visually simulates a beer brewing process. See src/main/scala/akka/brewery directory for source.
 
 >The Brew command, via Akka messaging, flows through each actor of the brewing process, during which brewing Command,
 State and Event instances, subscribed to by the Brewer, are published via Akka event streaming and pushed to ScalaFx
@@ -57,14 +57,10 @@ Test
 
 Run
 ---
->**Must build and run with JDK 11!** To build and run:
-1. sbt clean compile run -java-home /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
->**Or if JDK11 is installed:**
-1. sbt run
+1. sbt clean compile run
 
 Bloop
 -----
->Must edit /usr/local/Cellar/bloop/1.4.0-RC1/bin/blp-server to use JDK 11. Replace 1.8 with 11.
 1. sbt bloopInstall
 2. bloop clean akka
 3. bloop compile akka
@@ -74,6 +70,6 @@ Bloop
 Package and Run
 ---------------
 >Fails with java.lang.NoClassDefFoundError: sun/misc/Unsafe due to Akka!
->Adding the **jdk.unsupported** module, build.sbt, resolves the issue.
+>Adding the **jdk.unsupported** module, to build.sbt, resolves this issue.
 1. sbt stage
 2. ./target/universal/stage/bin/akka
