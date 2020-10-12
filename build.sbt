@@ -5,7 +5,7 @@ organization := "objektwerks"
 version := "0.1-SNAPSHOT"
 scalaVersion := "2.13.2"
 libraryDependencies ++= {
-  val akkaVersion = "2.6.8"
+  val akkaVersion = "2.6.10"
   Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
@@ -15,7 +15,7 @@ libraryDependencies ++= {
     "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8" % Test,
     "com.typesafe.akka" %% "akka-persistence" % akkaVersion % Test,
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
-    "org.scalatest" %% "scalatest" % "3.2.0" % Test
+    "org.scalatest" %% "scalatest" % "3.2.2" % Test
   )
 }
 lazy val osName = System.getProperty("os.name") match {
