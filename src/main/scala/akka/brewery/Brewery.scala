@@ -17,9 +17,9 @@ object Brewery {
   var eventPropertyListener: Option[ObjectProperty[Event]] = None
 
   val system = ActorSystem.create("brewmeister", ConfigFactory.load("brewery.conf"))
-  val bottler = system.actorOf(Props[Bottler], name = "bottler")
-  val kegger = system.actorOf(Props[Kegger], name = "kegger")
-  val casker = system.actorOf(Props[Casker], name = "casker")
+  val bottler = system.actorOf(Props[Bottler](), name = "bottler")
+  val kegger = system.actorOf(Props[Kegger](), name = "kegger")
+  val casker = system.actorOf(Props[Casker](), name = "casker")
   val conditioner = system.actorOf(Props(classOf[Conditioner], bottler, kegger, casker), name = "conditioner")
   val fermenter = system.actorOf(Props(classOf[Fermenter], conditioner), name = "fermenter")
   val cooler = system.actorOf(Props(classOf[Cooler], fermenter), name = "cooler")
@@ -50,7 +50,7 @@ object Brewery {
 
   def close(): Unit = {
     system.log.info("Brewery closing...")
-    Await.result(system.terminate, 3 seconds)
+    Await.result(system.terminate(), 3 seconds)
     ()
   }
 }

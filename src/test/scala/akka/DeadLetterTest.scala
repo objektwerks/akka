@@ -24,8 +24,8 @@ class Listener extends Actor with ActorLogging {
 class DeadLetterTest extends AnyFunSuite  with BeforeAndAfterAll {
   implicit val timeout = Timeout(1 second)
   val system = ActorSystem.create("deadletter", Conf.config)
-  val service = system.actorOf(Props[Service], name = "service")
-  val listener = system.actorOf(Props[Listener], name = "listener")
+  val service = system.actorOf(Props[Service](), name = "service")
+  val listener = system.actorOf(Props[Listener](), name = "listener")
   system.eventStream.subscribe(listener, classOf[DeadLetter])
 
   override protected def afterAll(): Unit = {

@@ -29,7 +29,7 @@ class FutureExtensionsTest extends AnyFunSuite with Matchers {
                 akkaTimeout = 3 seconds,
                 futureSleep = 2 seconds).onComplete {
       case Success(result) => result shouldBe true
-      case Failure(_) => fail
+      case Failure(_) => fail("*** future with timeout > failed")
     }
   }
 
@@ -38,7 +38,7 @@ class FutureExtensionsTest extends AnyFunSuite with Matchers {
                 dispatcherPath = futureExtensionsDispatcherPath,
                 akkaTimeout = 2 seconds,
                 futureSleep = 3 seconds).onComplete {
-      case Success(_) => fail
+      case Success(_) => fail("*** future with timeout > succeeded, when it should've failed!")
       case Failure(error) => error.getMessage.nonEmpty shouldBe true
     }
   }
@@ -55,7 +55,7 @@ class FutureExtensionsTest extends AnyFunSuite with Matchers {
       factorial(9)
     }.withTimeout(new TimeoutException("Future timed out!")).onComplete {
       case Success(result) => result shouldBe 362880
-      case Failure(_) => fail
+      case Failure(_) => fail("*** Future factorial test failed!")
     }
   }
 

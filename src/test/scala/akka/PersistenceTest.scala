@@ -50,7 +50,7 @@ class Computer extends PersistentActor with ActorLogging {
     case Snapshot => saveSnapshot(events)
     case SaveSnapshotSuccess(metadata) => log.info(s"*** Computer snapshot successful: $metadata")
     case SaveSnapshotFailure(_, reason) => throw reason
-    case Result => sender ! events.list
+    case Result => sender() ! events.list
     case Shutdown => context.stop(self)
   }
 
@@ -64,7 +64,7 @@ class Computer extends PersistentActor with ActorLogging {
 class PersistenceTest extends AnyFunSuite with BeforeAndAfterAll {
   implicit val timeout = Timeout(3 seconds)
   val system = ActorSystem.create("persistence", Conf.config)
-  val computer = system.actorOf(Props[Computer], name = "computer")
+  val computer = system.actorOf(Props[Computer](), name = "computer")
   implicit val ec = system.dispatcher
 
   def fibonacci(n: Int): Int = {

@@ -17,13 +17,13 @@ import scala.language.postfixOps
 class Clock extends Actor with ActorLogging {
   val router = {
     val routees = Vector.fill(2) {
-      ActorRefRoutee( context.actorOf(Props[Time]) )
+      ActorRefRoutee( context.actorOf(Props[Time]()) )
     }
     Router(RoundRobinRoutingLogic(), routees)
   }
 
   def receive: Receive = {
-    case timeIs: String => router.route(timeIs, sender)
+    case timeIs: String => router.route(timeIs, sender())
   }
 }
 
@@ -32,14 +32,14 @@ class Time extends Actor with ActorLogging {
     case timeIs: String =>
       val time = s"$timeIs ${LocalTime.now.toString}"
       log.info(s"*** $time")
-      sender.tell(time, context.parent)
+      sender().tell(time, context.parent)
   }
 }
 
 class RouterTest extends AnyFunSuite with BeforeAndAfterAll {
   implicit val timeout = Timeout(1 second)
   val system = ActorSystem.create("router", Conf.config)
-  val clock = system.actorOf(Props[Clock], name = "clock")
+  val clock = system.actorOf(Props[Clock](), name = "clock")
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 1 second)

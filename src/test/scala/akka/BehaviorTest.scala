@@ -44,7 +44,7 @@ class Triathlete extends Actor with ActorLogging {
 class BehaviorTest extends AnyFunSuite with BeforeAndAfterAll {
   implicit val timeout = Timeout(1 second)
   val system = ActorSystem.create("behavior", Conf.config)
-  val triathlete = system.actorOf(Props[Triathlete], name = "triathlete")
+  val triathlete = system.actorOf(Props[Triathlete](), name = "triathlete")
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 1 second)

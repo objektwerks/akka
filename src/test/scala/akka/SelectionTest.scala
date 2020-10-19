@@ -20,12 +20,12 @@ class GrandParents extends Actor with ActorLogging {
 
   log.info(s"*** GrandParents created: $self")
   implicit val timeout = Timeout(1 second)
-  val parent = context.actorOf(Props[Parents], name = "parents")
+  val parent = context.actorOf(Props[Parents](), name = "parents")
 
   def receive: Receive = {
-    case ToGrandParents => sender ! "grandparents"
-    case ToParents => parent ? ToParents pipeTo sender; ()
-    case ToChildren => parent ? ToChildren pipeTo sender; ()
+    case ToGrandParents => sender() ! "grandparents"
+    case ToParents => parent ? ToParents pipeTo sender(); ()
+    case ToChildren => parent ? ToChildren pipeTo sender(); ()
   }
 }
 
@@ -34,11 +34,11 @@ class Parents extends Actor with ActorLogging {
 
   log.info(s"*** Parents created: $self")
   implicit val timeout = Timeout(1 second)
-  val child = context.actorOf(Props[Children], name = "children")
+  val child = context.actorOf(Props[Children](), name = "children")
 
   def receive: Receive = {
-    case ToParents => sender ! "parents"
-    case ToChildren => child ? ToChildren pipeTo sender; ()
+    case ToParents => sender() ! "parents"
+    case ToChildren => child ? ToChildren pipeTo sender(); ()
   }
 }
 
@@ -47,14 +47,14 @@ class Children extends Actor with ActorLogging {
   implicit val timeout = Timeout(1 second)
 
   def receive: Receive = {
-    case ToChildren => sender ! "children"
+    case ToChildren => sender() ! "children"
   }
 }
 
 class SelectionTest extends AnyFunSuite with BeforeAndAfterAll {
   implicit val timeout = Timeout(1 second)
   val system = ActorSystem.create("selection", Conf.config)
-  val grandparents = system.actorOf(Props[GrandParents], name = "grandparents")
+  val grandparents = system.actorOf(Props[GrandParents](), name = "grandparents")
 
   override protected def afterAll(): Unit = {
     Await.result(system.terminate(), 1 second)
