@@ -15,7 +15,7 @@ libraryDependencies ++= {
     "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8" % Test,
     "com.typesafe.akka" %% "akka-persistence" % akkaVersion % Test,
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
-    "org.scalatest" %% "scalatest" % "3.2.5" % Test
+    "org.scalatest" %% "scalatest" % "3.2.6" % Test
   )
 }
 lazy val osName = System.getProperty("os.name") match {
