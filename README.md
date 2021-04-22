@@ -2,11 +2,13 @@ Akka
 ----
 >This project contains Akka feature tests and a akka.brewery simulator.
 
-WARNING
--------
->**Must build, test and run with JDK 11!**
-1. Test: sbt clean test -java-home /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
-2. Run: sbt clean compile run -java-home /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
+Test
+----
+1. sbt clean test
+
+Run
+---
+1. sbt run
 
 Brewery
 -------
@@ -50,26 +52,3 @@ property change listeners and displayed in the BrewMeister UI.
 4. akka.brewery --- brewed(e) ---> app
 
 >See akka/brewmeister.png for a visual of the simulation.
-
-Test
-----
-1. sbt clean test
-
-Run
----
-1. sbt clean compile run
-
-Bloop
------
-1. sbt bloopInstall
-2. bloop clean akka
-3. bloop compile akka
-4. bloop test akka
-5. bloop run akka
-
-Package and Run
----------------
->Fails with java.lang.NoClassDefFoundError: sun/misc/Unsafe due to Akka!
->Adding the **jdk.unsupported** module, to build.sbt, resolves this issue.
-1. sbt stage
-2. ./target/universal/stage/bin/akka
