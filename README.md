@@ -1,6 +1,6 @@
 Akka
 ----
->This project contains Akka feature tests and a akka.brewery simulator.
+>Akka feature tests, Akka Persistence and a brewery simulation using Akka and ScalaFX.
 
 Test
 ----
