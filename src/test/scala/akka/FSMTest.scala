@@ -39,7 +39,7 @@ class FSMTest extends AnyFunSuite with BeforeAndAfterAll {
   }
 
   test("fsm") {
-    pump ! Event(On, Data(33))
+    pump ! Event(On, Data(1))
     pump ! Event(Off, Data(0))
   }
 }
