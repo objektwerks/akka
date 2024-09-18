@@ -49,6 +49,6 @@ property change listeners and displayed in the BrewMeister UI.
     9. casker --- casking(s) ---> brewer
        * casker --- casked(e) ---> brewer
 3. brewer --- brewed(e) ---> akka.brewery
-4. akka.brewery --- brewed(e) ---> app
+4. brewery --- brewed(e) ---> app
 
 >See akka/brewmeister.png for a visual of the simulation.
