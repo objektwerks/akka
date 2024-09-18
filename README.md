@@ -23,8 +23,8 @@ property change listeners and displayed in the BrewMeister UI.
 * (s) = state   [8]
 * (e) = event   [9]
 
-1. app --- recipe(m) ---> akka.brewery
-2. akka.brewery --- recipe(m) ---> brewer
+1. app --- recipe(m) ---> brewery
+2. brewery --- recipe(m) ---> brewer
     1. brewer --- brew(c) ---> masher
     2. masher --- brew(c) ---> boiler
        * masher --- mashing(s) ---> brewer
