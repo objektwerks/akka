@@ -1,6 +1,6 @@
 Akka
 ----
->Akka feature tests, Akka Persistence and a brewery simulation using Akka and ScalaFx.
+>Akka feature tests, to include a brewery simulation using Akka and ScalaFx.
 
 Test
 ----
