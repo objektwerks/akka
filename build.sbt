@@ -7,7 +7,7 @@ libraryDependencies ++= {
   Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
-    "org.scalafx" %% "scalafx" % "22.0.0-R33",
+    "org.scalafx" %% "scalafx" % "23.0.1-R34",
     "ch.qos.logback" % "logback-classic" % "1.5.11",
     "org.iq80.leveldb" % "leveldb" % "0.12" % Test,
     "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8" % Test,
