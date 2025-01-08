@@ -8,7 +8,7 @@ libraryDependencies ++= {
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
     "org.scalafx" %% "scalafx" % "23.0.1-R34",
-    "ch.qos.logback" % "logback-classic" % "1.5.15",
+    "ch.qos.logback" % "logback-classic" % "1.5.16",
     "org.iq80.leveldb" % "leveldb" % "0.12" % Test,
     "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8" % Test,
     "com.typesafe.akka" %% "akka-persistence" % akkaVersion % Test,
